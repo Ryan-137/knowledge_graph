@@ -1,0 +1,18 @@
+{
+  "embedding_path": "knowledge_graph/data/resources/glove.6B.100d.txt",
+  "embedding_dim": 100,
+  "freeze_embedding": false,
+  "max_seq_len": 128,
+  "position_clip_limit": 40,
+  "na_downsample_ratio": 3.0,
+  "use_class_weights": true,
+  "dropout": 0.3,
+  "cnn_kernel_sizes": [3, 5],
+  "cnn_hidden_size": 128,
+  "position_embedding_dim": 16,
+  "batch_size": 16,
+  "learning_rate": 0.001,
+  "weight_decay": 0.00001,
+  "max_epochs": 25,
+  "early_stop_patience": 5
+}

@@ -1,0 +1,414 @@
+﻿{
+  "version": "2.0",
+  "domain": "Alan Turing Knowledge Graph",
+  "principles": {
+    "mention_boundary": "本体只定义规范实体、最终关系和事件类型，不直接定义 mention 层输出。",
+    "event_policy": "带明确时间过程的事实后续优先抽成事件，同时可以融合出简化关系事实。"
+  },
+  "classes": [
+    {
+      "name": "Entity",
+      "parent": null,
+      "attributes": ["entity_id", "canonical_name", "aliases", "description", "source_ids", "source_texts", "confidence", "external_ids"]
+    },
+    {
+      "name": "Person",
+      "parent": "Entity",
+      "attributes": ["birth_date", "death_date"]
+    },
+    {
+      "name": "Organization",
+      "parent": "Entity",
+      "attributes": ["org_type"]
+    },
+    {
+      "name": "Place",
+      "parent": "Entity",
+      "attributes": ["place_type"]
+    },
+    {
+      "name": "Work",
+      "parent": "Entity",
+      "attributes": ["publication_year", "work_type"]
+    },
+    {
+      "name": "Concept",
+      "parent": "Entity",
+      "attributes": []
+    },
+    {
+      "name": "Machine",
+      "parent": "Entity",
+      "attributes": ["model", "purpose"]
+    },
+    {
+      "name": "Award",
+      "parent": "Entity",
+      "attributes": ["award_type", "awarding_body"]
+    },
+    {
+      "name": "Event",
+      "parent": "Entity",
+      "attributes": ["event_id", "event_type", "time_text", "start_time", "end_time", "location_text", "source_ids", "source_texts", "confidence"]
+    },
+    {
+      "name": "BirthEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "EducationEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "EmploymentEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "PublicationEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "DeathEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "ProposalEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "DesignEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "HonorEvent",
+      "parent": "Event",
+      "attributes": []
+    }
+  ],
+  "relations": [
+    {
+      "name": "BORN_IN",
+      "domain": "Person",
+      "range": "Place",
+      "event_type": "BirthEvent"
+    },
+    {
+      "name": "DIED_IN",
+      "domain": "Person",
+      "range": "Place",
+      "event_type": "DeathEvent"
+    },
+    {
+      "name": "STUDIED_AT",
+      "domain": "Person",
+      "range": "Organization",
+      "event_type": "EducationEvent"
+    },
+    {
+      "name": "WORKED_AT",
+      "domain": "Person",
+      "range": "Organization",
+      "event_type": "EmploymentEvent"
+    },
+    {
+      "name": "AUTHORED",
+      "domain": "Person",
+      "range": "Work",
+      "event_type": "PublicationEvent"
+    },
+    {
+      "name": "PROPOSED",
+      "domain": "Person",
+      "range": "Concept",
+      "event_type": "ProposalEvent"
+    },
+    {
+      "name": "DESIGNED",
+      "domain": "Person",
+      "range": "Machine",
+      "event_type": "DesignEvent"
+    },
+    {
+      "name": "WORKED_WITH",
+      "domain": "Person",
+      "range": "Person",
+      "event_type": null
+    },
+    {
+      "name": "ENGAGED_TO",
+      "domain": "Person",
+      "range": "Person",
+      "event_type": null
+    },
+    {
+      "name": "AWARDED",
+      "domain": "Person",
+      "range": "Award",
+      "event_type": "HonorEvent"
+    },
+    {
+      "name": "RELATED_TO",
+      "domain": "Work",
+      "range": "Concept",
+      "event_type": null
+    },
+    {
+      "name": "LOCATED_IN",
+      "domain": "Organization",
+      "range": "Place",
+      "event_type": null
+    },
+    {
+      "name": "INFLUENCED",
+      "domain": "Person",
+      "range": "Person",
+      "event_type": null
+    },
+    {
+      "name": "ABOUT",
+      "domain": "Work",
+      "range": ["Person", "Concept", "Machine"],
+      "event_type": null
+    },
+    {
+      "name": "INSTANCE_OF",
+      "domain": "Entity",
+      "range": "Concept",
+      "event_type": null
+    },
+    {
+      "name": "SUBCONCEPT_OF",
+      "domain": "Concept",
+      "range": "Concept",
+      "event_type": null
+    },
+    {
+      "name": "IMPLEMENTS",
+      "domain": "Machine",
+      "range": "Concept",
+      "event_type": null
+    },
+    {
+      "name": "ASSOCIATED_WITH",
+      "domain": "Person",
+      "range": "Concept",
+      "event_type": null
+    },
+    {
+      "name": "PARTICIPATED_IN",
+      "domain": "Person",
+      "range": "Event",
+      "event_type": null
+    },
+    {
+      "name": "OCCURRED_IN",
+      "domain": "Event",
+      "range": "Place",
+      "event_type": null
+    },
+    {
+      "name": "PRODUCED_WORK",
+      "domain": "PublicationEvent",
+      "range": "Work",
+      "event_type": null
+    }
+  ],
+  "event_types": [
+    {
+      "name": "BirthEvent",
+      "participants": [
+        {"role": "person", "class": "Person"},
+        {"role": "birth_place", "class": "Place"}
+      ],
+      "derived_relation": "BORN_IN"
+    },
+    {
+      "name": "EducationEvent",
+      "participants": [
+        {"role": "student", "class": "Person"},
+        {"role": "institution", "class": "Organization"}
+      ],
+      "derived_relation": "STUDIED_AT"
+    },
+    {
+      "name": "EmploymentEvent",
+      "participants": [
+        {"role": "employee", "class": "Person"},
+        {"role": "employer", "class": "Organization"}
+      ],
+      "derived_relation": "WORKED_AT"
+    },
+    {
+      "name": "PublicationEvent",
+      "participants": [
+        {"role": "author", "class": "Person"},
+        {"role": "work", "class": "Work"}
+      ],
+      "derived_relation": "AUTHORED"
+    },
+    {
+      "name": "DeathEvent",
+      "participants": [
+        {"role": "person", "class": "Person"},
+        {"role": "death_place", "class": "Place"}
+      ],
+      "derived_relation": "DIED_IN"
+    },
+    {
+      "name": "ProposalEvent",
+      "participants": [
+        {"role": "proposer", "class": "Person"},
+        {"role": "concept", "class": "Concept"}
+      ],
+      "derived_relation": "PROPOSED"
+    },
+    {
+      "name": "DesignEvent",
+      "participants": [
+        {"role": "designer", "class": "Person"},
+        {"role": "machine", "class": "Machine"}
+      ],
+      "derived_relation": "DESIGNED"
+    },
+    {
+      "name": "HonorEvent",
+      "participants": [
+        {"role": "recipient", "class": "Person"},
+        {"role": "award", "class": "Award"}
+      ],
+      "derived_relation": "AWARDED"
+    }
+  ],
+  "constraints": [
+    {
+      "type": "required_attribute",
+      "class": "Person",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Organization",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Place",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Work",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Machine",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Award",
+      "attribute": "canonical_name"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Event",
+      "attribute": "event_id"
+    },
+    {
+      "type": "required_attribute",
+      "class": "Event",
+      "attribute": "event_type"
+    },
+    {
+      "type": "unique_attribute",
+      "class": "Entity",
+      "attribute": "entity_id"
+    },
+    {
+      "type": "unique_attribute",
+      "class": "Event",
+      "attribute": "event_id"
+    },
+    {
+      "type": "non_empty_array",
+      "class": "Entity",
+      "attribute": "aliases"
+    },
+    {
+      "type": "non_empty_array",
+      "class": "Entity",
+      "attribute": "source_ids"
+    },
+    {
+      "type": "value_range",
+      "class": "Entity",
+      "attribute": "confidence",
+      "min": 0.0,
+      "max": 1.0
+    },
+    {
+      "type": "value_range",
+      "class": "Event",
+      "attribute": "confidence",
+      "min": 0.0,
+      "max": 1.0
+    },
+    {
+      "type": "relation_domain_range_check"
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "BirthEvent",
+      "roles": ["person", "birth_place"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "EducationEvent",
+      "roles": ["student", "institution"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "EmploymentEvent",
+      "roles": ["employee", "employer"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "PublicationEvent",
+      "roles": ["author", "work"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "DeathEvent",
+      "roles": ["person", "death_place"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "ProposalEvent",
+      "roles": ["proposer", "concept"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "DesignEvent",
+      "roles": ["designer", "machine"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "HonorEvent",
+      "roles": ["recipient", "award"]
+    },
+    {
+      "type": "time_order_check",
+      "class": "Event",
+      "start_attribute": "start_time",
+      "end_attribute": "end_time"
+    }
+  ]
+}

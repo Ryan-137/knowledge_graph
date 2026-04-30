@@ -1,0 +1,13 @@
+# 非结构化数据源配置解析
+PyYAML>=6.0
+beautifulsoup4>=4.12
+pypdf>=4.0
+
+# CRF 训练与模型持久化
+joblib>=1.3
+sklearn-crfsuite>=0.3.6
+
+# 关系抽取与深度学习依赖
+numpy>=1.26
+nltk>=3.8
+torch>=2.2

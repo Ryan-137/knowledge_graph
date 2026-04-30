@@ -1,0 +1,28 @@
+{
+  "database_path": "knowledge_graph/data/processed/structured/structured_kg.db",
+  "csv_export_dir": "knowledge_graph/data/processed/structured/csv",
+  "log_path": "knowledge_graph/data/processed/structured/structured_fetch.log",
+  "seed_file": "knowledge_graph/configs/seed_entities.json",
+  "wikidata_endpoint": "https://query.wikidata.org/sparql",
+  "wikipedia_summary_api": "https://en.wikipedia.org/api/rest_v1/page/summary/{title}",
+  "sleep_seconds": 2.0,
+  "request_timeout_seconds": 30,
+  "max_retries": 4,
+  "backoff_base_seconds": 2.0,
+  "page_size": 100,
+  "entity_batch_size": 20,
+  "summary_batch_size": 20,
+  "user_agent": "knowledge-graph-structured-fetcher/0.1 (educational project)",
+  "default_confidence": 0.95,
+  "relations": [
+    "BORN_IN",
+    "DIED_IN",
+    "STUDIED_AT",
+    "WORKED_AT",
+    "AUTHORED",
+    "PROPOSED",
+    "DESIGNED",
+    "AWARDED",
+    "LOCATED_IN"
+  ]
+}

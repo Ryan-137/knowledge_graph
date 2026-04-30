@@ -1,0 +1,112 @@
+sources:
+  - source_id: src_first_001
+    title: 10 things to know about Alan Turing
+    tier: 1
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/10 things to know about Alan Turing _ Bletchley Park.htm
+    organization: Bletchley Park
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_002
+    title: Turing Computing Machinery and Intelligence
+    tier: 1
+    authority_level: high
+    source_type: pdf
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/5_turing_computing_machinery_and_intelligence.pdf
+    organization: ""
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_003
+    title: Alan Mathison Turing (1912-54)
+    tier: 1
+    authority_level: high
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/Alan Mathison Turing (1912-54) _ King's College Cambridge.htm
+    organization: King's College Cambridge
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_004
+    title: Alan Mathison Turing Graduate School
+    tier: 1
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/Alan Mathison Turing _ Graduate School.htm
+    organization: Princeton University
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_005
+    title: Alan Turing A Short Biography
+    tier: 1
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/Alan Turing - a short biography.htm
+    organization: ""
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_006
+    title: Alan Turing at The University of Manchester
+    tier: 1
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/Alan Turing at The University of Manchester (Digital 60).htm
+    organization: University of Manchester
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_007
+    title: The Chemical Basis of Morphogenesis
+    tier: 1
+    authority_level: high
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/The chemical basis of morphogenesis _ Philosophical Transactions of the Royal Society B _ The Royal Society.htm
+    organization: The Royal Society
+    verification_status: pending
+    notes: ""
+  - source_id: src_first_008
+    title: Turing PDF
+    tier: 1
+    authority_level: medium
+    source_type: pdf
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/first/turing.pdf
+    organization: ""
+    verification_status: pending
+    notes: ""
+  - source_id: src_second_001
+    title: Alan Turing Wikipedia
+    tier: 2
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/second/Alan Turing - Wikipedia.htm
+    organization: Wikipedia
+    verification_status: pending
+    notes: ""
+  - source_id: src_second_002
+    title: Alan Turing in Manchester
+    tier: 2
+    authority_level: medium
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/second/Alan Turing in Manchester _ Science and Industry Museum.htm
+    organization: Science and Industry Museum
+    verification_status: pending
+    notes: ""
+  - source_id: src_second_003
+    title: Alan Turing Biography Britannica
+    tier: 2
+    authority_level: high
+    source_type: html
+    original_url: ""
+    raw_path: knowledge_graph/data/raw/unstructed/second/Alan Turing _ Biography, Facts, Computer, Machine, Education, & Death _ Britannica.htm
+    organization: Britannica
+    verification_status: pending
+    notes: ""
+

@@ -1,0 +1,35 @@
+BORN_IN:
+  triggers:
+    - born in
+    - born at
+    - birthplace
+STUDIED_AT:
+  triggers:
+    - studied at
+    - educated at
+    - attended
+    - went to
+WORKED_AT:
+  triggers:
+    - worked at
+    - joined
+    - employed by
+    - served at
+AUTHORED:
+  triggers:
+    - wrote
+    - authored
+    - published
+    - paper by
+PROPOSED:
+  triggers:
+    - proposed
+    - introduced
+    - outlined
+    - formulated
+LOCATED_IN:
+  triggers:
+    - located in
+    - based in
+    - in
+    - at
