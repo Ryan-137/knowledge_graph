@@ -72,7 +72,7 @@ class EntityLinker:
             normalized_mention["mention_type"] = normalized_mention.get("mention_type_hint")
         normalized_mention["mention_type"] = normalize_mention_type(normalized_mention.get("mention_type"))
         normalized_mention.setdefault("source_id", "")
-        normalized_mention.setdefault("normalized_text", normalize_alias_text(normalized_mention.get("text", "")))
+        normalized_mention["normalized_text"] = normalize_alias_text(normalized_mention.get("text", ""))
         return MentionRecord(**{
             "mention_id": normalized_mention["mention_id"],
             "sentence_id": normalized_mention["sentence_id"],
@@ -219,6 +219,13 @@ class EntityLinker:
     def _determine_link_threshold(self, draft: MentionDraft, top_candidate: CandidateScore) -> float:
         token_count = int(draft.mention.get("token_end", 0)) - int(draft.mention.get("token_start", 0))
         if token_count <= 1:
+            second_score = draft.candidates[1].link_confidence if len(draft.candidates) > 1 else 0.0
+            margin = top_candidate.link_confidence - second_score
+            direct_alias_match = bool(top_candidate.candidate_sources & {"exact_alias", "normalized_alias", "surname_alias"})
+            type_consistent = top_candidate.features.get("type_consistency_score", 0.0) >= 1.0
+            # 单 token 姓氏/简称不能一概放宽，只有直连别名且候选优势明显时才降低阈值。
+            if direct_alias_match and type_consistent and margin >= 0.2:
+                return min(self.config.single_token_link_threshold, 0.8)
             return self.config.single_token_link_threshold
         if "exact_alias" in top_candidate.candidate_sources or "normalized_alias" in top_candidate.candidate_sources:
             return self.config.multi_token_link_threshold

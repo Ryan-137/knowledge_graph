@@ -32,7 +32,8 @@ STOPWORDS = {
 
 
 def normalize_text(text: str) -> str:
-    normalized = unicodedata.normalize("NFKC", str(text or "")).casefold()
+    normalized = unicodedata.normalize("NFKC", str(text or "")).replace("’", "'").casefold()
+    normalized = re.sub(r"(?<=\w)'s\b", "", normalized)
     normalized = re.sub(r"[_\-/]+", " ", normalized)
     normalized = re.sub(r"[^\w\s\u4e00-\u9fff]", " ", normalized)
     normalized = re.sub(r"\s+", " ", normalized)

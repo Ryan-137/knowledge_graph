@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,108 @@ GENERIC_PLACE_SUFFIXES = {
     "museum",
     "institute",
 }
+
+CURATED_ENTITIES = [
+    {
+        "entity_id": "LOCAL_BLETCHLEY_PARK",
+        "canonical_name": "Bletchley Park",
+        "label_en": "Bletchley Park",
+        "label_zh": "布莱切利园",
+        "description_en": "wartime codebreaking centre associated with Alan Turing",
+        "description_zh": "图灵参与战时破译工作的地点",
+        "wikipedia_title_en": "Bletchley Park",
+        "wikipedia_summary_en": "Bletchley Park was the principal centre of Allied codebreaking during the Second World War.",
+        "entity_type": "Place",
+        "external_ids": "{}",
+        "source_name": "curated_local",
+        "source_record_id": "LOCAL_BLETCHLEY_PARK",
+        "retrieved_at": "",
+        "confidence": "1.0",
+        "raw_payload_json": "{}",
+    },
+    {
+        "entity_id": "LOCAL_ENIGMA_MACHINE",
+        "canonical_name": "Enigma machine",
+        "label_en": "Enigma machine",
+        "label_zh": "恩尼格玛机",
+        "description_en": "cipher machine central to Turing's wartime cryptanalysis",
+        "description_zh": "图灵战时密码分析相关的密码机",
+        "wikipedia_title_en": "Enigma machine",
+        "wikipedia_summary_en": "The Enigma machine was a cipher device used to protect military communication.",
+        "entity_type": "Machine",
+        "external_ids": "{}",
+        "source_name": "curated_local",
+        "source_record_id": "LOCAL_ENIGMA_MACHINE",
+        "retrieved_at": "",
+        "confidence": "1.0",
+        "raw_payload_json": "{}",
+    },
+    {
+        "entity_id": "LOCAL_ALONZO_CHURCH",
+        "canonical_name": "Alonzo Church",
+        "label_en": "Alonzo Church",
+        "label_zh": "阿隆佐·邱奇",
+        "description_en": "mathematician and Turing's doctoral supervisor at Princeton",
+        "description_zh": "图灵在普林斯顿时期的导师",
+        "wikipedia_title_en": "Alonzo Church",
+        "wikipedia_summary_en": "Alonzo Church was an American mathematician and logician.",
+        "entity_type": "Person",
+        "external_ids": "{}",
+        "source_name": "curated_local",
+        "source_record_id": "LOCAL_ALONZO_CHURCH",
+        "retrieved_at": "",
+        "confidence": "1.0",
+        "raw_payload_json": "{}",
+    },
+    {
+        "entity_id": "LOCAL_MAX_NEWMAN",
+        "canonical_name": "Max Newman",
+        "label_en": "Max Newman",
+        "label_zh": "马克斯·纽曼",
+        "description_en": "mathematician connected with Turing at Cambridge and Manchester",
+        "description_zh": "与图灵在剑桥和曼彻斯特相关的数学家",
+        "wikipedia_title_en": "Max Newman",
+        "wikipedia_summary_en": "Max Newman was a British mathematician and computer scientist.",
+        "entity_type": "Person",
+        "external_ids": "{}",
+        "source_name": "curated_local",
+        "source_record_id": "LOCAL_MAX_NEWMAN",
+        "retrieved_at": "",
+        "confidence": "1.0",
+        "raw_payload_json": "{}",
+    },
+    {
+        "entity_id": "LOCAL_MANCHESTER_MARK_1",
+        "canonical_name": "Manchester Mark 1",
+        "label_en": "Manchester Mark 1",
+        "label_zh": "曼彻斯特一号",
+        "description_en": "early stored-program computer associated with Manchester and Turing",
+        "description_zh": "与曼彻斯特和图灵相关的早期存储程序计算机",
+        "wikipedia_title_en": "Manchester Mark 1",
+        "wikipedia_summary_en": "The Manchester Mark 1 was an early stored-program computer.",
+        "entity_type": "Machine",
+        "external_ids": "{}",
+        "source_name": "curated_local",
+        "source_record_id": "LOCAL_MANCHESTER_MARK_1",
+        "retrieved_at": "",
+        "confidence": "1.0",
+        "raw_payload_json": "{}",
+    },
+]
+
+CURATED_ALIASES = [
+    {"entity_id": "LOCAL_BLETCHLEY_PARK", "alias": "Bletchley Park", "alias_lang": "en", "normalized_alias": "bletchley park"},
+    {"entity_id": "LOCAL_BLETCHLEY_PARK", "alias": "Bletchley", "alias_lang": "en", "normalized_alias": "bletchley"},
+    {"entity_id": "LOCAL_ENIGMA_MACHINE", "alias": "Enigma", "alias_lang": "en", "normalized_alias": "enigma"},
+    {"entity_id": "LOCAL_ENIGMA_MACHINE", "alias": "Enigma machine", "alias_lang": "en", "normalized_alias": "enigma machine"},
+    {"entity_id": "LOCAL_ENIGMA_MACHINE", "alias": "Enigma cipher machine", "alias_lang": "en", "normalized_alias": "enigma cipher machine"},
+    {"entity_id": "LOCAL_ENIGMA_MACHINE", "alias": "Enigma cipher machines", "alias_lang": "en", "normalized_alias": "enigma cipher machines"},
+    {"entity_id": "LOCAL_ALONZO_CHURCH", "alias": "Alonzo Church", "alias_lang": "en", "normalized_alias": "alonzo church"},
+    {"entity_id": "LOCAL_MAX_NEWMAN", "alias": "Max Newman", "alias_lang": "en", "normalized_alias": "max newman"},
+    {"entity_id": "LOCAL_MANCHESTER_MARK_1", "alias": "Manchester Mark 1", "alias_lang": "en", "normalized_alias": "manchester mark 1"},
+    {"entity_id": "LOCAL_MANCHESTER_MARK_1", "alias": "Manchester Mk 1", "alias_lang": "en", "normalized_alias": "manchester mk 1"},
+    {"entity_id": "LOCAL_MANCHESTER_MARK_1", "alias": "Mark 1", "alias_lang": "en", "normalized_alias": "mark 1"},
+]
 
 
 @dataclass(frozen=True)
@@ -49,11 +152,13 @@ class EntityCatalog:
 
 
 def normalize_alias_text(text: str) -> str:
-    return " ".join(str(text or "").casefold().strip().split())
+    normalized = unicodedata.normalize("NFKC", str(text or "")).replace("’", "'").casefold().strip()
+    normalized = re.sub(r"(?<=\w)'s$", "", normalized)
+    return " ".join(normalized.split())
 
 
 def normalize_exact_alias_text(text: str) -> str:
-    return " ".join(str(text or "").strip().split())
+    return " ".join(unicodedata.normalize("NFKC", str(text or "")).replace("’", "'").strip().split())
 
 
 def _dedupe_keep_order(values: list[str]) -> list[str]:
@@ -186,6 +291,13 @@ def load_entity_catalog(
             raise ValueError(f"{entities_csv_path} 存在空 entity_id")
         row["entity_type"] = normalize_entity_type(row.get("entity_type"))
         entities[entity_id] = dict(row)
+    for row in CURATED_ENTITIES:
+        entity_id = str(row["entity_id"])
+        if entity_id in entities:
+            continue
+        curated_row = dict(row)
+        curated_row["entity_type"] = normalize_entity_type(curated_row.get("entity_type"))
+        entities[entity_id] = curated_row
 
     alias_rows_by_entity: dict[str, list[dict[str, Any]]] = defaultdict(list)
     aliases: list[dict[str, Any]] = []
@@ -197,7 +309,7 @@ def load_entity_catalog(
     place_variant_index: dict[str, list[dict[str, Any]]] = {}
     alias_surface_index_by_entity: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
-    for row in read_csv_records(aliases_csv_path):
+    for row in [*read_csv_records(aliases_csv_path), *CURATED_ALIASES]:
         entity_id = str(row.get("entity_id", "")).strip()
         alias = normalize_exact_alias_text(str(row.get("alias", "")))
         if not entity_id or not alias:

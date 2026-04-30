@@ -168,6 +168,7 @@ def build_parser() -> argparse.ArgumentParser:
     resolve_parser = coreference_subparsers.add_parser("resolve", help="将 skipped mention 解析为 resolved mentions")
     resolve_parser.add_argument("--linked-mentions", default=str(PATHS.linked_mentions_jsonl))
     resolve_parser.add_argument("--sentences", default=str(PATHS.sentences_jsonl))
+    resolve_parser.add_argument("--tokenized-sentences", default=str(PATHS.mentions_dir / "tokenized_sentences.jsonl"))
     resolve_parser.add_argument("--output", default=str(PATHS.resolved_mentions_jsonl))
     resolve_parser.add_argument("--report", default=str(PATHS.coreference_report_json))
     resolve_parser.add_argument("--unresolved-output", default=str(PATHS.coreference_dir / "coreference_unresolved.jsonl"))
@@ -580,6 +581,7 @@ def handle_coreference(args: argparse.Namespace) -> int:
     resolved_mentions = resolve_coreferences_from_paths(
         linked_mentions_path=args.linked_mentions,
         sentences_path=args.sentences,
+        tokenized_sentences_path=args.tokenized_sentences,
         output_path=args.output,
         report_path=args.report,
         unresolved_output_path=args.unresolved_output,
