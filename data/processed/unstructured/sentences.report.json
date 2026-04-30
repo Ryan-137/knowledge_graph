@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-04-29T17:48:10.348236+00:00",
+  "document_count": 11,
+  "sentence_count": 2383,
+  "error_count": 0,
+  "doc_sentence_counts": [
+    {
+      "doc_id": "doc_0001",
+      "source_id": "src_first_001",
+      "sentence_count": 154
+    },
+    {
+      "doc_id": "doc_0002",
+      "source_id": "src_first_002",
+      "sentence_count": 235
+    },
+    {
+      "doc_id": "doc_0003",
+      "source_id": "src_first_003",
+      "sentence_count": 137
+    },
+    {
+      "doc_id": "doc_0004",
+      "source_id": "src_first_004",
+      "sentence_count": 109
+    },
+    {
+      "doc_id": "doc_0005",
+      "source_id": "src_first_005",
+      "sentence_count": 209
+    },
+    {
+      "doc_id": "doc_0006",
+      "source_id": "src_first_006",
+      "sentence_count": 28
+    },
+    {
+      "doc_id": "doc_0007",
+      "source_id": "src_first_007",
+      "sentence_count": 47
+    },
+    {
+      "doc_id": "doc_0008",
+      "source_id": "src_first_008",
+      "sentence_count": 586
+    },
+    {
+      "doc_id": "doc_0009",
+      "source_id": "src_second_001",
+      "sentence_count": 390
+    },
+    {
+      "doc_id": "doc_0010",
+      "source_id": "src_second_002",
+      "sentence_count": 342
+    },
+    {
+      "doc_id": "doc_0011",
+      "source_id": "src_second_003",
+      "sentence_count": 146
+    }
+  ],
+  "errors": []
+}
