@@ -1,6 +1,6 @@
 {
   "node_count": 73,
-  "edge_count": 123,
+  "edge_count": 121,
   "node_type_counts": {
     "Person": 3,
     "Place": 9,
@@ -22,12 +22,11 @@
   "edge_layer_counts": {
     "facts": 30,
     "event": 63,
-    "evidence": 28,
-    "wikipedia_direct": 2
+    "evidence": 28
   },
   "edge_type_counts": {
-    "BORN_IN": 4,
-    "DIED_IN": 3,
+    "BORN_IN": 3,
+    "DIED_IN": 2,
     "STUDIED_AT": 12,
     "WORKED_AT": 11,
     "AUTHORED": 4,

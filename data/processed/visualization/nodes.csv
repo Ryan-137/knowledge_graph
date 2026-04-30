@@ -17,7 +17,7 @@ LOCAL_ENIGMA_MACHINE,Enigma machine,Machine,Entity;Machine,cipher machine centra
 LOCAL_MANCHESTER_MARK_1,Manchester Mark 1,Machine,Entity;Machine,early stored-program computer associated with Manchester and Turing,entity,curated_local,1.0,0
 LOCAL_MAX_NEWMAN,Max Newman,Person,Entity;Person,mathematician connected with Turing at Cambridge and Manchester,entity,curated_local,1.0,0
 Q10762848,Officer of the Order of the British Empire,Award,Entity;Award,"award, rank of the Order of the British Empire",entity,wikipedia_rest,0.95,4
-Q122744,Maida Vale,Place,Entity;Place,residential district comprising the northern part of Paddington in west London,entity,wikipedia_rest,0.95,4
+Q122744,Maida Vale,Place,Entity;Place,residential district comprising the northern part of Paddington in west London,entity,wikipedia_rest,0.95,3
 Q133854517,"Alan Turing's ""Delilah"" project",Concept,Entity;Concept,,entity,wikidata_sparql,0.95,2
 Q138518,Princeton,Place,Entity;Place,"municipality in Mercer County, New Jersey, United States",entity,wikipedia_rest,0.95,1
 Q14420,Order of the British Empire,Award,Entity;Award,British order of chivalry,entity,wikipedia_rest,0.95,2
@@ -27,7 +27,7 @@ Q1690167,Smith's Prize,Award,Entity;Award,Prize from University of Cambridge in 
 Q18125,Manchester,Place,Entity;Place,"city in Greater Manchester, England",entity,wikipedia_rest,0.95,1
 Q189223,Turing test,Concept,Entity;Concept,"test of a machine's ability to exhibit intelligent behaviour equivalent to, or indistinguishable from, that of a human",entity,wikipedia_rest,0.95,4
 Q1967606,National Physical Laboratory,Organization,Entity;Organization,National Measurement Institution of the United Kingdom,entity,wikipedia_rest,0.95,5
-Q2011497,Wilmslow,Place,Entity;Place,"town and civil parish in Cheshire East, England",entity,wikipedia_rest,0.95,4
+Q2011497,Wilmslow,Place,Entity;Place,"town and civil parish in Cheshire East, England",entity,wikipedia_rest,0.95,3
 Q20895942,Warrington Lodge,Place,Entity;Place,"former nursing home in London W9, England",entity,wikidata_sparql,0.95,2
 Q20895966,Intelligent Machinery,Work,Entity;Work,"report by Alan Turing to NPL, 1948",entity,wikidata_sparql,0.95,4
 Q21578,Princeton University,Organization,Entity;Organization,"private Ivy League research university in Princeton, New Jersey, United States",entity,wikipedia_rest,0.95,5
@@ -42,7 +42,7 @@ Q4887849,Benhall,Place,Entity;Place,"suburb in Cheltenham, Gloucestershire, Engl
 Q5583769,Good–Turing frequency estimation,Concept,Entity;Concept,statistical technique,entity,wikipedia_rest,0.95,2
 Q586895,Sherborne,Place,Entity;Place,"town and civil parish in Dorset, England",entity,wikipedia_rest,0.95,2
 Q66135280,Hazlehurst Community Primary School,Organization,Entity;Organization,"school in Bury, UK",entity,wikidata_sparql,0.95,2
-Q7251,Alan Turing,Person,Entity;Person,English computer scientist (1912–1954),entity,wikidata_sparql,0.95,76
+Q7251,Alan Turing,Person,Entity;Person,English computer scientist (1912–1954),entity,wikidata_sparql,0.95,74
 Q7854954,Turing's proof,Work,Entity;Work,Proof by Alan Turing,entity,wikipedia_rest,0.95,2
 Q867530,Victoria University of Manchester,Organization,Entity;Organization,British university (1851-2004),entity,wikipedia_rest,0.95,4
 Q924289,King's College,Organization,Entity;Organization,college of the University of Cambridge,entity,wikipedia_rest,0.95,6

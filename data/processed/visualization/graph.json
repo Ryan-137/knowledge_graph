@@ -345,7 +345,7 @@
       "canonical_name": "梅達谷區",
       "label_zh": "梅達谷區",
       "wikipedia_title_en": "Maida Vale",
-      "degree": 4
+      "degree": 3
     },
     {
       "id": "Q133854517",
@@ -515,7 +515,7 @@
       "canonical_name": "威姆斯洛",
       "label_zh": "威姆斯洛",
       "wikipedia_title_en": "Wilmslow",
-      "degree": 4
+      "degree": 3
     },
     {
       "id": "Q20895942",
@@ -770,7 +770,7 @@
       "canonical_name": "艾倫·圖靈",
       "label_zh": "艾倫·圖靈",
       "wikipedia_title_en": "Alan Turing",
-      "degree": 76
+      "degree": 74
     },
     {
       "id": "Q7854954",
@@ -2689,29 +2689,6 @@
       "display_label": "WORKED_AT [evidence]"
     },
     {
-      "id": "EVIDENCE::3d740e572ca6e8d6f16c",
-      "source": "Q7251",
-      "target": "Q122744",
-      "label": "BORN_IN",
-      "type": "Directed",
-      "source_layer": "wikipedia_direct",
-      "source_name": "wikipedia_parse_api",
-      "confidence": 0.95,
-      "evidence_text": "Born: Alan Mathison Turing ( 1912-06-23 ) 23 June 1912 Maida Vale , London, England",
-      "source_id": "Alan Turing",
-      "event_id": "BirthEvent",
-      "qualifiers": {
-        "time_text": "1912-06-23",
-        "place_role": "birth_place",
-        "page_revid": "1351251344",
-        "source_url": "https://en.wikipedia.org/wiki/Alan_Turing"
-      },
-      "semantic_key": "EVIDENCE::Q7251::BORN_IN::Q122744::aed9ebecb2a6",
-      "fusion_status": "original",
-      "fusion_reason": "",
-      "display_label": "BORN_IN [wikipedia_direct]"
-    },
-    {
       "id": "EVIDENCE::46cdfd31a971fb503507",
       "source": "Q7251",
       "target": "Q2278254",
@@ -3165,29 +3142,6 @@
       "fusion_status": "original",
       "fusion_reason": "",
       "display_label": "STUDIED_AT [evidence]"
-    },
-    {
-      "id": "EVIDENCE::e36d56029eed160051cb",
-      "source": "Q7251",
-      "target": "Q2011497",
-      "label": "DIED_IN",
-      "type": "Directed",
-      "source_layer": "wikipedia_direct",
-      "source_name": "wikipedia_parse_api",
-      "confidence": 0.95,
-      "evidence_text": "Died: 7 June 1954 (1954-06-07) (aged 41) Wilmslow , Cheshire, England",
-      "source_id": "Alan Turing",
-      "event_id": "DeathEvent",
-      "qualifiers": {
-        "time_text": "1954-06-07",
-        "place_role": "death_place",
-        "page_revid": "1351251344",
-        "source_url": "https://en.wikipedia.org/wiki/Alan_Turing"
-      },
-      "semantic_key": "EVIDENCE::Q7251::DIED_IN::Q2011497::94da7a63b5ac",
-      "fusion_status": "original",
-      "fusion_reason": "",
-      "display_label": "DIED_IN [wikipedia_direct]"
     },
     {
       "id": "EVIDENCE::ec33ae598a500b4d92b4",
@@ -3775,7 +3729,7 @@
   ],
   "stats": {
     "node_count": 73,
-    "edge_count": 123,
+    "edge_count": 121,
     "node_type_counts": {
       "Person": 3,
       "Place": 9,
@@ -3797,12 +3751,11 @@
     "edge_layer_counts": {
       "facts": 30,
       "event": 63,
-      "evidence": 28,
-      "wikipedia_direct": 2
+      "evidence": 28
     },
     "edge_type_counts": {
-      "BORN_IN": 4,
-      "DIED_IN": 3,
+      "BORN_IN": 3,
+      "DIED_IN": 2,
       "STUDIED_AT": 12,
       "WORKED_AT": 11,
       "AUTHORED": 4,
