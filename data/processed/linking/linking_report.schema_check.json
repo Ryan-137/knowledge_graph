@@ -1,0 +1,18 @@
+{
+  "mention_count": 20,
+  "decision_counts": {
+    "NIL": 14,
+    "LINKED": 6
+  },
+  "nil_reason_counts": {
+    "ambiguous": 2,
+    "low_score": 10,
+    "type_conflict": 2
+  },
+  "mention_type_counts": {
+    "PER": 10,
+    "ORG": 5,
+    "LOC": 5
+  },
+  "avg_candidate_count": 3.85
+}

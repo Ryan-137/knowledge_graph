@@ -1,0 +1,17 @@
+{
+  "gold_count": 8,
+  "matched_prediction_count": 8,
+  "missing_prediction_count": 0,
+  "gold_linked_count": 2,
+  "decision_counts": {
+    "NIL": 4,
+    "LINKED": 2,
+    "REVIEW": 2
+  },
+  "candidate_recall_at_1": 1.0,
+  "candidate_recall_at_5": 1.0,
+  "linking_accuracy": 1.0,
+  "nil_precision": 1.0,
+  "short_mention_accuracy": 1.0,
+  "error_examples": []
+}

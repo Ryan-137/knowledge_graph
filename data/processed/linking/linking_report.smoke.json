@@ -1,0 +1,172 @@
+{
+  "mention_count": 20,
+  "decision_counts": {
+    "NIL": 9,
+    "LINKED": 6,
+    "REVIEW": 5
+  },
+  "link_status_counts": {
+    "NIL": 9,
+    "LINKED": 6,
+    "REVIEW": 5
+  },
+  "nil_reason_counts": {
+    "AMBIGUOUS": 7,
+    "LOW_EVIDENCE": 2
+  },
+  "decision_reason_counts": {
+    "AMBIGUOUS": 7,
+    "LOW_EVIDENCE": 7,
+    "DOCUMENT_SUPPORT_MATCH": 5,
+    "HIGH_CONFIDENCE_EXACT_ALIAS": 1
+  },
+  "mention_type_counts": {
+    "ORGANIZATION": 9,
+    "PERSON": 8,
+    "PLACE": 3
+  },
+  "linked_count": 6,
+  "review_count": 5,
+  "nil_count": 9,
+  "skipped_count": 0,
+  "short_mention_count": 9,
+  "avg_candidate_count": 5.0,
+  "candidate_source_counts": {
+    "tfidf_recall": 85,
+    "exact_alias": 15,
+    "normalized_alias": 15,
+    "surname_alias": 3,
+    "short_name_alias": 1
+  },
+  "candidate_recall_at_1": null,
+  "candidate_recall_at_5": null,
+  "linking_accuracy": null,
+  "nil_precision": null,
+  "short_mention_accuracy": null,
+  "top_no_candidate_mentions": [],
+  "top_nil_mentions": [
+    {
+      "mention_text": "Dorset",
+      "mention_type": "PLACE",
+      "count": 2,
+      "doc_count": 1,
+      "sample_contexts": [
+        "He was educated at Sherborne, an English public school in Dorset, where his maths teacher recognised his ability and let him study on his own instead of following the lessons given to his classmates."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 2
+      }
+    },
+    {
+      "mention_text": "Hazelhurst School",
+      "mention_type": "ORGANIZATION",
+      "count": 2,
+      "doc_count": 1,
+      "sample_contexts": [
+        "You can see a letter here from Alan Turing to his mother and father while he was at Hazelhurst School in 1923, which was written with a fountain pen he had invented."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Sherborne",
+      "mention_type": "ORGANIZATION",
+      "count": 2,
+      "doc_count": 1,
+      "sample_contexts": [
+        "He was educated at Sherborne, an English public school in Dorset, where his maths teacher recognised his ability and let him study on his own instead of following the lessons given to his classmates."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Charing Cross",
+      "mention_type": "ORGANIZATION",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Alan Turing (left) with school friends, Robin and John Wainwright and Hugh Highet, taken at Waterloo Station on the way to the school carriage at Charing Cross Station."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 1
+      }
+    },
+    {
+      "mention_text": "Princeton Universities",
+      "mention_type": "ORGANIZATION",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Turing went to Cambridge and Princeton Universities Alan Turing went up to King’s College, Cambridge, in autumn 1931, to study mathematics."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 1
+      }
+    },
+    {
+      "mention_text": "Waterloo Station",
+      "mention_type": "ORGANIZATION",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Alan Turing (left) with school friends, Robin and John Wainwright and Hugh Highet, taken at Waterloo Station on the way to the school carriage at Charing Cross Station."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 1
+      }
+    }
+  ],
+  "top_review_mentions": [
+    {
+      "mention_text": "Turing",
+      "mention_type": "PERSON",
+      "count": 2,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Turing was a mathematician Alan Turing demonstrated a talent for mathematics at a young age.",
+        "Turing went to Cambridge and Princeton Universities Alan Turing went up to King’s College, Cambridge, in autumn 1931, to study mathematics."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 2
+      }
+    },
+    {
+      "mention_text": "Alan Turing",
+      "mention_type": "PERSON",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Alan Turing (left) with school friends, Robin and John Wainwright and Hugh Highet, taken at Waterloo Station on the way to the school carriage at Charing Cross Station."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 1
+      }
+    },
+    {
+      "mention_text": "Cambridge",
+      "mention_type": "ORGANIZATION",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Turing went to Cambridge and Princeton Universities Alan Turing went up to King’s College, Cambridge, in autumn 1931, to study mathematics."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 1
+      }
+    },
+    {
+      "mention_text": "Cambridge",
+      "mention_type": "PLACE",
+      "count": 1,
+      "doc_count": 1,
+      "sample_contexts": [
+        "(Archives Centre, King's College, Cambridge, AMT/K/7/3)."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 1
+      }
+    }
+  ]
+}

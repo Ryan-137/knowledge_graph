@@ -1,0 +1,641 @@
+{
+  "mention_count": 2468,
+  "decision_counts": {
+    "LINKED": 1276,
+    "NIL": 972,
+    "REVIEW": 220
+  },
+  "link_status_counts": {
+    "LINKED": 1276,
+    "NIL": 972,
+    "REVIEW": 220
+  },
+  "nil_reason_counts": {
+    "LOW_EVIDENCE": 539,
+    "AMBIGUOUS": 353,
+    "TYPE_CONFLICT": 80
+  },
+  "decision_reason_counts": {
+    "DOCUMENT_SUPPORT_MATCH": 899,
+    "LOW_EVIDENCE": 752,
+    "AMBIGUOUS": 360,
+    "HIGH_CONFIDENCE_EXACT_ALIAS": 245,
+    "TYPE_CONFLICT": 80,
+    "ALIAS_AND_CONTEXT_MATCH": 72,
+    "MANUAL_REVIEW_ACCEPTED": 60
+  },
+  "mention_type_counts": {
+    "PERSON": 1105,
+    "ORGANIZATION": 443,
+    "PLACE": 302,
+    "MACHINE": 264,
+    "CONCEPT": 246,
+    "WORK": 82,
+    "AWARD": 26
+  },
+  "linked_count": 1276,
+  "review_count": 220,
+  "nil_count": 972,
+  "skipped_count": 0,
+  "short_mention_count": 1202,
+  "avg_candidate_count": 4.9935,
+  "candidate_source_counts": {
+    "tfidf_recall": 10841,
+    "normalized_alias": 1440,
+    "exact_alias": 1256,
+    "surname_alias": 629,
+    "place_variant_alias": 114,
+    "short_name_alias": 41,
+    "abbreviation_alias": 29
+  },
+  "candidate_recall_at_1": null,
+  "candidate_recall_at_5": null,
+  "linking_accuracy": null,
+  "nil_precision": null,
+  "short_mention_accuracy": null,
+  "top_no_candidate_mentions": [],
+  "top_nil_mentions": [
+    {
+      "mention_text": "Science Museum Group",
+      "mention_type": "ORGANIZATION",
+      "count": 38,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Three-ring Enigma cypher machine in oak wood transit case Nazi Germany used Enigma machines to automatically turn messages into a complex code before they sent them by radio.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Automatic Computing Engine (ACE) pilot model, 1949 Frustrated at NPL, Turing took a sabbatical, when an old friend from Bletchley named Max Newman asked if he might be interested in a job as Deputy Director of a computing laboratory Newman was trying to establish at the University of Manchester… Manchester computers Turing moved to Manchester in October 1948, where the world's first stored program computer had recently been completed, now known as the'Manchester Baby'.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Replica of the'Baby'or SSEM computer Turing made important contributions to Baby's growth into the Mark 1, but he saw computing differently to the engineering team."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 18,
+        "TYPE_CONFLICT": 18,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Entscheidungsproblem",
+      "mention_type": "CONCEPT",
+      "count": 28,
+      "doc_count": 5,
+      "sample_contexts": [
+        "Turing developed the idea of a computer In 1936, Turing published an academic paper, ‘On Computable Numbers, with an application to the Entscheidungsproblem’ in the proceedings of the London Mathematical Society.",
+        "In 1936, Turing published an academic paper, ‘On Computable Numbers, with an application to the Entscheidungsproblem’ in the proceedings of the London Mathematical Society.",
+        "Alan Mathison Turing (1912-54) On this page Childhood Cambridge The Entscheidungsproblem Princeton and Bletchley Park After the War and Artificial Intelligence Morphogenesis The Final Years Acknowledgements This is an exhibition about Alan Turing illustrated with documents from papers held at the Archive Centre."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 21,
+        "LOW_EVIDENCE": 7
+      }
+    },
+    {
+      "mention_text": "Board of Trustees of the Science Museum",
+      "mention_type": "ORGANIZATION",
+      "count": 24,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Three-ring Enigma cypher machine in oak wood transit case Nazi Germany used Enigma machines to automatically turn messages into a complex code before they sent them by radio.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Automatic Computing Engine (ACE) pilot model, 1949 Frustrated at NPL, Turing took a sabbatical, when an old friend from Bletchley named Max Newman asked if he might be interested in a job as Deputy Director of a computing laboratory Newman was trying to establish at the University of Manchester… Manchester computers Turing moved to Manchester in October 1948, where the world's first stored program computer had recently been completed, now known as the'Manchester Baby'.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Replica of the'Baby'or SSEM computer Turing made important contributions to Baby's growth into the Mark 1, but he saw computing differently to the engineering team."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 13,
+        "TYPE_CONFLICT": 9,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "London",
+      "mention_type": "PLACE",
+      "count": 19,
+      "doc_count": 5,
+      "sample_contexts": [
+        "During and after World War Two, Turing took up running – he would often run long distances to and from work, and once from London to his mother’s home in Guildford.",
+        "He was successful in athletic competitions, and it is possible that, had he not suffered an injury beforehand, he could have qualified for the marathon at the 1948 London Olympics.",
+        "Turing worked on the first computer at Manchester University After World War Two in 1945, Turing joined the National Physical Laboratory in Teddington, London, where he helped to design one of the first electronic computers, known as ‘ACE’."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 13,
+        "AMBIGUOUS": 5,
+        "TYPE_CONFLICT": 1
+      }
+    },
+    {
+      "mention_text": "artificial intelligence",
+      "mention_type": "CONCEPT",
+      "count": 15,
+      "doc_count": 5,
+      "sample_contexts": [
+        "As a result of this work, Turing is now considered to be one of the fathers of machine learning and what we now know as artificial intelligence or AI. He also devised what has become known as the ‘Turing Test’, where he proposed a game in which, by asking only written questions and studying written answers, a player had to determine whether the answers were coming from a human or a machine.",
+        "His contribution was wide-ranging, across such issues as programming, neural nets and artificial intelligence.",
+        "Morphogenesis Turing’s approach to artificial intelligence – a machine ‘learning’ from its existing state, its electronically stored experience and its programme – could be applied to the study of how a plant ‘knows’ to grow in a particular pattern, based on its existing state of growth, the environmental conditions, and its biologically stored genetic ‘programme’."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 12,
+        "LOW_EVIDENCE": 3
+      }
+    },
+    {
+      "mention_text": "discrete-state machine",
+      "mention_type": "CONCEPT",
+      "count": 12,
+      "doc_count": 2,
+      "sample_contexts": [
+        "As an example of a discrete-state machine we might consider a wheel which clicks round through 120 once a second, but may be stopped by a]ever which can be operated from outside;",
+        "… Given the table corresponding to a discrete-state machine it is possible to predict what it will do.",
+        "Provided it could be carried out sufficiently quickly the digital computer could mimic the behavior of any discrete-state machine."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 8,
+        "LOW_EVIDENCE": 4
+      }
+    },
+    {
+      "mention_text": "Board of Trustees of the Science Museum Image",
+      "mention_type": "ORGANIZATION",
+      "count": 12,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum Punched paper computer tape (1955–65) Science Museum Group Collection © The Board of Trustees of the Science Museum Image source for A roll of white tape with symbols punched into it In the 1930s, Turing had imagined a computing machine controlled by symbols on paper tape.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum Ferranti paper tape reader, used for feeding programs into a computer (late 1950s) Science Museum Group Collection © The Board of Trustees of the Science Museum Image source for A grey, cube-shaped 1950s paper reader used in early computing Users prepared programs on a paper tape by punching holes that represented instructions or data.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum Image source for Black and white photo of three men working at a computer Computers were a fantastic and little understood new technology in the 1950s."
+      ],
+      "decision_reasons": {
+        "TYPE_CONFLICT": 7,
+        "LOW_EVIDENCE": 5
+      }
+    },
+    {
+      "mention_text": "Ferranti Mark 1",
+      "mention_type": "MACHINE",
+      "count": 11,
+      "doc_count": 3,
+      "sample_contexts": [
+        "Turing made contributions to the extra orders added in the Ferranti Mark 1, notably the random number generator.",
+        "Turing wrote the first version of the Programmer's Manual for this machine, was elected to membership of the Manchester Literary and Philosophical Society, and was recruited by Ferranti as a consultant in the development of their commercialised machine, the Ferranti Mark 1.",
+        "Built of over 3,500 electronic valves and 12 cathode ray tubes (used as memory and display screens) linked by six miles of wire, the Ferranti Mark 1 had just a fraction of the power of a modern computer—the main memory was just over 1 kilobyte."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 10,
+        "LOW_EVIDENCE": 1
+      }
+    },
+    {
+      "mention_text": "Ferranti",
+      "mention_type": "ORGANIZATION",
+      "count": 11,
+      "doc_count": 2,
+      "sample_contexts": [
+        "Turing wrote the first version of the Programmer's Manual for this machine, was elected to membership of the Manchester Literary and Philosophical Society, and was recruited by Ferranti as a consultant in the development of their commercialised machine, the Ferranti Mark 1.",
+        "He continued to be paid consultancy fees by Ferranti until his death.",
+        "Alan Turing, Computing Machinery and Intelligence (1950) In 1951 Ferranti delivered the first production model Ferranti Mark 1 Computer to the University of Manchester."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 9,
+        "TYPE_CONFLICT": 2
+      }
+    },
+    {
+      "mention_text": "Computing Machinery and Intelligence",
+      "mention_type": "WORK",
+      "count": 8,
+      "doc_count": 5,
+      "sample_contexts": [
+        "Turing’s seminal philosophical paper on artificial intelligence, ‘Computing Machinery and Intelligence’, was written in 1950.",
+        "Out of this confused era arose, however, the most lucid and far-reaching expression of Turing's philosophy of machine and Mind, the paper Computing Machinery and Intelligence which appeared in the philosophical journal Mind in 1950.",
+        "Meanwhile, he was continuing his theoretical work and in 1950 published another famous paper \"Computing Machinery and Intelligence\", which anticipated the subject of Artificial Intelligence."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 6,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Bomba",
+      "mention_type": "MACHINE",
+      "count": 8,
+      "doc_count": 3,
+      "sample_contexts": [
+        "One of their ideas was embodied in a machine called a Bomba.",
+        "Turing's approach was more general, using crib-based decryption for which he produced the functional specification of the bombe (an improvement on the Polish Bomba).",
+        "As early as 1932, a small team of Polish mathematician-cryptanalysts, led by Marian Rejewski, had succeeded in deducing the internal wiring of Enigma, and by 1938 Rejewski’s team had devised a code-breaking machine they called the Bomba (the Polish word for a type of ice cream)."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 8
+      }
+    },
+    {
+      "mention_text": "discrete-state machines",
+      "mention_type": "CONCEPT",
+      "count": 8,
+      "doc_count": 2,
+      "sample_contexts": [
+        "The digital computers considered in the last section may be classified amongst the “discrete-state machines.”",
+        "The internal state at any moment is determined by the last state and input signal according to the table The output signals, the only externally visible indication of the internal state (the light) are described by the table This example is typical of discrete-state machines.",
+        "(I am assuming that the idea of storage capacity is extended in some way to cover machines other than discrete-state machines."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 6,
+        "LOW_EVIDENCE": 2
+      }
+    },
+    {
+      "mention_text": "Artificial Intelligence",
+      "mention_type": "CONCEPT",
+      "count": 7,
+      "doc_count": 4,
+      "sample_contexts": [
+        "Turing pioneered the idea of Artificial Intelligence In the 1950s, Turing continued to theorise about the potential of computers in the future.",
+        "Turing pioneered the idea of Artificial Intelligence.",
+        "Alan Mathison Turing (1912-54) On this page Childhood Cambridge The Entscheidungsproblem Princeton and Bletchley Park After the War and Artificial Intelligence Morphogenesis The Final Years Acknowledgements This is an exhibition about Alan Turing illustrated with documents from papers held at the Archive Centre."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4,
+        "AMBIGUOUS": 3
+      }
+    },
+    {
+      "mention_text": "United States",
+      "mention_type": "PLACE",
+      "count": 7,
+      "doc_count": 4,
+      "sample_contexts": [
+        "By the end of 1941, as the United States entered the war, the battle of the Atlantic was moving towards Allied advantage.",
+        "But since 1948, the conditions of the Cold War, and the alliance with the United States, meant that known homosexuals had become ineligible for security clearance.",
+        "The reader may draw a parallel with the Constitution of the United States."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4,
+        "AMBIGUOUS": 3
+      }
+    },
+    {
+      "mention_text": "Andrew Hodges",
+      "mention_type": "PERSON",
+      "count": 7,
+      "doc_count": 3,
+      "sample_contexts": [
+        "King’s College is also grateful to the Turing family, the Turing Trust, Prof. I.J. Good, Dr. Andrew Hodges, N.E. Hoskin, Prof. C.B. Jones, Dr. Norman Routledge, Prof. M.V. Wilkes, and Prof. Mike Yates for their generosity in providing documents and advice.",
+        "These notes have been prepared with the help of Andrew Hodges’ book Alan Turing: The Enigma (Burnett Books Ltd.",
+        "Andrew Hodges, 1995 Other on-line publications Listing of all my publications."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 7
+      }
+    },
+    {
+      "mention_text": "universal machine",
+      "mention_type": "CONCEPT",
+      "count": 7,
+      "doc_count": 3,
+      "sample_contexts": [
+        "Turing’s famous article ‘On Computable Numbers, with an Application to the Entsheidungsproblem’, in the process of answering Hilbert’s question defined what we now know as the programmable computer, then called a ‘universal machine’.",
+        "his own 1936 concept of the universal machine the potential speed and reliability of electronic technology.",
+        "Turing knew that superior technology would soon transform design: his emphasis was on speed in every sense, and in the exploitation of the universal machine concept."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 6,
+        "LOW_EVIDENCE": 1
+      }
+    },
+    {
+      "mention_text": "Analytical Engine",
+      "mention_type": "MACHINE",
+      "count": 7,
+      "doc_count": 2,
+      "sample_contexts": [
+        "Charles Babbage, Lucasian Professor of Mathematics at Cambridge from 1828 to 1839, planned such a machine, called the Analytical Engine, but it was never completed.",
+        "The fact that Babbage’s Analytical Engine was to be entirely mechanical will help us to rid ourselves of a superstition.",
+        "The fact that Babbage's Analytical Engine was to be entirely mechanical will help us to rid ourselves of a superstition."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 5,
+        "LOW_EVIDENCE": 2
+      }
+    },
+    {
+      "mention_text": "Murray",
+      "mention_type": "PERSON",
+      "count": 7,
+      "doc_count": 2,
+      "sample_contexts": [
+        "When questioned, Turing openly admitted to a sexual relationship with Murray, which was illegal at the time under the Sexual Offences Act, and he and Murray were prosecuted.",
+        "Turing was walking along Manchester's Oxford Road when he met Murray just outside the Regal Cinema and invited him to lunch.",
+        "During the investigation, he acknowledged a sexual relationship with Murray."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 7
+      }
+    },
+    {
+      "mention_text": "Britain",
+      "mention_type": "PLACE",
+      "count": 6,
+      "doc_count": 3,
+      "sample_contexts": [
+        "This was the centre of Britain’s codebreaking effort in World War Two.",
+        "However, both Julius and Ethel wanted their children to be brought up in Britain, so they moved to Maida Vale, London, where Alan Turing was born on 23 June 1912, as recorded by a blue plaque on the outside of the house of his birth, later the Colonnade Hotel.",
+        "The first day of term coincided with the 1926 General Strike, in Britain, but Turing was so determined to attend that he rode his bicycle unaccompanied 60 miles (97 km) from Southampton to Sherborne, stopping overnight at an inn."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Nazi Germany",
+      "mention_type": "PLACE",
+      "count": 6,
+      "doc_count": 3,
+      "sample_contexts": [
+        "This gave Allied commanders a decisive advantage on the various battle fronts, at sea and in the air, and helped bring victory over Nazi Germany in 1945.",
+        "He concentrated on cryptanalysis of the Enigma cipher machine used by Nazi Germany, together with Dilly Knox, a senior GC&CS codebreaker.",
+        "Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Three-ring Enigma cypher machine in oak wood transit case Nazi Germany used Enigma machines to automatically turn messages into a complex code before they sent them by radio."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 3,
+        "AMBIGUOUS": 2,
+        "TYPE_CONFLICT": 1
+      }
+    }
+  ],
+  "top_review_mentions": [
+    {
+      "mention_text": "Church",
+      "mention_type": "PERSON",
+      "count": 28,
+      "doc_count": 6,
+      "sample_contexts": [
+        "Turing would meet some of the best mathematicians of the day in Princeton: von Neumann, Weyl, Courant, Hardy, Einstein, Lefschetz, and Church.",
+        "Church and Turing were among several mathematicians and logicians who did pioneering work on computation at Princeton in the 1930s, laying the foundation for computer science.",
+        "Church and Turing were among several."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 28
+      }
+    },
+    {
+      "mention_text": "Princeton",
+      "mention_type": "ORGANIZATION",
+      "count": 25,
+      "doc_count": 5,
+      "sample_contexts": [
+        "During this time, he completed his PhD. At the time of his visit, Princeton was home to the Institute for Advanced Studies, where some of the greatest mathematicians of the age were based, including Alonzo Church, John von Neumann, Albert Einstein, and the physicist Wolfgang Pauli.",
+        "While intellectually stimulated in the USA, Turing missed Cambridge, and he turned down an offer to remain at Princeton after his PhD. Turing, Alan Mathison;",
+        "PhD. At the time of his visit, Princeton was home to the Institute for"
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 25
+      }
+    },
+    {
+      "mention_text": "Turing",
+      "mention_type": "PERSON",
+      "count": 18,
+      "doc_count": 6,
+      "sample_contexts": [
+        "However, in 1948, before ACE was completed, Turing moved to Manchester University, where he joined a team led by his former Bletchley Park colleague Max Newman, and was appointed as ‘Deputy Director of the Royal Society Computing Laboratory’.",
+        "The Entscheidungsproblem Turing attended Max Newman’s Part III lectures on the Foundations of Mathematics in Spring 1935.",
+        "Turing attended Max Newman’s Part III lectures on the Foundations of Mathematics in Spring 1935."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 18
+      }
+    },
+    {
+      "mention_text": "Cambridge",
+      "mention_type": "PLACE",
+      "count": 17,
+      "doc_count": 4,
+      "sample_contexts": [
+        "While intellectually stimulated in the USA, Turing missed Cambridge, and he turned down an offer to remain at Princeton after his PhD. Turing, Alan Mathison;",
+        "Turing went to Cambridge and Princeton Universities.",
+        "USA, Turing missed Cambridge, and he turned down an offer to remain at"
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 17
+      }
+    },
+    {
+      "mention_text": "Turing machine",
+      "mention_type": "CONCEPT",
+      "count": 13,
+      "doc_count": 3,
+      "sample_contexts": [
+        "Subsequently, the concept of the Turing machine has become the foundation of the modern theory of computation and computability.",
+        "One can only speculate, but it looks as if Turing found in the concept of the Turing machine something that would satisfy the fascination with the problem of Mind that Christopher Morcom had sparked;",
+        "The concept of'the Turing machine'is like that of'the formula'or'the equation';"
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 12,
+        "AMBIGUOUS": 1
+      }
+    },
+    {
+      "mention_text": "Manchester",
+      "mention_type": "PLACE",
+      "count": 11,
+      "doc_count": 5,
+      "sample_contexts": [
+        "Meanwhile the NPL made no advance with the construction of the ACE, and as Turing's position fell back, other computer projects at Cambridge and Manchester took the lead.",
+        "He conveyed the basic principles to the leading radar engineer F. C. Williams, who had been attracted to Manchester, and the latter's brilliant innovation made possible a rapid success: Manchester in June 1948 had the world's first practical demonstration of Turing's computer principle.",
+        "Turing at Manchester could perhaps have led the world in software development."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 11
+      }
+    },
+    {
+      "mention_text": "Ferranti Mark 1",
+      "mention_type": "MACHINE",
+      "count": 11,
+      "doc_count": 3,
+      "sample_contexts": [
+        "However, the main formal contribution Turing made to the Mark 1 project was that he worked on providing the early software requirements for the Manchester Mark 1, with the full time help of Cicely Popplewell, and wrote the first programming manual for the Ferranti Mark 1.",
+        "In 1952, he tried to implement it on a Ferranti Mark 1, but lacking enough power, the computer was unable to execute the program.",
+        "This design was used by the Ferranti company to make the Ferranti Mark 1, the world's first commercially available stored program computer."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 11
+      }
+    },
+    {
+      "mention_text": "Cambridge",
+      "mention_type": "ORGANIZATION",
+      "count": 10,
+      "doc_count": 5,
+      "sample_contexts": [
+        "Charles Babbage, Lucasian Professor of Mathematics at Cambridge from 1828 to 1839, planned such a machine, called the Analytical Engine, but it was never completed.",
+        "In 1938 Turing was offered a temporary post at Princeton by von Neumann but instead returned to Cambridge.",
+        "Meanwhile the NPL made no advance with the construction of the ACE, and as Turing's position fell back, other computer projects at Cambridge and Manchester took the lead."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 10
+      }
+    },
+    {
+      "mention_text": "Newman",
+      "mention_type": "PERSON",
+      "count": 10,
+      "doc_count": 4,
+      "sample_contexts": [
+        "Newman encouraged Turing to consider whether there was some mechanical process which might be applied to a mathematical statement to ascertain whether or not it was provable.",
+        "Throughout 1935 and into 1936 Turing worked on his proof with Newman’s guidance.",
+        "and into 1936 Turing worked on his proof with Newman’s guidance."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 10
+      }
+    },
+    {
+      "mention_text": "Computing Machinery and Intelligence",
+      "mention_type": "WORK",
+      "count": 7,
+      "doc_count": 2,
+      "sample_contexts": [
+        "During this time, he continued to do more abstract work in mathematics, and in \"Computing Machinery and Intelligence\", Turing addressed the problem of artificial intelligence, and proposed an experiment that became known as the Turing test, an attempt to define a standard for a machine to be called\" intelligent\".",
+        "Alan Turing, Computing Machinery and Intelligence (1950) In 1951 Ferranti delivered the first production model Ferranti Mark 1 Computer to the University of Manchester.",
+        "Alan Turing, Computing Machinery and Intelligence (1950) Aged just 41, Turing died just as the computer age was beginning."
+      ],
+      "decision_reasons": {
+        "AMBIGUOUS": 4,
+        "LOW_EVIDENCE": 3
+      }
+    },
+    {
+      "mention_text": "imitation game",
+      "mention_type": "CONCEPT",
+      "count": 5,
+      "doc_count": 2,
+      "sample_contexts": [
+        "Those who hold to the mathematical argument would, I think, mostly he willing to accept the imitation game as a basis for discussion, Those who believe in the two previous objections would probably not be interested in any criteria.",
+        "A more specific argument based on ESP might run as follows:\"Let us play the imitation game, using as witnesses a man who is good as a telepathic receiver, and a digital computer.",
+        "In'Computing Machinery and Intelligence', a foundational 1950 article on artificial intelligence, he proposed an imitation game to see if a computer could fool a person into thinking it was human—now famous as the'Turing Test'."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 5
+      }
+    },
+    {
+      "mention_text": "Princeton",
+      "mention_type": "PLACE",
+      "count": 5,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Alan Mathison Turing (1912-54) On this page Childhood Cambridge The Entscheidungsproblem Princeton and Bletchley Park After the War and Artificial Intelligence Morphogenesis The Final Years Acknowledgements This is an exhibition about Alan Turing illustrated with documents from papers held at the Archive Centre.",
+        "Princeton and Bletchley Park The completion of his research into Hilbert’s Entscheidungsproblem in 1936 coincided with the decision to study at Princeton University with Alonzo Church.",
+        "Turing would meet some of the best mathematicians of the day in Princeton: von Neumann, Weyl, Courant, Hardy, Einstein, Lefschetz, and Church."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 3,
+        "AMBIGUOUS": 2
+      }
+    },
+    {
+      "mention_text": "Bombe",
+      "mention_type": "MACHINE",
+      "count": 4,
+      "doc_count": 3,
+      "sample_contexts": [
+        "He also travelled to the USA to assist with the development of a ‘Bombe’ machine by the US Navy.",
+        "From late 1940 onwards, the Turing-Welchman Bombe made reading of Luftwaffe signals routine.",
+        "Career and research 2.1 Cryptanalysis 2.2 Bombe 2.2.1 Action This Day 2.4 Turingery 2.5 Delilah 2.6 Early computers and the Turing test 2.7 Pattern formation and mathematical biology"
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4
+      }
+    },
+    {
+      "mention_text": "Church's",
+      "mention_type": "PERSON",
+      "count": 4,
+      "doc_count": 2,
+      "sample_contexts": [
+        "His paper, On Computable Numbers with an application to the Entscheidungsproblem, had to refer to Church's work, and was delayed until August 1936.",
+        "His partly explored ideas included the use of mathematical logic for program checking, implementing Church's logical calculus on the machine, and other ideas which, combined with his massive knowledge of combinatorial and statistical methods, could have set the agenda in computer science for years ahead.",
+        "Although Turing's proof was published shortly after Church's equivalent proof using his lambda calculus, Turing's approach is considerably more accessible and intuitive than Church's."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4
+      }
+    },
+    {
+      "mention_text": "Turing Machine",
+      "mention_type": "CONCEPT",
+      "count": 4,
+      "doc_count": 2,
+      "sample_contexts": [
+        "This ‘Turing Machine’, as it is now known, is often cited as the inspiration for the computers which surround us today.",
+        "Determined to specify a ‘definitive method’, he described a machine (the ‘Turing Machine’ as it became known) working with a paper tape bearing printed symbols."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4
+      }
+    },
+    {
+      "mention_text": "Turing Test",
+      "mention_type": "CONCEPT",
+      "count": 4,
+      "doc_count": 2,
+      "sample_contexts": [
+        "The wit and drama of the Turing Test has proved a lasting stimulus to later thinkers, and the paper a classic contribution to the philosophy and practice of Artificial Intelligence research.",
+        "In'Computing Machinery and Intelligence', a foundational 1950 article on artificial intelligence, he proposed an imitation game to see if a computer could fool a person into thinking it was human—now famous as the'Turing Test'."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 4
+      }
+    },
+    {
+      "mention_text": "Ferranti Mark 1 Computer",
+      "mention_type": "MACHINE",
+      "count": 3,
+      "doc_count": 1,
+      "sample_contexts": [
+        "In 1951 Ferranti delivered the first production model Ferranti Mark 1 Computer to the University of Manchester.",
+        "The Ferranti Mark 1 Computer."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 3
+      }
+    },
+    {
+      "mention_text": "Manchester Mark 1 Computer",
+      "mention_type": "MACHINE",
+      "count": 3,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Sunflower grown as part of the Turing's Sunflowers citizen science project (2012) Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Sunflower grown as part of citizen science project The Ferranti Mark 1 Computer Much of Turing's computing at Manchester was done on a Ferranti Mark 1, which was the commercial version of the Manchester Mark 1 Computer, which Turing also helped to develop.",
+        "The Ferranti Mark 1 Computer Much of Turing's computing at Manchester was done on a Ferranti Mark 1, which was the commercial version of the Manchester Mark 1 Computer, which Turing also helped to develop.",
+        "Much of Turing's computing at Manchester was done on a Ferranti Mark 1, which was the commercial version of the Manchester Mark 1 Computer, which Turing also helped to develop."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 3
+      }
+    },
+    {
+      "mention_text": "Sherborne",
+      "mention_type": "PLACE",
+      "count": 3,
+      "doc_count": 1,
+      "sample_contexts": [
+        "The first day of term coincided with the 1926 General Strike, in Britain, but Turing was so determined to attend that he rode his bicycle unaccompanied 60 miles (97 km) from Southampton to Sherborne, stopping overnight at an inn.",
+        "At Sherborne, Turing formed a significant friendship with fellow pupil Christopher Collan Morcom (13 July 1911 – 13 February 1930), who has been described as Turing's first love.",
+        "After graduating from Sherborne, Turing applied for several Cambridge colleges scholarships, including Trinity and King's, eventually earning an £80 per annum scholarship (equivalent to about £4,300 as of 2023) to study at the latter."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 3
+      }
+    },
+    {
+      "mention_text": "Ferranti Mark 1 Computer Much of",
+      "mention_type": "MACHINE",
+      "count": 2,
+      "doc_count": 1,
+      "sample_contexts": [
+        "Sunflower grown as part of the Turing's Sunflowers citizen science project (2012) Science Museum Group Collection © The Board of Trustees of the Science Museum More information about Sunflower grown as part of citizen science project The Ferranti Mark 1 Computer Much of Turing's computing at Manchester was done on a Ferranti Mark 1, which was the commercial version of the Manchester Mark 1 Computer, which Turing also helped to develop.",
+        "The Ferranti Mark 1 Computer Much of Turing's computing at Manchester was done on a Ferranti Mark 1, which was the commercial version of the Manchester Mark 1 Computer, which Turing also helped to develop."
+      ],
+      "decision_reasons": {
+        "LOW_EVIDENCE": 2
+      }
+    }
+  ]
+}
