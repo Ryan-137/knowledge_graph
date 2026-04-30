@@ -1,0 +1,40 @@
+{
+  "mention_count": 4462,
+  "decision_counts": {
+    "LINKED_BY_COREF": 1100,
+    "NIL": 1032,
+    "LINKED": 973,
+    "COREF_UNRESOLVED": 894,
+    "REVIEW": 463
+  },
+  "original_decision_counts": {
+    "SKIPPED_PRONOUN": 1824,
+    "NIL": 1032,
+    "LINKED": 973,
+    "REVIEW": 463,
+    "SKIPPED_GENERIC": 170
+  },
+  "linked_by_coref_count": 1100,
+  "coref_unresolved_count": 894,
+  "coref_reason_counts": {
+    "RULE_NEAREST_ANTECEDENT": 975,
+    "NO_COMPATIBLE_ANTECEDENT": 878,
+    "PRODUCT_REVIEW_DIRECT_UNIQUE_PERSON_ANTECEDENT": 81,
+    "PRODUCT_REVIEW_SAME_ENTITY_ANTECEDENT": 44,
+    "AMBIGUOUS_ANTECEDENT": 16
+  },
+  "antecedent_type_counts": {
+    "PERSON": 1012,
+    "MACHINE": 32,
+    "PLACE": 26,
+    "CONCEPT": 22,
+    "ORGANIZATION": 5,
+    "WORK": 3
+  },
+  "antecedent_distance_sentence_counts": {
+    "1": 420,
+    "0": 321,
+    "2": 229,
+    "3": 130
+  }
+}
