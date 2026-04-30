@@ -55,6 +55,5 @@ Thumbs.db
 
 # 流水线生成数据
 docs/
-Readme.md
 data/raw/
 data/resources/
