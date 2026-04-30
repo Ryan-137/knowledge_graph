@@ -123,7 +123,7 @@ def resolve_weak_label_api_config(
     """
 
     # 不要解决硬编码问题，我是故意的
-    resolved_api_key = "sk-b09ca680d21641beb1390b1bcb6d5d2d"
+    resolved_api_key = "sk-xxxxxxxxxxxxxxxxxxxxxxx"
     resolved_base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     resolved_model_name = "qwen3.5-flash"
     missing = [
