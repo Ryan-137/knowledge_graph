@@ -1,0 +1,71 @@
+{
+  "generate": {
+    "sentence_count": 2383,
+    "event_candidate_count": 4,
+    "event_argument_count": 8,
+    "event_type_counts": {
+      "CollaborationEvent": 1,
+      "InfluenceEvent": 3
+    }
+  },
+  "verify": {
+    "input_event_count": 4,
+    "status_counts": {
+      "REVIEW": 4
+    },
+    "missing_entity_role_counts": {
+      "person_a": 1,
+      "target_person": 3
+    },
+    "missing_entity_mentions": [
+      {
+        "event_candidate_id": "eventcand_7078991cc0aa",
+        "event_type": "CollaborationEvent",
+        "role": "person_a",
+        "mention_text": "Jack Good",
+        "mention_id": "ment_001301",
+        "doc_id": "doc_0009",
+        "sentence_id": "sent_001645",
+        "source_id": "src_second_001",
+        "trigger": "worked with"
+      },
+      {
+        "event_candidate_id": "eventcand_ff8bb152299c",
+        "event_type": "InfluenceEvent",
+        "role": "target_person",
+        "mention_text": "Dietrich Prinz",
+        "mention_id": "ment_001738",
+        "doc_id": "doc_0010",
+        "sentence_id": "sent_001964",
+        "source_id": "src_second_002",
+        "trigger": "influenced"
+      },
+      {
+        "event_candidate_id": "eventcand_9d7c16a1b822",
+        "event_type": "InfluenceEvent",
+        "role": "target_person",
+        "mention_text": "Dietrich Prinz",
+        "mention_id": "ment_002044",
+        "doc_id": "doc_0010",
+        "sentence_id": "sent_002141",
+        "source_id": "src_second_002",
+        "trigger": "influenced"
+      },
+      {
+        "event_candidate_id": "eventcand_e88fbf7c08f3",
+        "event_type": "InfluenceEvent",
+        "role": "target_person",
+        "mention_text": "Dietrich Prinz",
+        "mention_id": "ment_002066",
+        "doc_id": "doc_0010",
+        "sentence_id": "sent_002157",
+        "source_id": "src_second_002",
+        "trigger": "influenced"
+      }
+    ],
+    "review_event_count_by_reason": {
+      "empty_entity_roles:person_a": 1,
+      "empty_entity_roles:target_person": 3
+    }
+  }
+}

@@ -10,9 +10,28 @@
   "cnn_kernel_sizes": [3, 5],
   "cnn_hidden_size": 128,
   "position_embedding_dim": 16,
+  "min_token_frequency": 1,
+  "initializer_range": 0.05,
+  "max_sentences_per_bag": 16,
+  "top_k_support_sentences": 3,
+  "prediction_mask_mode": "candidate",
   "batch_size": 16,
   "learning_rate": 0.001,
   "weight_decay": 0.00001,
+  "gradient_clip_norm": 5.0,
+  "log_every_steps": 10,
   "max_epochs": 25,
-  "early_stop_patience": 5
+  "early_stop_patience": 5,
+  "target_relations": [
+    "BORN_IN",
+    "DIED_IN",
+    "STUDIED_AT",
+    "WORKED_AT",
+    "AUTHORED",
+    "PROPOSED",
+    "DESIGNED",
+    "AWARDED",
+    "LOCATED_IN"
+  ],
+  "threshold_by_relation": {}
 }

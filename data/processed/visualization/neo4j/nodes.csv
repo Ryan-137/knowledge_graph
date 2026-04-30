@@ -1,0 +1,74 @@
+:ID,:LABEL,name,entity_type,description,source_layer,source_name,confidence:float
+02312e2f5243659ab53e68d8ff421eddd405e153,Event;PublicationEvent,PublicationEvent: Alan Turing -> Turing's proof,PublicationEvent,AUTHORED,event,wikidata_sparql,0.95
+13a76a6840c4f803d98fab147da6c075e10306fe,Event;PublicationEvent,PublicationEvent: Alan Turing -> Intelligent Machinery,PublicationEvent,AUTHORED,event,wikidata_sparql,0.95
+1d571ae7716ccdf8b90543c0b11670a99a4ecfd3,Event;DesignEvent,DesignEvent: Alan Turing -> Automatic Computing Engine,DesignEvent,DESIGNED,event,wikidata_sparql,0.95
+1e9b58834e7b16a92a35ece0040ea5fba8b5646a,Event;BirthEvent,BirthEvent: Alan Turing -> Warrington Lodge,BirthEvent,BORN_IN,event,wikidata_sparql,0.95
+2a05c44046c0ff3b9725dd8f1399763132f78538,Event;BirthEvent,BirthEvent: Alan Turing -> Maida Vale,BirthEvent,BORN_IN,event,wikidata_sparql,0.95
+2caa17fc3f980570acc9e699c090d266c141bbdf,Event;EducationEvent,EducationEvent: Alan Turing -> Princeton University,EducationEvent,STUDIED_AT,event,wikidata_sparql,0.95
+485e7b42f082b3f9bfe9914a4f7c26cbe263d84f,Event;DesignEvent,DesignEvent: Alan Turing -> Bombe,DesignEvent,DESIGNED,event,wikidata_sparql,0.95
+5a00f19fd1d6759d0c4be6649fb1923c029d4db3,Event;EmploymentEvent,EmploymentEvent: Alan Turing -> Victoria University of Manchester,EmploymentEvent,WORKED_AT,event,wikidata_sparql,0.95
+695ff1f6577fbb828e601935aa3d5e7fd7ea70d1,Event;DesignEvent,DesignEvent: Alan Turing -> Turing machine,DesignEvent,DESIGNED,event,wikidata_sparql,0.95
+7e2ba48c88b1b2650ec707ac921921d36c8354d7,Event;EducationEvent,EducationEvent: Alan Turing -> King's College,EducationEvent,STUDIED_AT,event,wikidata_sparql,0.95
+82cbb884381cab33aac03082660eb5092af22ab2,Event;HonorEvent,HonorEvent: Alan Turing -> Order of the British Empire,HonorEvent,AWARDED,event,wikidata_sparql,0.95
+9afba5d1054d30c0b5c6311091a901309b24ec0a,Event;ProposalEvent,ProposalEvent: Alan Turing -> Turing test,ProposalEvent,PROPOSED,event,wikidata_sparql,0.95
+LOCAL_ALONZO_CHURCH,Entity;Person,Alonzo Church,Person,mathematician and Turing's doctoral supervisor at Princeton,entity,curated_local,1.0
+LOCAL_BLETCHLEY_PARK,Entity;Place,Bletchley Park,Place,wartime codebreaking centre associated with Alan Turing,entity,curated_local,1.0
+LOCAL_ENIGMA_MACHINE,Entity;Machine,Enigma machine,Machine,cipher machine central to Turing's wartime cryptanalysis,entity,curated_local,1.0
+LOCAL_MANCHESTER_MARK_1,Entity;Machine,Manchester Mark 1,Machine,early stored-program computer associated with Manchester and Turing,entity,curated_local,1.0
+LOCAL_MAX_NEWMAN,Entity;Person,Max Newman,Person,mathematician connected with Turing at Cambridge and Manchester,entity,curated_local,1.0
+Q10762848,Entity;Award,Officer of the Order of the British Empire,Award,"award, rank of the Order of the British Empire",entity,wikipedia_rest,0.95
+Q122744,Entity;Place,Maida Vale,Place,residential district comprising the northern part of Paddington in west London,entity,wikipedia_rest,0.95
+Q133854517,Entity;Concept,"Alan Turing's ""Delilah"" project",Concept,,entity,wikidata_sparql,0.95
+Q138518,Entity;Place,Princeton,Place,"municipality in Mercer County, New Jersey, United States",entity,wikipedia_rest,0.95
+Q14420,Entity;Award,Order of the British Empire,Award,British order of chivalry,entity,wikipedia_rest,0.95
+Q15631401,Entity;Award,Fellow of the Royal Society,Award,"elected Fellow of the Royal Society in London, including Honorary, Foreign and Royal Fellows",entity,wikipedia_rest,0.95
+Q163310,Entity;Concept,Turing machine,Concept,abstract computation model; mathematical model of computation that defines an abstract machine which manipulates symbols on a strip of tape according to a table of rules,entity,wikipedia_rest,0.95
+Q1690167,Entity;Award,Smith's Prize,Award,Prize from University of Cambridge in mathematics and theoretical physics,entity,wikipedia_rest,0.95
+Q18125,Entity;Place,Manchester,Place,"city in Greater Manchester, England",entity,wikipedia_rest,0.95
+Q189223,Entity;Concept,Turing test,Concept,"test of a machine's ability to exhibit intelligent behaviour equivalent to, or indistinguishable from, that of a human",entity,wikipedia_rest,0.95
+Q1967606,Entity;Organization,National Physical Laboratory,Organization,National Measurement Institution of the United Kingdom,entity,wikipedia_rest,0.95
+Q2011497,Entity;Place,Wilmslow,Place,"town and civil parish in Cheshire East, England",entity,wikipedia_rest,0.95
+Q20895942,Entity;Place,Warrington Lodge,Place,"former nursing home in London W9, England",entity,wikidata_sparql,0.95
+Q20895966,Entity;Work,Intelligent Machinery,Work,"report by Alan Turing to NPL, 1948",entity,wikidata_sparql,0.95
+Q21578,Entity;Organization,Princeton University,Organization,"private Ivy League research university in Princeton, New Jersey, United States",entity,wikipedia_rest,0.95
+Q220798,Entity;Organization,Government Communications Headquarters,Organization,British intelligence agency,entity,wikipedia_rest,0.95
+Q2278254,Entity;Organization,Sherborne School,Organization,"school in Sherborne, Dorset, England, UK",entity,wikipedia_rest,0.95
+Q350,Entity;Place,Cambridge,Place,"city in Cambridgeshire, England",entity,wikipedia_rest,0.95
+Q35794,Entity;Organization,University of Cambridge,Organization,"collegiate public research university in Cambridge, England, United Kingdom",entity,wikipedia_rest,0.95
+Q39086154,Entity;Concept,Turing's Wager,Concept,philosophical argument developed by Alan Turing,entity,wikipedia_rest,0.95
+Q4428206,Entity;Machine,Automatic Computing Engine,Machine,British early electronic serial stored-program computer,entity,wikipedia_rest,0.95
+Q480476,Entity;Machine,Bombe,Machine,codebreaking device created at Bletchley Park (United Kingdom),entity,wikipedia_rest,0.95
+Q4887849,Entity;Place,Benhall,Place,"suburb in Cheltenham, Gloucestershire, England, UK",entity,wikipedia_rest,0.95
+Q5583769,Entity;Concept,Good–Turing frequency estimation,Concept,statistical technique,entity,wikipedia_rest,0.95
+Q586895,Entity;Place,Sherborne,Place,"town and civil parish in Dorset, England",entity,wikipedia_rest,0.95
+Q66135280,Entity;Organization,Hazlehurst Community Primary School,Organization,"school in Bury, UK",entity,wikidata_sparql,0.95
+Q7251,Entity;Person,Alan Turing,Person,English computer scientist (1912–1954),entity,wikidata_sparql,0.95
+Q7854954,Entity;Work,Turing's proof,Work,Proof by Alan Turing,entity,wikipedia_rest,0.95
+Q867530,Entity;Organization,Victoria University of Manchester,Organization,British university (1851-2004),entity,wikipedia_rest,0.95
+Q924289,Entity;Organization,King's College,Organization,college of the University of Cambridge,entity,wikipedia_rest,0.95
+a3a5c29adddf0f5038d69edbdbca9d7643c5e3f1,Event;HonorEvent,HonorEvent: Alan Turing -> Fellow of the Royal Society,HonorEvent,AWARDED,event,wikidata_sparql,0.95
+a449a2c2651db20dadc33f9a74b0bd9422ed138b,Event;ProposalEvent,"ProposalEvent: Alan Turing -> Alan Turing's ""Delilah"" project",ProposalEvent,PROPOSED,event,wikidata_sparql,0.95
+a790cdad3d1d635be084f074dfa9659aa4553e9e,Event;EmploymentEvent,EmploymentEvent: Alan Turing -> Government Communications Headquarters,EmploymentEvent,WORKED_AT,event,wikidata_sparql,0.95
+a792edef8564208d7585c87cc98fd83ab581af45,Event;EmploymentEvent,EmploymentEvent: Alan Turing -> University of Cambridge,EmploymentEvent,WORKED_AT,event,wikidata_sparql,0.95
+b80211a4d499adc9bcfb5f49462bc4e4bd4bd447,Event;ProposalEvent,ProposalEvent: Alan Turing -> Turing's Wager,ProposalEvent,PROPOSED,event,wikidata_sparql,0.95
+ba90e8467fa8af5fd940399abc6644e1b63c792f,Event;HonorEvent,HonorEvent: Alan Turing -> Smith's Prize,HonorEvent,AWARDED,event,wikidata_sparql,0.95
+bf987415a571311b8922eeeb1f87eb1d71597af3,Event;EmploymentEvent,EmploymentEvent: Alan Turing -> National Physical Laboratory,EmploymentEvent,WORKED_AT,event,wikidata_sparql,0.95
+c0bff1944eb8e0c3d4baa2e819978f8d88fdf91e,Event;EducationEvent,EducationEvent: Alan Turing -> Hazlehurst Community Primary School,EducationEvent,STUDIED_AT,event,wikidata_sparql,0.95
+c7bea787ad5448520499863371dbc6967628dbc6,Event;HonorEvent,HonorEvent: Alan Turing -> Officer of the Order of the British Empire,HonorEvent,AWARDED,event,wikidata_sparql,0.95
+e70528b78ffc68ae3a846d516788d7f435aedcaf,Event;ProposalEvent,ProposalEvent: Alan Turing -> Good–Turing frequency estimation,ProposalEvent,PROPOSED,event,wikidata_sparql,0.95
+ed744fa1064b360acfcfca02f6d0a2141333df69,Event;EducationEvent,EducationEvent: Alan Turing -> Sherborne School,EducationEvent,STUDIED_AT,event,wikidata_sparql,0.95
+f39ef217cb68fe49a2e99bc130f5e35a3a548bc6,Event;DeathEvent,DeathEvent: Alan Turing -> Wilmslow,DeathEvent,DIED_IN,event,wikidata_sparql,0.95
+literal:Time:0da24e3bb4d3dedaae48,Literal;Time,1912-06-23,Literal,1912-06-23,literal,,
+literal:Time:0f6f3c5f98bf927f034c,Literal;Time,1938-01-01,Literal,1938-01-01,literal,,
+literal:Time:21785e0e0e312d0d4b9f,Literal;Time,1937-01-01,Literal,1937-01-01,literal,,
+literal:Time:278ce9ae63df4c73cfb8,Literal;Time,1931-01-01,Literal,1931-01-01,literal,,
+literal:Time:33de5fe2cd954544d48a,Literal;Time,1954-06-07,Literal,1954-06-07,literal,,
+literal:Time:5ff7b68dd81ab59b4aaf,Literal;Time,1946-06-24,Literal,1946-06-24,literal,,
+literal:Time:9041828c0460dc10a617,Literal;Time,1945-01-01,Literal,1945-01-01,literal,,
+literal:Time:b2b342a2f3fc34e359f4,Literal;Time,1948-03-01,Literal,1948-03-01,literal,,
+literal:Time:bda350e497b57cce603e,Literal;Time,1936-01-01,Literal,1936-01-01,literal,,
+literal:Time:c50fd659dd5720a71bcb,Literal;Time,1926-01-01,Literal,1926-01-01,literal,,
+literal:Time:c609396d48345d524ce2,Literal;Time,1951-01-01,Literal,1951-01-01,literal,,
+literal:Time:db3b90bd9a3e9d01dabd,Literal;Time,1936-11-01,Literal,1936-11-01,literal,,
+literal:Time:de2233b1ceec1319d178,Literal;Time,1934-01-01,Literal,1934-01-01,literal,,
+literal:Time:f97cb79e8497cecae08c,Literal;Time,1926-01-01T00:00:00Z,Literal,1926-01-01T00:00:00Z,literal,,

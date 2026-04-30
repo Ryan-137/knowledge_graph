@@ -1,0 +1,77 @@
+{
+  "candidate_source": "extracted_claims",
+  "generate_candidates": {
+    "input_extracted_claim_count": 41,
+    "fact_candidate_count": 41,
+    "pattern_hit_count": 21,
+    "filtered_relation_out_of_scope_count": 0,
+    "relation_counts": {
+      "STUDIED_AT": 14,
+      "WORKED_AT": 11,
+      "AWARDED": 4,
+      "LOCATED_IN": 4,
+      "AUTHORED": 2,
+      "DESIGNED": 2,
+      "PROPOSED": 2,
+      "BORN_IN": 1,
+      "DIED_IN": 1
+    }
+  },
+  "extra_fact_candidate_count": 0,
+  "extra_fact_candidates_path": "data/processed/events/event_to_fact_candidates.jsonl",
+  "extra_fact_candidates_exists": true,
+  "score": {
+    "candidate_count": 41,
+    "wikidata_alignment_count": 36
+  },
+  "verify_llm": {
+    "candidate_count": 41,
+    "verification_mode": "offline",
+    "label_counts": {
+      "SUPPORTED": 21,
+      "UNCERTAIN": 20
+    }
+  },
+  "aggregate": {
+    "input_candidate_count": 41,
+    "usable_candidate_count": 35,
+    "verified_fact_count": 28,
+    "final_fact_count": 28,
+    "conflict_count": 0,
+    "relation_counts": {
+      "STUDIED_AT": 8,
+      "WORKED_AT": 7,
+      "AWARDED": 3,
+      "AUTHORED": 2,
+      "DESIGNED": 2,
+      "LOCATED_IN": 2,
+      "PROPOSED": 2,
+      "BORN_IN": 1,
+      "DIED_IN": 1
+    }
+  },
+  "manual_review": {
+    "rejected_fact_candidate_ids": [
+      "factcand_000001",
+      "factcand_000004",
+      "factcand_000008",
+      "factcand_000010",
+      "factcand_000012",
+      "factcand_000041"
+    ],
+    "cleared_sentence_time_fact_candidate_ids": [
+      "factcand_000006",
+      "factcand_000007",
+      "factcand_000013",
+      "factcand_000015",
+      "factcand_000016",
+      "factcand_000021",
+      "factcand_000025",
+      "factcand_000027",
+      "factcand_000037"
+    ],
+    "narrowed_sentence_time_fact_candidate_ids": [
+      "factcand_000040"
+    ]
+  }
+}

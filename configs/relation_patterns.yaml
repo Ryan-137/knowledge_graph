@@ -15,6 +15,12 @@ WORKED_AT:
     - joined
     - employed by
     - served at
+WORKED_WITH:
+  triggers:
+    - worked with
+    - collaborated with
+    - cooperated with
+    - collaboration with
 AUTHORED:
   triggers:
     - wrote
@@ -33,3 +39,11 @@ LOCATED_IN:
     - based in
     - in
     - at
+INFLUENCED:
+  triggers:
+    - influenced
+    - inspired
+    - shaped
+    - had an influence on
+    - influence on
+    - was influenced by

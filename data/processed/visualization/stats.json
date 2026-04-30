@@ -1,0 +1,40 @@
+{
+  "node_count": 73,
+  "edge_count": 123,
+  "node_type_counts": {
+    "Person": 3,
+    "Place": 9,
+    "Concept": 5,
+    "Organization": 8,
+    "Machine": 4,
+    "Award": 4,
+    "Work": 2,
+    "PublicationEvent": 2,
+    "Literal": 14,
+    "HonorEvent": 4,
+    "BirthEvent": 2,
+    "DeathEvent": 1,
+    "DesignEvent": 3,
+    "ProposalEvent": 4,
+    "EducationEvent": 4,
+    "EmploymentEvent": 4
+  },
+  "edge_layer_counts": {
+    "facts": 30,
+    "event": 63,
+    "evidence": 28,
+    "wikipedia_direct": 2
+  },
+  "edge_type_counts": {
+    "BORN_IN": 4,
+    "DIED_IN": 3,
+    "STUDIED_AT": 12,
+    "WORKED_AT": 11,
+    "AUTHORED": 4,
+    "PROPOSED": 7,
+    "DESIGNED": 4,
+    "AWARDED": 7,
+    "LOCATED_IN": 8,
+    "EXT_EVENT_ARG": 63
+  }
+}

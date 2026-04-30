@@ -1,0 +1,47 @@
+node {
+  diameter: 34px;
+  color: #6c757d;
+  border-color: #424242;
+  border-width: 1.5px;
+  text-color-internal: #ffffff;
+  caption: '{name}';
+  font-size: 10px;
+}
+
+node.Person { color: #d1495b; diameter: 52px; }
+node.Organization { color: #00798c; }
+node.Place { color: #edae49; }
+node.Concept { color: #30638e; }
+node.Machine { color: #4d908e; }
+node.Work { color: #7b2cbf; }
+node.Award { color: #f77f00; }
+node.Event { color: #2a9d8f; }
+node.Literal { color: #6c757d; diameter: 26px; }
+
+relationship {
+  color: #8d99ae;
+  shaft-width: 2px;
+  caption: '<type>';
+  font-size: 9px;
+}
+
+relationship.PERSON,
+relationship.BIRTH_PLACE,
+relationship.DEATH_PLACE,
+relationship.STUDENT,
+relationship.INSTITUTION,
+relationship.EMPLOYEE,
+relationship.EMPLOYER,
+relationship.AUTHOR,
+relationship.WORK,
+relationship.PROPOSER,
+relationship.CONCEPT,
+relationship.DESIGNER,
+relationship.MACHINE,
+relationship.RECIPIENT,
+relationship.AWARD,
+relationship.EVENT_TIME,
+relationship.EXT_EVENT_ARG,
+relationship.LOCATION {
+  color: #2a9d8f;
+}
