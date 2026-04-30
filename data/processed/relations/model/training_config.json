@@ -1,0 +1,63 @@
+{
+  "data": {
+    "sentences_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/unstructured/sentences.jsonl",
+    "tokenized_sentences_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/mentions/tokenized_sentences.jsonl",
+    "resolved_mentions_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/coreference/resolved_mentions.jsonl",
+    "claims_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/claims.csv",
+    "entities_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/entities.csv",
+    "aliases_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/aliases.csv",
+    "ontology_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/knowledge/ontology.json",
+    "pair_candidates_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/pair_candidates.jsonl",
+    "distant_labeled_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/distant_labeled.jsonl",
+    "relation_gold_path": "knowledge_graph/data/processed/relations/relation_gold.jsonl",
+    "output_dir": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/model"
+  },
+  "embeddings": {
+    "pretrained_txt_path": "knowledge_graph/data/resources/glove.6B.100d.txt",
+    "embedding_dim": 100,
+    "position_embedding_dim": 16,
+    "min_token_frequency": 1,
+    "lowercase_tokens": true,
+    "initializer_range": 0.05
+  },
+  "model": {
+    "max_sentence_length": 128,
+    "max_sentences_per_bag": 16,
+    "convolution_channels": 128,
+    "convolution_kernel_sizes": [
+      3,
+      5
+    ],
+    "dropout": 0.3,
+    "relation_threshold": 0.5,
+    "threshold_by_relation": {},
+    "top_k_support_sentences": 3,
+    "prediction_mask_mode": "candidate"
+  },
+  "training": {
+    "random_seed": 42,
+    "batch_size": 16,
+    "num_epochs": 25,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "gradient_clip_norm": 5.0,
+    "train_ratio": 0.65,
+    "dev_ratio": 0.2,
+    "na_downsample_ratio": 3.0,
+    "log_every_steps": 10,
+    "device": "auto",
+    "early_stop_patience": 5,
+    "use_class_weights": true
+  },
+  "target_relations": [
+    "AUTHORED",
+    "AWARDED",
+    "BORN_IN",
+    "DESIGNED",
+    "DIED_IN",
+    "LOCATED_IN",
+    "PROPOSED",
+    "STUDIED_AT",
+    "WORKED_AT"
+  ]
+}

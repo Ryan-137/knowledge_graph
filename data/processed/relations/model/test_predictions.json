@@ -1,0 +1,2646 @@
+{
+  "predictions": [
+    {
+      "bag_id": "doc_0001__LOCAL_ALONZO_CHURCH__Q21578",
+      "doc_id": "doc_0001",
+      "subject_id": "LOCAL_ALONZO_CHURCH",
+      "object_id": "Q21578",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000022"
+      ],
+      "probabilities": {
+        "NA": 0.273601,
+        "AUTHORED": 0.09947,
+        "AWARDED": 0.388188,
+        "BORN_IN": 0.203754,
+        "DESIGNED": 0.33432,
+        "DIED_IN": 0.161023,
+        "LOCATED_IN": 0.221915,
+        "PROPOSED": 0.188855,
+        "STUDIED_AT": 0.384572,
+        "WORKED_AT": 0.509158
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__LOCAL_MAX_NEWMAN__LOCAL_BLETCHLEY_PARK",
+      "doc_id": "doc_0001",
+      "subject_id": "LOCAL_MAX_NEWMAN",
+      "object_id": "LOCAL_BLETCHLEY_PARK",
+      "subject_type": "PERSON",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "BORN_IN",
+        "DIED_IN"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000094",
+        "sent_000101"
+      ],
+      "probabilities": {
+        "NA": 0.380473,
+        "AUTHORED": 0.111591,
+        "AWARDED": 0.442543,
+        "BORN_IN": 0.311947,
+        "DESIGNED": 0.301392,
+        "DIED_IN": 0.106575,
+        "LOCATED_IN": 0.424289,
+        "PROPOSED": 0.130937,
+        "STUDIED_AT": 0.611705,
+        "WORKED_AT": 0.331137
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__LOCAL_MAX_NEWMAN__Q4428206",
+      "doc_id": "doc_0001",
+      "subject_id": "LOCAL_MAX_NEWMAN",
+      "object_id": "Q4428206",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000094",
+        "sent_000101"
+      ],
+      "probabilities": {
+        "NA": 0.275664,
+        "AUTHORED": 0.101841,
+        "AWARDED": 0.442592,
+        "BORN_IN": 0.244923,
+        "DESIGNED": 0.211493,
+        "DIED_IN": 0.125889,
+        "LOCATED_IN": 0.30062,
+        "PROPOSED": 0.152149,
+        "STUDIED_AT": 0.430731,
+        "WORKED_AT": 0.570693
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__LOCAL_MAX_NEWMAN__Q867530",
+      "doc_id": "doc_0001",
+      "subject_id": "LOCAL_MAX_NEWMAN",
+      "object_id": "Q867530",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000094",
+        "sent_000101"
+      ],
+      "probabilities": {
+        "NA": 0.375183,
+        "AUTHORED": 0.095211,
+        "AWARDED": 0.369543,
+        "BORN_IN": 0.301653,
+        "DESIGNED": 0.214988,
+        "DIED_IN": 0.101745,
+        "LOCATED_IN": 0.279916,
+        "PROPOSED": 0.131156,
+        "STUDIED_AT": 0.52866,
+        "WORKED_AT": 0.555839
+      },
+      "predicted_relations": [
+        {
+          "predicate": "WORKED_AT",
+          "probability": 0.555839,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000094",
+            "sent_000101"
+          ],
+          "supporting_texts": [
+            "However, in 1948, before ACE was completed, Turing moved to Manchester University, where he joined a team led by his former Bletchley Park colleague Max Newman, and was appointed as ‘Deputy Director of the Royal Society Computing Laboratory’.",
+            "However, in 1948, before ACE was completed, Turing moved to Manchester University, where he joined a team led by his former Bletchley Park colleague Max Newman, and was appointed as ‘Deputy Director of the Royal Society Computing Laboratory’."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000073",
+              "sentence_id": "sent_000094",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 94,
+              "text": "However, in 1948, before ACE was completed, Turing moved to Manchester University, where he joined a team led by his former Bletchley Park colleague Max Newman, and was appointed as ‘Deputy Director of the Royal Society Computing Laboratory’.",
+              "predicate": "WORKED_AT",
+              "subject_mention_id": "ment_000161",
+              "object_mention_id": "ment_000159",
+              "subject_text": "Max Newman",
+              "object_text": "Manchester University",
+              "subject_span": [
+                28,
+                30
+              ],
+              "object_span": [
+                13,
+                15
+              ],
+              "original_subject_span": [
+                28,
+                30
+              ],
+              "original_object_span": [
+                13,
+                15
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": false,
+              "matched_claim_ids": [],
+              "bridge_predicates": [
+                "WORKED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "09c11d7c3f9769a0c4188c79bb809727aaca82d7",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "WORKED_AT",
+                  "bridge_match_surface": "Victoria University of Manchester",
+                  "bridge_match_score": 0.9
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "has_strict_positive_predicate",
+              "supervision_tier": "bridge_supervised",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "WORKED_AT"
+              ],
+              "positive_predicates": [
+                "WORKED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "WORKED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "local_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "exact_claim_matches": {},
+              "candidate_strength_by_predicate": {
+                "WORKED_AT": "strong"
+              }
+            },
+            {
+              "candidate_id": "relcand_000088",
+              "sentence_id": "sent_000101",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 101,
+              "text": "However, in 1948, before ACE was completed, Turing moved to Manchester University, where he joined a team led by his former Bletchley Park colleague Max Newman, and was appointed as ‘Deputy Director of the Royal Society Computing Laboratory’.",
+              "predicate": "WORKED_AT",
+              "subject_mention_id": "ment_000181",
+              "object_mention_id": "ment_000179",
+              "subject_text": "Max Newman",
+              "object_text": "Manchester University",
+              "subject_span": [
+                28,
+                30
+              ],
+              "object_span": [
+                13,
+                15
+              ],
+              "original_subject_span": [
+                28,
+                30
+              ],
+              "original_object_span": [
+                13,
+                15
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": false,
+              "matched_claim_ids": [],
+              "bridge_predicates": [
+                "WORKED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "09c11d7c3f9769a0c4188c79bb809727aaca82d7",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "WORKED_AT",
+                  "bridge_match_surface": "Victoria University of Manchester",
+                  "bridge_match_score": 0.9
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "has_strict_positive_predicate",
+              "supervision_tier": "bridge_supervised",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "WORKED_AT"
+              ],
+              "positive_predicates": [
+                "WORKED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "WORKED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "local_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "exact_claim_matches": {},
+              "candidate_strength_by_predicate": {
+                "WORKED_AT": "strong"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q220798__LOCAL_BLETCHLEY_PARK",
+      "doc_id": "doc_0001",
+      "subject_id": "Q220798",
+      "object_id": "LOCAL_BLETCHLEY_PARK",
+      "subject_type": "ORGANIZATION",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "LOCATED_IN"
+      ],
+      "candidate_predicates": [
+        "LOCATED_IN"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000064",
+        "sent_000073"
+      ],
+      "probabilities": {
+        "NA": 0.453694,
+        "AUTHORED": 0.138503,
+        "AWARDED": 0.257857,
+        "BORN_IN": 0.199711,
+        "DESIGNED": 0.352305,
+        "DIED_IN": 0.210574,
+        "LOCATED_IN": 0.40332,
+        "PROPOSED": 0.168347,
+        "STUDIED_AT": 0.356182,
+        "WORKED_AT": 0.526762
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__LOCAL_BLETCHLEY_PARK",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "LOCAL_BLETCHLEY_PARK",
+      "subject_type": "PERSON",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "BORN_IN",
+        "DIED_IN"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000066",
+        "sent_000076",
+        "sent_000121",
+        "sent_000121",
+        "sent_000133"
+      ],
+      "probabilities": {
+        "NA": 0.331511,
+        "AUTHORED": 0.221613,
+        "AWARDED": 0.347014,
+        "BORN_IN": 0.224609,
+        "DESIGNED": 0.307886,
+        "DIED_IN": 0.247768,
+        "LOCATED_IN": 0.420797,
+        "PROPOSED": 0.441348,
+        "STUDIED_AT": 0.463742,
+        "WORKED_AT": 0.379961
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__LOCAL_ENIGMA_MACHINE",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "LOCAL_ENIGMA_MACHINE",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000064",
+        "sent_000064",
+        "sent_000071",
+        "sent_000081",
+        "sent_000081",
+        "sent_000087"
+      ],
+      "probabilities": {
+        "NA": 0.397826,
+        "AUTHORED": 0.140856,
+        "AWARDED": 0.407508,
+        "BORN_IN": 0.319534,
+        "DESIGNED": 0.338616,
+        "DIED_IN": 0.27573,
+        "LOCATED_IN": 0.324252,
+        "PROPOSED": 0.225616,
+        "STUDIED_AT": 0.53323,
+        "WORKED_AT": 0.389589
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q189223",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q189223",
+      "subject_type": "PERSON",
+      "object_type": "CONCEPT",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "PROPOSED"
+      ],
+      "candidate_predicates": [
+        "PROPOSED"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000110",
+        "sent_000110",
+        "sent_000119",
+        "sent_000119"
+      ],
+      "probabilities": {
+        "NA": 0.407805,
+        "AUTHORED": 0.090684,
+        "AWARDED": 0.384784,
+        "BORN_IN": 0.232842,
+        "DESIGNED": 0.340659,
+        "DIED_IN": 0.155673,
+        "LOCATED_IN": 0.270864,
+        "PROPOSED": 0.240844,
+        "STUDIED_AT": 0.331107,
+        "WORKED_AT": 0.417406
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q1967606",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q1967606",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000093",
+        "sent_000093",
+        "sent_000093",
+        "sent_000100",
+        "sent_000100"
+      ],
+      "probabilities": {
+        "NA": 0.306081,
+        "AUTHORED": 0.109799,
+        "AWARDED": 0.318927,
+        "BORN_IN": 0.237079,
+        "DESIGNED": 0.311794,
+        "DIED_IN": 0.165129,
+        "LOCATED_IN": 0.385006,
+        "PROPOSED": 0.263989,
+        "STUDIED_AT": 0.554708,
+        "WORKED_AT": 0.392488
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q2011497",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q2011497",
+      "subject_type": "PERSON",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "BORN_IN",
+        "DIED_IN"
+      ],
+      "candidate_predicates": [
+        "DIED_IN"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000143",
+        "sent_000143",
+        "sent_000143",
+        "sent_000150",
+        "sent_000150"
+      ],
+      "probabilities": {
+        "NA": 0.433799,
+        "AUTHORED": 0.241024,
+        "AWARDED": 0.229147,
+        "BORN_IN": 0.223554,
+        "DESIGNED": 0.373628,
+        "DIED_IN": 0.344141,
+        "LOCATED_IN": 0.377648,
+        "PROPOSED": 0.264923,
+        "STUDIED_AT": 0.484264,
+        "WORKED_AT": 0.382372
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q21578",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q21578",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "STUDIED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000018",
+        "sent_000021",
+        "sent_000025",
+        "sent_000041",
+        "sent_000041",
+        "sent_000049",
+        "sent_000049"
+      ],
+      "probabilities": {
+        "NA": 0.328431,
+        "AUTHORED": 0.150451,
+        "AWARDED": 0.317723,
+        "BORN_IN": 0.225393,
+        "DESIGNED": 0.265257,
+        "DIED_IN": 0.208362,
+        "LOCATED_IN": 0.302395,
+        "PROPOSED": 0.289673,
+        "STUDIED_AT": 0.558801,
+        "WORKED_AT": 0.413804
+      },
+      "predicted_relations": [
+        {
+          "predicate": "STUDIED_AT",
+          "probability": 0.558801,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000021",
+            "sent_000025",
+            "sent_000041"
+          ],
+          "supporting_texts": [
+            "In 1936, Turing travelled to the USA and studied for three years at Princeton University.",
+            "Turing went to Cambridge and Princeton Universities.",
+            "He also played hockey at Princeton with Shaun Wylie, another English mathematician who would later join Turing at Bletchley Park."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000014",
+              "sentence_id": "sent_000021",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 21,
+              "text": "In 1936, Turing travelled to the USA and studied for three years at Princeton University.",
+              "predicate": "STUDIED_AT",
+              "subject_mention_id": "ment_000028",
+              "object_mention_id": "ment_000029",
+              "subject_text": "Turing",
+              "object_text": "Princeton University",
+              "subject_span": [
+                3,
+                4
+              ],
+              "object_span": [
+                14,
+                16
+              ],
+              "original_subject_span": [
+                3,
+                4
+              ],
+              "original_object_span": [
+                14,
+                16
+              ],
+              "pair_source": "linked_linked",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+              ],
+              "bridge_predicates": [],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "STUDIED_AT"
+              ],
+              "positive_predicates": [
+                "STUDIED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "study"
+                ]
+              },
+              "local_trigger_hits": {
+                "STUDIED_AT": [
+                  "study"
+                ]
+              },
+              "exact_claim_matches": {
+                "STUDIED_AT": [
+                  "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "strong"
+              }
+            },
+            {
+              "candidate_id": "relcand_000023",
+              "sentence_id": "sent_000025",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 25,
+              "text": "Turing went to Cambridge and Princeton Universities.",
+              "predicate": "STUDIED_AT",
+              "subject_mention_id": "ment_000043",
+              "object_mention_id": "ment_000045",
+              "subject_text": "Turing",
+              "object_text": "Princeton Universities",
+              "subject_span": [
+                0,
+                1
+              ],
+              "object_span": [
+                5,
+                7
+              ],
+              "original_subject_span": [
+                0,
+                1
+              ],
+              "original_object_span": [
+                5,
+                7
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+              ],
+              "bridge_predicates": [
+                "STUDIED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "a35bbbc5d5e76f4da758f59cbe8d3d905356d806",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "STUDIED_AT",
+                  "bridge_match_surface": "Princeton University",
+                  "bridge_match_score": 0.904762
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "STUDIED_AT"
+              ],
+              "positive_predicates": [
+                "STUDIED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "STUDIED_AT": [
+                  "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "unknown"
+              }
+            },
+            {
+              "candidate_id": "relcand_000032",
+              "sentence_id": "sent_000041",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 41,
+              "text": "He also played hockey at Princeton with Shaun Wylie, another English mathematician who would later join Turing at Bletchley Park.",
+              "predicate": "NA",
+              "subject_mention_id": "ment_000065",
+              "object_mention_id": "ment_000064",
+              "subject_text": "Turing",
+              "object_text": "Princeton",
+              "subject_span": [
+                17,
+                18
+              ],
+              "object_span": [
+                5,
+                6
+              ],
+              "original_subject_span": [
+                17,
+                18
+              ],
+              "original_object_span": [
+                5,
+                6
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+              ],
+              "bridge_predicates": [
+                "STUDIED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "a35bbbc5d5e76f4da758f59cbe8d3d905356d806",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "STUDIED_AT",
+                  "bridge_match_surface": "Princeton",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "hard_negative",
+              "weak_label_reason": "manual_review_rejected_relation",
+              "supervision_tier": "hard_negative",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [],
+              "positive_predicates": [],
+              "hard_negative_predicates": [
+                "STUDIED_AT"
+              ],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "hard_negative"
+              },
+              "sentence_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "local_trigger_hits": {
+                "WORKED_AT": [
+                  "join"
+                ]
+              },
+              "exact_claim_matches": {
+                "STUDIED_AT": [
+                  "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "unknown",
+                "WORKED_AT": "medium"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q220798",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q220798",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000064",
+        "sent_000064"
+      ],
+      "probabilities": {
+        "NA": 0.301616,
+        "AUTHORED": 0.128681,
+        "AWARDED": 0.253362,
+        "BORN_IN": 0.206346,
+        "DESIGNED": 0.344049,
+        "DIED_IN": 0.202414,
+        "LOCATED_IN": 0.486547,
+        "PROPOSED": 0.315937,
+        "STUDIED_AT": 0.581546,
+        "WORKED_AT": 0.450883
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q2278254",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q2278254",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "STUDIED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000002",
+        "sent_000002",
+        "sent_000002",
+        "sent_000002",
+        "sent_000002",
+        "sent_000012",
+        "sent_000012",
+        "sent_000012",
+        "sent_000012",
+        "sent_000012"
+      ],
+      "probabilities": {
+        "NA": 0.353939,
+        "AUTHORED": 0.140424,
+        "AWARDED": 0.491229,
+        "BORN_IN": 0.336923,
+        "DESIGNED": 0.271695,
+        "DIED_IN": 0.211784,
+        "LOCATED_IN": 0.316819,
+        "PROPOSED": 0.236603,
+        "STUDIED_AT": 0.473064,
+        "WORKED_AT": 0.471444
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q4428206",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q4428206",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [
+        "DESIGNED"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000093",
+        "sent_000094",
+        "sent_000094",
+        "sent_000094",
+        "sent_000100",
+        "sent_000101",
+        "sent_000101",
+        "sent_000101"
+      ],
+      "probabilities": {
+        "NA": 0.368476,
+        "AUTHORED": 0.088162,
+        "AWARDED": 0.290175,
+        "BORN_IN": 0.254181,
+        "DESIGNED": 0.297555,
+        "DIED_IN": 0.142254,
+        "LOCATED_IN": 0.299966,
+        "PROPOSED": 0.193983,
+        "STUDIED_AT": 0.477927,
+        "WORKED_AT": 0.481354
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q480476",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q480476",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [
+        "DESIGNED"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000066",
+        "sent_000076",
+        "sent_000083",
+        "sent_000089"
+      ],
+      "probabilities": {
+        "NA": 0.4024,
+        "AUTHORED": 0.218207,
+        "AWARDED": 0.254346,
+        "BORN_IN": 0.20591,
+        "DESIGNED": 0.378947,
+        "DIED_IN": 0.230586,
+        "LOCATED_IN": 0.286753,
+        "PROPOSED": 0.552344,
+        "STUDIED_AT": 0.332701,
+        "WORKED_AT": 0.426336
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q867530",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q867530",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000093",
+        "sent_000093",
+        "sent_000093",
+        "sent_000094",
+        "sent_000094",
+        "sent_000094",
+        "sent_000099",
+        "sent_000101",
+        "sent_000101",
+        "sent_000101"
+      ],
+      "probabilities": {
+        "NA": 0.327969,
+        "AUTHORED": 0.106782,
+        "AWARDED": 0.291031,
+        "BORN_IN": 0.260619,
+        "DESIGNED": 0.310514,
+        "DIED_IN": 0.153814,
+        "LOCATED_IN": 0.352753,
+        "PROPOSED": 0.217913,
+        "STUDIED_AT": 0.588397,
+        "WORKED_AT": 0.458506
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q7251__Q924289",
+      "doc_id": "doc_0001",
+      "subject_id": "Q7251",
+      "object_id": "Q924289",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "STUDIED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000018",
+        "sent_000026",
+        "sent_000098",
+        "sent_000131",
+        "sent_000148"
+      ],
+      "probabilities": {
+        "NA": 0.363363,
+        "AUTHORED": 0.2079,
+        "AWARDED": 0.329292,
+        "BORN_IN": 0.242324,
+        "DESIGNED": 0.33858,
+        "DIED_IN": 0.262416,
+        "LOCATED_IN": 0.491518,
+        "PROPOSED": 0.359104,
+        "STUDIED_AT": 0.490904,
+        "WORKED_AT": 0.385199
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0001__Q924289__Q350",
+      "doc_id": "doc_0001",
+      "subject_id": "Q924289",
+      "object_id": "Q350",
+      "subject_type": "ORGANIZATION",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "LOCATED_IN"
+      ],
+      "candidate_predicates": [
+        "LOCATED_IN"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000009",
+        "sent_000026",
+        "sent_000098",
+        "sent_000131",
+        "sent_000148"
+      ],
+      "probabilities": {
+        "NA": 0.411015,
+        "AUTHORED": 0.150784,
+        "AWARDED": 0.256032,
+        "BORN_IN": 0.150068,
+        "DESIGNED": 0.229596,
+        "DIED_IN": 0.266659,
+        "LOCATED_IN": 0.767309,
+        "PROPOSED": 0.243517,
+        "STUDIED_AT": 0.560475,
+        "WORKED_AT": 0.35178
+      },
+      "predicted_relations": [
+        {
+          "predicate": "LOCATED_IN",
+          "probability": 0.767309,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000098",
+            "sent_000148",
+            "sent_000131"
+          ],
+          "supporting_texts": [
+            "Alan Turing reading on the porch of a house (Archives Centre, King's College, Cambridge, AMT/K/7/36)",
+            "Alan Turing (Archives Centre, King's College, Cambridge, AMT/K/7/39).",
+            "Alan Turing, aged about 17 (Archives Centre, King's College, Cambridge, AMT/K/7/32)"
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000077",
+              "sentence_id": "sent_000098",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 98,
+              "text": "Alan Turing reading on the porch of a house (Archives Centre, King's College, Cambridge, AMT/K/7/36)",
+              "predicate": "LOCATED_IN",
+              "subject_mention_id": "ment_000168",
+              "object_mention_id": "ment_000169",
+              "subject_text": "King's College",
+              "object_text": "Cambridge",
+              "subject_span": [
+                13,
+                15
+              ],
+              "object_span": [
+                16,
+                17
+              ],
+              "original_subject_span": [
+                13,
+                15
+              ],
+              "original_object_span": [
+                16,
+                17
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "bd49cd01c14138868669fc616e93403a3240dc05"
+              ],
+              "bridge_predicates": [
+                "LOCATED_IN"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "bd49cd01c14138868669fc616e93403a3240dc05",
+                  "bridge_anchor_entity_id": "Q924289",
+                  "bridge_predicate": "LOCATED_IN",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "LOCATED_IN"
+              ],
+              "candidate_predicates": [
+                "LOCATED_IN"
+              ],
+              "positive_predicates": [
+                "LOCATED_IN"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "LOCATED_IN": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "LOCATED_IN": [
+                  "bd49cd01c14138868669fc616e93403a3240dc05"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "LOCATED_IN": "unknown"
+              }
+            },
+            {
+              "candidate_id": "relcand_000112",
+              "sentence_id": "sent_000148",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 148,
+              "text": "Alan Turing (Archives Centre, King's College, Cambridge, AMT/K/7/39).",
+              "predicate": "LOCATED_IN",
+              "subject_mention_id": "ment_000249",
+              "object_mention_id": "ment_000250",
+              "subject_text": "King's College",
+              "object_text": "Cambridge",
+              "subject_span": [
+                6,
+                8
+              ],
+              "object_span": [
+                9,
+                10
+              ],
+              "original_subject_span": [
+                6,
+                8
+              ],
+              "original_object_span": [
+                9,
+                10
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "bd49cd01c14138868669fc616e93403a3240dc05"
+              ],
+              "bridge_predicates": [
+                "LOCATED_IN"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "bd49cd01c14138868669fc616e93403a3240dc05",
+                  "bridge_anchor_entity_id": "Q924289",
+                  "bridge_predicate": "LOCATED_IN",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "LOCATED_IN"
+              ],
+              "candidate_predicates": [
+                "LOCATED_IN"
+              ],
+              "positive_predicates": [
+                "LOCATED_IN"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "LOCATED_IN": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "LOCATED_IN": [
+                  "bd49cd01c14138868669fc616e93403a3240dc05"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "LOCATED_IN": "unknown"
+              }
+            },
+            {
+              "candidate_id": "relcand_000102",
+              "sentence_id": "sent_000131",
+              "doc_id": "doc_0001",
+              "source_id": "src_first_001",
+              "sentence_index_in_doc": 131,
+              "text": "Alan Turing, aged about 17 (Archives Centre, King's College, Cambridge, AMT/K/7/32)",
+              "predicate": "LOCATED_IN",
+              "subject_mention_id": "ment_000221",
+              "object_mention_id": "ment_000222",
+              "subject_text": "King's College",
+              "object_text": "Cambridge",
+              "subject_span": [
+                10,
+                12
+              ],
+              "object_span": [
+                13,
+                14
+              ],
+              "original_subject_span": [
+                10,
+                12
+              ],
+              "original_object_span": [
+                13,
+                14
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "bd49cd01c14138868669fc616e93403a3240dc05"
+              ],
+              "bridge_predicates": [
+                "LOCATED_IN"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "bd49cd01c14138868669fc616e93403a3240dc05",
+                  "bridge_anchor_entity_id": "Q924289",
+                  "bridge_predicate": "LOCATED_IN",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "LOCATED_IN"
+              ],
+              "candidate_predicates": [
+                "LOCATED_IN"
+              ],
+              "positive_predicates": [
+                "LOCATED_IN"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "LOCATED_IN": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "LOCATED_IN": [
+                  "bd49cd01c14138868669fc616e93403a3240dc05"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "LOCATED_IN": "unknown"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0002__Q7251__Q189223",
+      "doc_id": "doc_0002",
+      "subject_id": "Q7251",
+      "object_id": "Q189223",
+      "subject_type": "PERSON",
+      "object_type": "CONCEPT",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "PROPOSED"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000288"
+      ],
+      "probabilities": {
+        "NA": 0.276412,
+        "AUTHORED": 0.109475,
+        "AWARDED": 0.288129,
+        "BORN_IN": 0.155093,
+        "DESIGNED": 0.368666,
+        "DIED_IN": 0.191944,
+        "LOCATED_IN": 0.467772,
+        "PROPOSED": 0.35594,
+        "STUDIED_AT": 0.41778,
+        "WORKED_AT": 0.350466
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__LOCAL_MAX_NEWMAN__Q4428206",
+      "doc_id": "doc_0006",
+      "subject_id": "LOCAL_MAX_NEWMAN",
+      "object_id": "Q4428206",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000852",
+        "sent_000852"
+      ],
+      "probabilities": {
+        "NA": 0.376194,
+        "AUTHORED": 0.123471,
+        "AWARDED": 0.431463,
+        "BORN_IN": 0.243073,
+        "DESIGNED": 0.246126,
+        "DIED_IN": 0.145409,
+        "LOCATED_IN": 0.219575,
+        "PROPOSED": 0.238043,
+        "STUDIED_AT": 0.34194,
+        "WORKED_AT": 0.432428
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q220798__LOCAL_BLETCHLEY_PARK",
+      "doc_id": "doc_0006",
+      "subject_id": "Q220798",
+      "object_id": "LOCAL_BLETCHLEY_PARK",
+      "subject_type": "ORGANIZATION",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "LOCATED_IN"
+      ],
+      "candidate_predicates": [
+        "LOCATED_IN"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000850"
+      ],
+      "probabilities": {
+        "NA": 0.474005,
+        "AUTHORED": 0.171317,
+        "AWARDED": 0.209801,
+        "BORN_IN": 0.152482,
+        "DESIGNED": 0.230067,
+        "DIED_IN": 0.215722,
+        "LOCATED_IN": 0.784071,
+        "PROPOSED": 0.256124,
+        "STUDIED_AT": 0.475327,
+        "WORKED_AT": 0.38575
+      },
+      "predicted_relations": [
+        {
+          "predicate": "LOCATED_IN",
+          "probability": 0.784071,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000850"
+          ],
+          "supporting_texts": [
+            "At the outbreak of war in September 1939 he was drafted to the Government Code and Cypher School at Bletchley Park as a cryptanalyst."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000259",
+              "sentence_id": "sent_000850",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 6,
+              "text": "At the outbreak of war in September 1939 he was drafted to the Government Code and Cypher School at Bletchley Park as a cryptanalyst.",
+              "predicate": "LOCATED_IN",
+              "subject_mention_id": "ment_000923",
+              "object_mention_id": "ment_000924",
+              "subject_text": "Government Code and Cypher School",
+              "object_text": "Bletchley Park",
+              "subject_span": [
+                13,
+                18
+              ],
+              "object_span": [
+                19,
+                21
+              ],
+              "original_subject_span": [
+                13,
+                18
+              ],
+              "original_object_span": [
+                19,
+                21
+              ],
+              "pair_source": "linked_linked",
+              "exact_claim_match": false,
+              "matched_claim_ids": [],
+              "bridge_predicates": [],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "LOCATED_IN"
+              ],
+              "candidate_predicates": [
+                "LOCATED_IN"
+              ],
+              "positive_predicates": [
+                "LOCATED_IN"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "LOCATED_IN": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {},
+              "candidate_strength_by_predicate": {}
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q163310",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q163310",
+      "subject_type": "PERSON",
+      "object_type": "CONCEPT",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "PROPOSED"
+      ],
+      "candidate_predicates": [
+        "PROPOSED"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000848",
+        "sent_000848"
+      ],
+      "probabilities": {
+        "NA": 0.344077,
+        "AUTHORED": 0.162178,
+        "AWARDED": 0.241071,
+        "BORN_IN": 0.160583,
+        "DESIGNED": 0.332184,
+        "DIED_IN": 0.1438,
+        "LOCATED_IN": 0.369118,
+        "PROPOSED": 0.336039,
+        "STUDIED_AT": 0.43846,
+        "WORKED_AT": 0.359552
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q18125",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q18125",
+      "subject_type": "PERSON",
+      "object_type": "PLACE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "BORN_IN",
+        "DIED_IN"
+      ],
+      "candidate_predicates": [],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000857"
+      ],
+      "probabilities": {
+        "NA": 0.396197,
+        "AUTHORED": 0.131979,
+        "AWARDED": 0.447585,
+        "BORN_IN": 0.286113,
+        "DESIGNED": 0.204603,
+        "DIED_IN": 0.219707,
+        "LOCATED_IN": 0.294747,
+        "PROPOSED": 0.362683,
+        "STUDIED_AT": 0.586409,
+        "WORKED_AT": 0.417493
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q21578",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q21578",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "STUDIED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000848",
+        "sent_000848"
+      ],
+      "probabilities": {
+        "NA": 0.335092,
+        "AUTHORED": 0.13925,
+        "AWARDED": 0.181842,
+        "BORN_IN": 0.141493,
+        "DESIGNED": 0.353414,
+        "DIED_IN": 0.173919,
+        "LOCATED_IN": 0.297302,
+        "PROPOSED": 0.2778,
+        "STUDIED_AT": 0.511935,
+        "WORKED_AT": 0.405017
+      },
+      "predicted_relations": [
+        {
+          "predicate": "STUDIED_AT",
+          "probability": 0.511935,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000848",
+            "sent_000848"
+          ],
+          "supporting_texts": [
+            "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+            "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000253",
+              "sentence_id": "sent_000848",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 4,
+              "text": "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+              "predicate": "NA",
+              "subject_mention_id": "coref_auto_sent_000848_023_024",
+              "object_mention_id": "ment_000922",
+              "subject_text": "his",
+              "object_text": "Princeton",
+              "subject_span": [
+                23,
+                24
+              ],
+              "object_span": [
+                34,
+                35
+              ],
+              "original_subject_span": [
+                23,
+                24
+              ],
+              "original_object_span": [
+                34,
+                35
+              ],
+              "pair_source": "coref_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+              ],
+              "bridge_predicates": [],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                }
+              },
+              "weak_label": "hard_negative",
+              "weak_label_reason": "manual_review_rejected_relation",
+              "supervision_tier": "hard_negative",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [],
+              "positive_predicates": [],
+              "hard_negative_predicates": [
+                "STUDIED_AT"
+              ],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "hard_negative"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "STUDIED_AT": [
+                  "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "medium"
+              }
+            },
+            {
+              "candidate_id": "relcand_000248",
+              "sentence_id": "sent_000848",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 4,
+              "text": "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+              "predicate": "STUDIED_AT",
+              "subject_mention_id": "coref_auto_sent_000848_021_022",
+              "object_mention_id": "ment_000922",
+              "subject_text": "he",
+              "object_text": "Princeton",
+              "subject_span": [
+                21,
+                22
+              ],
+              "object_span": [
+                34,
+                35
+              ],
+              "original_subject_span": [
+                21,
+                22
+              ],
+              "original_object_span": [
+                34,
+                35
+              ],
+              "pair_source": "coref_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+              ],
+              "bridge_predicates": [],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "STUDIED_AT"
+              ],
+              "positive_predicates": [
+                "STUDIED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "STUDIED_AT": [
+                  "a35bbbc5d5e76f4da758f59cbe8d3d905356d806"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "medium"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q220798",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q220798",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000850"
+      ],
+      "probabilities": {
+        "NA": 0.34643,
+        "AUTHORED": 0.168552,
+        "AWARDED": 0.198282,
+        "BORN_IN": 0.152668,
+        "DESIGNED": 0.368978,
+        "DIED_IN": 0.239722,
+        "LOCATED_IN": 0.419475,
+        "PROPOSED": 0.226963,
+        "STUDIED_AT": 0.544097,
+        "WORKED_AT": 0.535577
+      },
+      "predicted_relations": [
+        {
+          "predicate": "WORKED_AT",
+          "probability": 0.535577,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000850"
+          ],
+          "supporting_texts": [
+            "At the outbreak of war in September 1939 he was drafted to the Government Code and Cypher School at Bletchley Park as a cryptanalyst."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000258",
+              "sentence_id": "sent_000850",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 6,
+              "text": "At the outbreak of war in September 1939 he was drafted to the Government Code and Cypher School at Bletchley Park as a cryptanalyst.",
+              "predicate": "WORKED_AT",
+              "subject_mention_id": "coref_auto_sent_000850_008_009",
+              "object_mention_id": "ment_000923",
+              "subject_text": "he",
+              "object_text": "Government Code and Cypher School",
+              "subject_span": [
+                8,
+                9
+              ],
+              "object_span": [
+                13,
+                18
+              ],
+              "original_subject_span": [
+                8,
+                9
+              ],
+              "original_object_span": [
+                13,
+                18
+              ],
+              "pair_source": "coref_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "a8c57427aad462c9fde10ee437d2f283bc83e71a"
+              ],
+              "bridge_predicates": [],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "WORKED_AT"
+              ],
+              "positive_predicates": [
+                "WORKED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "WORKED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {},
+              "local_trigger_hits": {},
+              "exact_claim_matches": {
+                "WORKED_AT": [
+                  "a8c57427aad462c9fde10ee437d2f283bc83e71a"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "WORKED_AT": "medium"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q35794",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q35794",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "STUDIED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000848",
+        "sent_000848",
+        "sent_000848"
+      ],
+      "probabilities": {
+        "NA": 0.270854,
+        "AUTHORED": 0.142106,
+        "AWARDED": 0.382384,
+        "BORN_IN": 0.243845,
+        "DESIGNED": 0.218382,
+        "DIED_IN": 0.163894,
+        "LOCATED_IN": 0.320124,
+        "PROPOSED": 0.235524,
+        "STUDIED_AT": 0.572689,
+        "WORKED_AT": 0.43017
+      },
+      "predicted_relations": [
+        {
+          "predicate": "STUDIED_AT",
+          "probability": 0.572689,
+          "threshold_used": 0.5,
+          "supporting_sentence_ids": [
+            "sent_000848",
+            "sent_000848",
+            "sent_000848"
+          ],
+          "supporting_texts": [
+            "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+            "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+            "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D."
+          ],
+          "supporting_evidence": [
+            {
+              "candidate_id": "relcand_000250",
+              "sentence_id": "sent_000848",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 4,
+              "text": "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+              "predicate": "STUDIED_AT",
+              "subject_mention_id": "coref_auto_sent_000848_021_022",
+              "object_mention_id": "ment_000919",
+              "subject_text": "he",
+              "object_text": "Cambridge",
+              "subject_span": [
+                21,
+                22
+              ],
+              "object_span": [
+                3,
+                4
+              ],
+              "original_subject_span": [
+                21,
+                22
+              ],
+              "original_object_span": [
+                3,
+                4
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "06c2c95dbf4a064461feb1a938afed282d4aea85"
+              ],
+              "bridge_predicates": [
+                "WORKED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "06c2c95dbf4a064461feb1a938afed282d4aea85",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "WORKED_AT",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "STUDIED_AT"
+              ],
+              "positive_predicates": [
+                "STUDIED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "local_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "exact_claim_matches": {
+                "WORKED_AT": [
+                  "06c2c95dbf4a064461feb1a938afed282d4aea85"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "medium",
+                "WORKED_AT": "unknown"
+              }
+            },
+            {
+              "candidate_id": "relcand_000255",
+              "sentence_id": "sent_000848",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 4,
+              "text": "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+              "predicate": "NA",
+              "subject_mention_id": "coref_auto_sent_000848_023_024",
+              "object_mention_id": "ment_000919",
+              "subject_text": "his",
+              "object_text": "Cambridge",
+              "subject_span": [
+                23,
+                24
+              ],
+              "object_span": [
+                3,
+                4
+              ],
+              "original_subject_span": [
+                23,
+                24
+              ],
+              "original_object_span": [
+                3,
+                4
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "06c2c95dbf4a064461feb1a938afed282d4aea85"
+              ],
+              "bridge_predicates": [
+                "WORKED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "06c2c95dbf4a064461feb1a938afed282d4aea85",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "WORKED_AT",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "hard_negative",
+              "weak_label_reason": "manual_review_rejected_relation",
+              "supervision_tier": "hard_negative",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [],
+              "positive_predicates": [],
+              "hard_negative_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "hard_negative",
+                "WORKED_AT": "hard_negative"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "local_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "exact_claim_matches": {
+                "WORKED_AT": [
+                  "06c2c95dbf4a064461feb1a938afed282d4aea85"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "medium",
+                "WORKED_AT": "unknown"
+              }
+            },
+            {
+              "candidate_id": "relcand_000246",
+              "sentence_id": "sent_000848",
+              "doc_id": "doc_0006",
+              "source_id": "src_first_006",
+              "sentence_index_in_doc": 4,
+              "text": "He graduated from Cambridge in Mathematics in 1934, was a fellow at Kings College for two years, during which he wrote his famous paper which introduced the Turing Machine, went to Princeton for two years to do a Ph.D.",
+              "predicate": "STUDIED_AT",
+              "subject_mention_id": "coref_auto_sent_000848_000_001",
+              "object_mention_id": "ment_000919",
+              "subject_text": "He",
+              "object_text": "Cambridge",
+              "subject_span": [
+                0,
+                1
+              ],
+              "object_span": [
+                3,
+                4
+              ],
+              "original_subject_span": [
+                0,
+                1
+              ],
+              "original_object_span": [
+                3,
+                4
+              ],
+              "pair_source": "bridge_augmented",
+              "exact_claim_match": true,
+              "matched_claim_ids": [
+                "06c2c95dbf4a064461feb1a938afed282d4aea85"
+              ],
+              "bridge_predicates": [
+                "WORKED_AT"
+              ],
+              "bridge_details": {
+                "subject": {
+                  "bridge_claim_id": null,
+                  "bridge_anchor_entity_id": null,
+                  "bridge_predicate": null,
+                  "bridge_match_surface": null,
+                  "bridge_match_score": null
+                },
+                "object": {
+                  "bridge_claim_id": "06c2c95dbf4a064461feb1a938afed282d4aea85",
+                  "bridge_anchor_entity_id": "Q7251",
+                  "bridge_predicate": "WORKED_AT",
+                  "bridge_match_surface": "Cambridge",
+                  "bridge_match_score": 1.0
+                }
+              },
+              "weak_label": "ds_strict",
+              "weak_label_reason": "manual_review_confirmed_positive",
+              "supervision_tier": "strict_text",
+              "allowed_predicates": [
+                "STUDIED_AT",
+                "WORKED_AT"
+              ],
+              "candidate_predicates": [
+                "STUDIED_AT"
+              ],
+              "positive_predicates": [
+                "STUDIED_AT"
+              ],
+              "hard_negative_predicates": [],
+              "unknown_predicates": [],
+              "review_predicates": [],
+              "weak_labels_by_predicate": {
+                "STUDIED_AT": "ds_strict"
+              },
+              "sentence_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "local_trigger_hits": {
+                "STUDIED_AT": [
+                  "graduate",
+                  "graduate from"
+                ]
+              },
+              "exact_claim_matches": {
+                "WORKED_AT": [
+                  "06c2c95dbf4a064461feb1a938afed282d4aea85"
+                ]
+              },
+              "candidate_strength_by_predicate": {
+                "STUDIED_AT": "medium",
+                "WORKED_AT": "unknown"
+              }
+            }
+          ]
+        }
+      ],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q480476",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q480476",
+      "subject_type": "PERSON",
+      "object_type": "MACHINE",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "DESIGNED"
+      ],
+      "candidate_predicates": [
+        "DESIGNED"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000851",
+        "sent_000851"
+      ],
+      "probabilities": {
+        "NA": 0.323064,
+        "AUTHORED": 0.163334,
+        "AWARDED": 0.344292,
+        "BORN_IN": 0.2936,
+        "DESIGNED": 0.373422,
+        "DIED_IN": 0.240604,
+        "LOCATED_IN": 0.316768,
+        "PROPOSED": 0.258943,
+        "STUDIED_AT": 0.483374,
+        "WORKED_AT": 0.412621
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    },
+    {
+      "bag_id": "doc_0006__Q7251__Q924289",
+      "doc_id": "doc_0006",
+      "subject_id": "Q7251",
+      "object_id": "Q924289",
+      "subject_type": "PERSON",
+      "object_type": "ORGANIZATION",
+      "mask_mode": "candidate",
+      "allowed_predicates": [
+        "STUDIED_AT",
+        "WORKED_AT"
+      ],
+      "candidate_predicates": [
+        "WORKED_AT"
+      ],
+      "masked_relations": [
+        "AUTHORED",
+        "AWARDED",
+        "BORN_IN",
+        "DESIGNED",
+        "DIED_IN",
+        "LOCATED_IN",
+        "PROPOSED",
+        "STUDIED_AT"
+      ],
+      "sentence_ids": [
+        "sent_000848",
+        "sent_000848",
+        "sent_000848",
+        "sent_000848"
+      ],
+      "probabilities": {
+        "NA": 0.323381,
+        "AUTHORED": 0.133633,
+        "AWARDED": 0.306754,
+        "BORN_IN": 0.245443,
+        "DESIGNED": 0.263286,
+        "DIED_IN": 0.162898,
+        "LOCATED_IN": 0.279883,
+        "PROPOSED": 0.215683,
+        "STUDIED_AT": 0.487044,
+        "WORKED_AT": 0.465699
+      },
+      "predicted_relations": [],
+      "extractor": "pcnn_mil_attention"
+    }
+  ]
+}

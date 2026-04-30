@@ -4,16 +4,21 @@ from pathlib import Path
 from typing import Any
 
 from kg_core.event_mapping import event_type_for_predicate
+from kg_core.taxonomy import normalize_entity_type
 
 from .config import (
     DEFAULT_EXTRACTOR_NAME,
     NA_RELATION_LABEL,
+    EmbeddingConfig,
     RelationExtractionConfig,
+    RelationModelConfig,
+    RelationTrainingConfig,
     load_relation_extraction_config,
 )
 from .dataset import (
     BagFeatureDataset,
     Vocabulary,
+    read_json,
     build_relation_bags,
     collate_relation_batch,
     write_json,
@@ -43,21 +48,78 @@ def load_relation_checkpoint(checkpoint_path: Path, *, device: Any) -> dict[str,
     return torch.load(checkpoint_path, map_location=device)
 
 
+def _restore_config_from_checkpoint(
+    checkpoint_payload: dict[str, Any],
+    runtime_config: RelationExtractionConfig,
+) -> RelationExtractionConfig:
+    checkpoint_config = checkpoint_payload.get("config")
+    if not isinstance(checkpoint_config, dict):
+        return runtime_config
+    embedding_payload = dict(checkpoint_config.get("embeddings", {}))
+    model_payload = dict(checkpoint_config.get("model", {}))
+    training_payload = dict(checkpoint_config.get("training", {}))
+    restored_config = RelationExtractionConfig(
+        data=runtime_config.data,
+        embeddings=EmbeddingConfig(
+            pretrained_txt_path=runtime_config.embeddings.pretrained_txt_path,
+            embedding_dim=int(embedding_payload.get("embedding_dim", runtime_config.embeddings.embedding_dim)),
+            position_embedding_dim=int(
+                embedding_payload.get("position_embedding_dim", runtime_config.embeddings.position_embedding_dim)
+            ),
+            min_token_frequency=int(embedding_payload.get("min_token_frequency", runtime_config.embeddings.min_token_frequency)),
+            lowercase_tokens=bool(embedding_payload.get("lowercase_tokens", runtime_config.embeddings.lowercase_tokens)),
+            initializer_range=float(embedding_payload.get("initializer_range", runtime_config.embeddings.initializer_range)),
+        ),
+        model=RelationModelConfig(
+            max_sentence_length=int(model_payload.get("max_sentence_length", runtime_config.model.max_sentence_length)),
+            max_sentences_per_bag=int(model_payload.get("max_sentences_per_bag", runtime_config.model.max_sentences_per_bag)),
+            convolution_channels=int(model_payload.get("convolution_channels", runtime_config.model.convolution_channels)),
+            convolution_kernel_sizes=[
+                int(item)
+                for item in model_payload.get("convolution_kernel_sizes", runtime_config.model.convolution_kernel_sizes)
+            ],
+            dropout=float(model_payload.get("dropout", runtime_config.model.dropout)),
+            relation_threshold=runtime_config.model.relation_threshold,
+            threshold_by_relation=runtime_config.model.threshold_by_relation,
+            top_k_support_sentences=runtime_config.model.top_k_support_sentences,
+            prediction_mask_mode=runtime_config.model.prediction_mask_mode,
+        ),
+        training=RelationTrainingConfig(
+            random_seed=runtime_config.training.random_seed,
+            batch_size=runtime_config.training.batch_size,
+            num_epochs=int(training_payload.get("num_epochs", runtime_config.training.num_epochs)),
+            learning_rate=float(training_payload.get("learning_rate", runtime_config.training.learning_rate)),
+            weight_decay=float(training_payload.get("weight_decay", runtime_config.training.weight_decay)),
+            gradient_clip_norm=float(training_payload.get("gradient_clip_norm", runtime_config.training.gradient_clip_norm)),
+            train_ratio=float(training_payload.get("train_ratio", runtime_config.training.train_ratio)),
+            dev_ratio=float(training_payload.get("dev_ratio", runtime_config.training.dev_ratio)),
+            na_downsample_ratio=float(training_payload.get("na_downsample_ratio", runtime_config.training.na_downsample_ratio)),
+            log_every_steps=int(training_payload.get("log_every_steps", runtime_config.training.log_every_steps)),
+            device=runtime_config.training.device,
+            early_stop_patience=int(training_payload.get("early_stop_patience", runtime_config.training.early_stop_patience)),
+            use_class_weights=bool(training_payload.get("use_class_weights", runtime_config.training.use_class_weights)),
+        ),
+        target_relations=list(runtime_config.target_relations),
+    )
+    return restored_config
+
+
 def load_relation_model(
     checkpoint_path: Path,
     *,
     config: RelationExtractionConfig,
     device: Any,
-) -> tuple[PCNNMILRelationExtractor, dict[str, Any], Vocabulary, list[str], dict[str, int]]:
+) -> tuple[PCNNMILRelationExtractor, dict[str, Any], Vocabulary, list[str], dict[str, int], RelationExtractionConfig]:
     checkpoint_payload = load_relation_checkpoint(checkpoint_path, device=device)
+    restored_config = _restore_config_from_checkpoint(checkpoint_payload, config)
     vocabulary = restore_vocabulary(checkpoint_payload)
     index_to_label = [str(item) for item in checkpoint_payload["index_to_label"]]
     label_to_index = {str(key): int(value) for key, value in checkpoint_payload["label_to_index"].items()}
-    model = PCNNMILRelationExtractor(config, vocabulary, index_to_label)
+    model = PCNNMILRelationExtractor(restored_config, vocabulary, index_to_label)
     model.load_state_dict(checkpoint_payload["model_state_dict"])
     model.to(device)
     model.eval()
-    return model, checkpoint_payload, vocabulary, index_to_label, label_to_index
+    return model, checkpoint_payload, vocabulary, index_to_label, label_to_index, restored_config
 
 
 def batch_to_tensors(batch: dict[str, Any], *, device: Any) -> dict[str, Any]:
@@ -74,6 +136,77 @@ def batch_to_tensors(batch: dict[str, Any], *, device: Any) -> dict[str, Any]:
 
 def _resolve_threshold(config: RelationExtractionConfig, relation_name: str) -> float:
     return float(config.model.threshold_by_relation.get(relation_name, config.model.relation_threshold))
+
+
+def _allowed_predicates_from_ontology(
+    *,
+    config: RelationExtractionConfig,
+    subject_type: str,
+    object_type: str,
+    index_to_label: list[str],
+) -> set[str]:
+    ontology = read_json(config.data.ontology_path)
+    normalized_subject = normalize_entity_type(subject_type)
+    normalized_object = normalize_entity_type(object_type)
+    label_set = {label for label in index_to_label if label != NA_RELATION_LABEL}
+    allowed: set[str] = set()
+    for relation in ontology.get("relations", []):
+        relation_name = str(relation.get("name", "")).strip().upper()
+        if relation_name not in label_set:
+            continue
+        raw_domains = relation.get("domain", "Entity")
+        raw_ranges = relation.get("range", "Entity")
+        domains = raw_domains if isinstance(raw_domains, list) else [raw_domains]
+        ranges = raw_ranges if isinstance(raw_ranges, list) else [raw_ranges]
+        domain_set = {normalize_entity_type(item) for item in domains}
+        range_set = {normalize_entity_type(item) for item in ranges}
+        if normalized_subject in domain_set and normalized_object in range_set:
+            allowed.add(relation_name)
+    return allowed
+
+
+def _candidate_predicates_from_evidence(evidence_items: list[dict[str, Any]]) -> set[str]:
+    return {
+        str(predicate).strip().upper()
+        for evidence in evidence_items
+        for predicate in evidence.get("candidate_predicates", [])
+        if str(predicate).strip()
+    }
+
+
+def _resolve_output_predicates(
+    *,
+    config: RelationExtractionConfig,
+    metadata: dict[str, Any],
+    evidence_items: list[dict[str, Any]],
+    index_to_label: list[str],
+) -> tuple[set[str], set[str], set[str], str]:
+    allowed_predicates = {
+        str(item).strip().upper()
+        for item in metadata.get("allowed_predicates", [])
+        if str(item).strip()
+    }
+    if not allowed_predicates:
+        allowed_predicates = _allowed_predicates_from_ontology(
+            config=config,
+            subject_type=str(metadata.get("subject_type", "")),
+            object_type=str(metadata.get("object_type", "")),
+            index_to_label=index_to_label,
+        )
+    if not allowed_predicates:
+        raise ValueError(
+            "预测阶段无法确定 allowed_predicates，不能开放全部关系输出。"
+            f" bag_id={metadata.get('bag_id')} subject_type={metadata.get('subject_type')} object_type={metadata.get('object_type')}"
+        )
+    candidate_predicates = _candidate_predicates_from_evidence(evidence_items)
+    mask_mode = config.model.prediction_mask_mode
+    if mask_mode == "ontology":
+        output_predicates = set(allowed_predicates)
+    elif mask_mode in {"candidate", "ontology-and-candidate"}:
+        output_predicates = allowed_predicates & candidate_predicates
+    else:
+        raise ValueError(f"未知 prediction_mask_mode: {mask_mode}")
+    return output_predicates, allowed_predicates, candidate_predicates, mask_mode
 
 
 def predict_bags_with_model(
@@ -125,8 +258,18 @@ def predict_bags_with_model(
                     for label_index, relation_name in enumerate(index_to_label)
                 }
                 predicted_relations: list[dict[str, Any]] = []
+                output_predicates, allowed_predicates, candidate_predicates, mask_mode = _resolve_output_predicates(
+                    config=config,
+                    metadata=metadata,
+                    evidence_items=bag_evidence_metadata,
+                    index_to_label=index_to_label,
+                )
+                masked_relations: list[str] = []
                 for label_index, relation_name in enumerate(index_to_label):
                     if relation_name == NA_RELATION_LABEL:
+                        continue
+                    if relation_name not in output_predicates:
+                        masked_relations.append(relation_name)
                         continue
                     threshold = _resolve_threshold(config, relation_name)
                     probability = probability_map[relation_name]
@@ -159,6 +302,10 @@ def predict_bags_with_model(
                         "object_id": metadata["object_id"],
                         "subject_type": metadata["subject_type"],
                         "object_type": metadata["object_type"],
+                        "mask_mode": mask_mode,
+                        "allowed_predicates": sorted(allowed_predicates),
+                        "candidate_predicates": sorted(candidate_predicates),
+                        "masked_relations": sorted(masked_relations),
                         "sentence_ids": bag_sentence_ids,
                         "probabilities": probability_map,
                         "predicted_relations": predicted_relations,
@@ -176,12 +323,12 @@ def _predict_relations_from_checkpoint(
     split_name: str | None = None,
 ) -> list[dict[str, Any]]:
     device = resolve_device(config.training.device)
-    model, checkpoint_payload, vocabulary, index_to_label, label_to_index = load_relation_model(
+    model, checkpoint_payload, vocabulary, index_to_label, label_to_index, inference_config = load_relation_model(
         checkpoint_path,
         config=config,
         device=device,
     )
-    inference_bags, _ = build_relation_bags(config, include_gold_labels=False)
+    inference_bags, _ = build_relation_bags(inference_config, include_gold_labels=False)
     if split_name is not None:
         split_bag_ids_payload = checkpoint_payload.get("split_bag_ids", {})
         requested_bag_ids = {str(item) for item in split_bag_ids_payload.get(split_name, [])}
@@ -192,13 +339,22 @@ def _predict_relations_from_checkpoint(
         vocabulary=vocabulary,
         index_to_label=index_to_label,
         label_to_index=label_to_index,
-        config=config,
+        config=inference_config,
         device=device,
-        batch_size=config.training.batch_size,
+        batch_size=inference_config.training.batch_size,
     )
     if output_path is not None:
         write_json(output_path, {"predictions": prediction_records})
     return prediction_records
+
+
+def _support_matches_predicate(predicate: str, evidence: dict[str, Any]) -> bool:
+    relation_name = str(predicate).strip().upper()
+    return (
+        relation_name in {str(item).strip().upper() for item in evidence.get("candidate_predicates", [])}
+        or relation_name in {str(item).strip().upper() for item in dict(evidence.get("local_trigger_hits", {}))}
+        or relation_name in {str(item).strip().upper() for item in dict(evidence.get("exact_claim_matches", {}))}
+    )
 
 
 def _build_extracted_claim_records(prediction_records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -212,6 +368,8 @@ def _build_extracted_claim_records(prediction_records: list[dict[str, Any]]) -> 
             if not supporting_sentence_ids:
                 continue
             primary_evidence = supporting_evidence[0] if supporting_evidence else {}
+            predicate = str(predicted_relation.get("predicate") or "").strip().upper()
+            support_matches_predicate = _support_matches_predicate(predicate, primary_evidence)
             running_index += 1
             extracted_claims.append(
                 {
@@ -228,7 +386,7 @@ def _build_extracted_claim_records(prediction_records: list[dict[str, Any]]) -> 
                     "object_text": primary_evidence.get("object_text", ""),
                     "subject_span": primary_evidence.get("original_subject_span", primary_evidence.get("subject_span", [])),
                     "object_span": primary_evidence.get("original_object_span", primary_evidence.get("object_span", [])),
-                    "predicate": predicted_relation.get("predicate"),
+                    "predicate": predicate,
                     "probability": predicted_relation.get("probability"),
                     "confidence": predicted_relation.get("probability"),
                     "threshold_used": predicted_relation.get("threshold_used"),
@@ -248,8 +406,10 @@ def _build_extracted_claim_records(prediction_records: list[dict[str, Any]]) -> 
                     "bridge_predicates": primary_evidence.get("bridge_predicates", []),
                     "bridge_details": primary_evidence.get("bridge_details", {}),
                     "supervision_tier": primary_evidence.get("supervision_tier", ""),
+                    "support_matches_predicate": support_matches_predicate,
+                    "support_evidence_mismatch": not support_matches_predicate,
                     "extractor": DEFAULT_EXTRACTOR_NAME,
-                    "event_type_hint": event_type_for_predicate(predicted_relation.get("predicate")) or "",
+                    "event_type_hint": event_type_for_predicate(predicate) or "",
                 }
             )
     return extracted_claims

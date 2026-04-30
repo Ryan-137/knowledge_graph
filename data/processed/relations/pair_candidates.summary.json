@@ -1,0 +1,93 @@
+{
+  "sentence_count": 2383,
+  "tokenized_sentence_count": 2383,
+  "resolved_mention_count": 4462,
+  "bridge_mention_count": 184,
+  "relation_names": [
+    "AUTHORED",
+    "AWARDED",
+    "BORN_IN",
+    "DESIGNED",
+    "DIED_IN",
+    "LOCATED_IN",
+    "PROPOSED",
+    "STUDIED_AT",
+    "WORKED_AT"
+  ],
+  "linked_mention_repair": {
+    "repair_counts": {
+      "context_window_filled_from_sentence": 1994
+    },
+    "decision_counts": {
+      "LINKED_BY_COREF": 1100,
+      "NIL": 1032,
+      "LINKED": 973,
+      "COREF_UNRESOLVED": 894,
+      "REVIEW": 463
+    },
+    "linked_entity_type_counts": {
+      "PERSON": 1681,
+      "MACHINE": 154,
+      "PLACE": 137,
+      "ORGANIZATION": 54,
+      "CONCEPT": 37,
+      "AWARD": 5,
+      "WORK": 5
+    }
+  },
+  "alias_bridge": {
+    "bridge_count": 184,
+    "bridge_counts_by_predicate": {
+      "STUDIED_AT": 72,
+      "WORKED_AT": 41,
+      "PROPOSED": 30,
+      "DESIGNED": 16,
+      "LOCATED_IN": 10,
+      "DIED_IN": 9,
+      "AWARDED": 4,
+      "BORN_IN": 2
+    },
+    "bridge_counts_by_match_source": {
+      "label_en": 91,
+      "alias": 79,
+      "wikipedia_title_en": 13,
+      "canonical_name": 1
+    }
+  },
+  "relation_candidates": {
+    "candidate_count": 600,
+    "candidate_counts_by_relation": {
+      "STUDIED_AT": 176,
+      "WORKED_AT": 156,
+      "DESIGNED": 102,
+      "PROPOSED": 46,
+      "DIED_IN": 25,
+      "AWARDED": 21,
+      "LOCATED_IN": 12,
+      "BORN_IN": 6,
+      "AUTHORED": 5
+    },
+    "candidate_counts_by_source": {
+      "bridge_augmented": 326,
+      "linked_linked": 172,
+      "coref_augmented": 102
+    },
+    "exact_claim_counts_by_relation": {
+      "DESIGNED": 74,
+      "WORKED_AT": 52,
+      "STUDIED_AT": 16,
+      "AWARDED": 11,
+      "PROPOSED": 11,
+      "AUTHORED": 5,
+      "BORN_IN": 2,
+      "LOCATED_IN": 1
+    },
+    "hard_negative_counts_by_source": {
+      "linked_linked": 94
+    },
+    "filtered_counts": {
+      "no_trigger_or_non_bridge_claim": 157,
+      "token_distance": 86
+    }
+  }
+}

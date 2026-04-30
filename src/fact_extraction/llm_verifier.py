@@ -22,6 +22,14 @@ def _has_signal(record: dict[str, Any], signal_name: str) -> bool:
 
 
 def _offline_verify(record: dict[str, Any]) -> dict[str, Any]:
+    if _has_signal(record, "event_verified") and _has_signal(record, "event_trigger_match"):
+        return {
+            "label": SUPPORTED,
+            "confidence": 0.85,
+            "evidence_span": record.get("evidence", {}).get("text", ""),
+            "reason": "候选由已校验文本事件派生，且事件触发词与角色完整性满足要求。",
+            "mode": "offline_event_projection",
+        }
     if _has_signal(record, "pattern_match"):
         return {
             "label": SUPPORTED,

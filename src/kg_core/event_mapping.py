@@ -22,10 +22,12 @@ EVENT_RELATION_SPECS: dict[str, EventRelationSpec] = {
     "DIED_IN": EventRelationSpec("DIED_IN", "DeathEvent", "person", "death_place", "PERSON", "PLACE"),
     "STUDIED_AT": EventRelationSpec("STUDIED_AT", "EducationEvent", "student", "institution", "PERSON", "ORGANIZATION"),
     "WORKED_AT": EventRelationSpec("WORKED_AT", "EmploymentEvent", "employee", "employer", "PERSON", "ORGANIZATION"),
+    "WORKED_WITH": EventRelationSpec("WORKED_WITH", "CollaborationEvent", "person_a", "person_b", "PERSON", "PERSON"),
     "AUTHORED": EventRelationSpec("AUTHORED", "PublicationEvent", "author", "work", "PERSON", "WORK"),
     "PROPOSED": EventRelationSpec("PROPOSED", "ProposalEvent", "proposer", "concept", "PERSON", "CONCEPT"),
     "DESIGNED": EventRelationSpec("DESIGNED", "DesignEvent", "designer", "machine", "PERSON", "MACHINE"),
     "AWARDED": EventRelationSpec("AWARDED", "HonorEvent", "recipient", "award", "PERSON", "AWARD"),
+    "INFLUENCED": EventRelationSpec("INFLUENCED", "InfluenceEvent", "source_person", "target_person", "PERSON", "PERSON"),
 }
 
 

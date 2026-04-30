@@ -10,12 +10,16 @@ from pathlib import Path
 from kg_core import ProjectPaths
 from kg_core.entity_catalog import load_entity_catalog, normalize_alias_text
 from kg_core.io import read_json, read_jsonl, write_json, write_jsonl
+from kg_core.mention_filters import classify_low_information_mention
 from kg_core.taxonomy import MENTION_TYPE_TO_ENTITY_TYPE, normalize_entity_type, normalize_mention_type
+from relation_extraction.config import NA_RELATION_LABEL
+from relation_extraction.config import resolve_target_relations
 from relation_extraction.rules import (
-    DEFAULT_RELATION_NAMES,
+    SUPPORTED_RELATION_NAMES,
     build_relation_rules,
     build_sentence_trigger_map,
     infer_candidate_relations,
+    match_relation_triggers,
 )
 
 
@@ -273,6 +277,84 @@ def _mention_token_distance(first_mention: dict[str, Any], second_mention: dict[
     return 0
 
 
+def _mention_token_window(
+    *,
+    tokens: Sequence[str],
+    subject_mention: dict[str, Any],
+    object_mention: dict[str, Any],
+    margin: int = 4,
+) -> tuple[int, int]:
+    token_count = len(tokens)
+    subject_start = int(subject_mention.get("token_start", 0))
+    subject_end = int(subject_mention.get("token_end", subject_start))
+    object_start = int(object_mention.get("token_start", 0))
+    object_end = int(object_mention.get("token_end", object_start))
+    window_start = max(0, min(subject_start, object_start) - margin)
+    window_end = min(token_count, max(subject_end, object_end) + margin)
+    return window_start, window_end
+
+
+def _build_local_trigger_hits(
+    *,
+    tokens: Sequence[str],
+    subject_mention: dict[str, Any],
+    object_mention: dict[str, Any],
+    relation_rules: dict[str, Any],
+    relation_names: Sequence[str],
+) -> tuple[dict[str, list[str]], list[int]]:
+    window_start, window_end = _mention_token_window(
+        tokens=tokens,
+        subject_mention=subject_mention,
+        object_mention=object_mention,
+    )
+    window_tokens = list(tokens)[window_start:window_end]
+    local_hits: dict[str, list[str]] = {}
+    for relation_name in relation_names:
+        relation_rule = relation_rules.get(relation_name)
+        if relation_rule is None:
+            continue
+        hits = match_relation_triggers(tokens=window_tokens, relation_rule=relation_rule)
+        if hits:
+            local_hits[relation_name] = hits
+    return local_hits, [window_start, window_end]
+
+
+def _candidate_strength(
+    *,
+    relation_name: str,
+    sentence_trigger_hits: dict[str, list[str]],
+    local_trigger_hits: dict[str, list[str]],
+    exact_claim_matches: dict[str, list[str]],
+    bridge_predicates: Sequence[str],
+) -> str:
+    has_sentence_trigger = bool(sentence_trigger_hits.get(relation_name))
+    has_local_trigger = bool(local_trigger_hits.get(relation_name))
+    has_structured_support = bool(exact_claim_matches.get(relation_name)) or relation_name in set(bridge_predicates)
+    if has_local_trigger and has_structured_support:
+        return "strong"
+    if has_local_trigger or (bool(exact_claim_matches.get(relation_name)) and not has_local_trigger):
+        return "medium"
+    if has_sentence_trigger:
+        return "weak"
+    return "unknown"
+
+
+def _pair_source(subject_mention: dict[str, Any], object_mention: dict[str, Any]) -> str:
+    resolutions = {str(subject_mention.get("mention_resolution")), str(object_mention.get("mention_resolution"))}
+    if resolutions == {"linked"}:
+        return "linked_linked"
+    if "claim_guided_alias_bridge" in resolutions:
+        return "bridge_augmented"
+    return "coref_augmented"
+
+
+def _pair_has_low_information_mention(subject_mention: dict[str, Any], object_mention: dict[str, Any]) -> bool:
+    return any(
+        bool(classify_low_information_mention(str(mention.get("mention_text", "")).strip()))
+        for mention in (subject_mention, object_mention)
+    )
+
+
 def _bridge_claim_ids(*mentions: dict[str, Any]) -> set[str]:
     claim_ids: set[str] = set()
     for mention in mentions:
@@ -414,8 +496,9 @@ def _build_relation_candidates(
     candidate_counts_by_source: Counter[str] = Counter()
     exact_claim_counts: Counter[str] = Counter()
     filtered_counts: Counter[str] = Counter()
+    hard_negative_counts_by_source: Counter[str] = Counter()
     relation_candidates: list[dict[str, Any]] = []
-    seen_candidate_keys: set[tuple[str, str, str, str, str, str]] = set()
+    seen_candidate_keys: set[tuple[str, str, str, str, str]] = set()
     seen_token_distance_filter_keys: set[tuple[str, str, tuple[str, ...]]] = set()
     candidate_index = 0
 
@@ -463,7 +546,17 @@ def _build_relation_candidates(
                     continue
 
                 bridge_claim_ids = _bridge_claim_ids(subject_mention, object_mention)
-                exact_claim_rows_by_relation: dict[str, list[dict[str, Any]]] = {}
+                bridge_predicates = sorted(
+                    {
+                        predicate
+                        for predicate in (
+                            str(subject_mention.get("bridge_predicate") or "").strip().upper(),
+                            str(object_mention.get("bridge_predicate") or "").strip().upper(),
+                        )
+                        if predicate
+                    }
+                )
+                exact_claim_matches: dict[str, list[str]] = {}
                 excluded_bridge_claim_ids: set[str] = set()
                 for relation_name in type_compatible_relations:
                     exact_claim_key = (subject_entity_id, relation_name, object_entity_id)
@@ -476,112 +569,238 @@ def _build_relation_candidates(
                             continue
                         filtered_exact_claim_rows.append(row)
                     if filtered_exact_claim_rows:
-                        exact_claim_rows_by_relation[relation_name] = filtered_exact_claim_rows
+                        exact_claim_matches[relation_name] = [
+                            str(row.get("claim_id") or "").strip()
+                            for row in filtered_exact_claim_rows
+                            if str(row.get("claim_id") or "").strip()
+                        ]
+
+                sentence_trigger_hits = {
+                    relation_name: list(trigger_map.get(relation_name, []))
+                    for relation_name in type_compatible_relations
+                    if trigger_map.get(relation_name)
+                }
+                local_trigger_hits, evidence_token_window = _build_local_trigger_hits(
+                    tokens=list(sentence_record.get("tokens", [])),
+                    subject_mention=subject_mention,
+                    object_mention=object_mention,
+                    relation_rules=relation_rules,
+                    relation_names=type_compatible_relations,
+                )
 
                 # 关系候选必须来自句内触发词或非 bridge 来源的精确 claim，避免纯类型枚举污染候选空间。
                 candidate_relations = sorted(
                     {
                         relation_name
                         for relation_name in type_compatible_relations
-                        if relation_name in triggered_relation_names or relation_name in exact_claim_rows_by_relation
+                        if relation_name in triggered_relation_names
+                        or relation_name in exact_claim_matches
+                        or relation_name in bridge_predicates
                     }
                 )
                 if not candidate_relations:
-                    filtered_counts["no_trigger_or_non_bridge_claim"] += 1
-                    continue
-                for relation_name in candidate_relations:
+                    pair_source = _pair_source(subject_mention, object_mention)
                     candidate_key = (
                         sentence_id,
                         str(subject_mention.get("mention_id")),
                         str(object_mention.get("mention_id")),
                         subject_entity_id,
                         object_entity_id,
-                        relation_name,
                     )
-                    if candidate_key in seen_candidate_keys:
-                        continue
-                    seen_candidate_keys.add(candidate_key)
-                    candidate_index += 1
-                    exact_claim_rows = exact_claim_rows_by_relation.get(relation_name, [])
-                    resolutions = {str(subject_mention.get("mention_resolution")), str(object_mention.get("mention_resolution"))}
-                    if resolutions == {"linked"}:
-                        pair_source = "linked_linked"
-                    elif "claim_guided_alias_bridge" in resolutions:
-                        pair_source = "bridge_augmented"
+                    if (
+                        not sentence_trigger_hits
+                        and not local_trigger_hits
+                        and not exact_claim_matches
+                        and not bridge_predicates
+                        and pair_source == "linked_linked"
+                        and not _pair_has_low_information_mention(subject_mention, object_mention)
+                        and candidate_key not in seen_candidate_keys
+                    ):
+                        seen_candidate_keys.add(candidate_key)
+                        candidate_index += 1
+                        candidate_record = {
+                            "candidate_id": f"relcand_{candidate_index:06d}",
+                            "sentence_id": sentence_id,
+                            "doc_id": sentence_record.get("doc_id"),
+                            "source_id": sentence_record.get("source_id"),
+                            "sentence_index_in_doc": sentence_record.get("sentence_index_in_doc"),
+                            "text": sentence_record.get("text"),
+                            "tokens": list(sentence_record.get("tokens", [])),
+                            "token_spans": list(sentence_record.get("token_spans", [])),
+                            "predicate": NA_RELATION_LABEL,
+                            "allowed_predicates": list(type_compatible_relations),
+                            "candidate_predicates": [],
+                            "sentence_trigger_hits": {},
+                            "local_trigger_hits": {},
+                            "local_trigger_hit_count": 0,
+                            "evidence_token_window": evidence_token_window,
+                            "exact_claim_matches": {},
+                            "candidate_strength_by_predicate": {},
+                            "positive_predicates": [],
+                            "review_predicates": [],
+                            "unknown_predicates": [],
+                            "hard_negative_predicates": [NA_RELATION_LABEL],
+                            "weak_labels_by_predicate": {},
+                            "weak_label": "hard_negative",
+                            "weak_label_reason": "conservative_no_relation_evidence",
+                            "weak_label_source": "prepare_conservative_sampler",
+                            "supervision_tier": "hard_negative",
+                            "subject_mention_id": subject_mention.get("mention_id"),
+                            "subject_text": subject_mention.get("mention_text"),
+                            "subject_entity_id": subject_entity_id,
+                            "subject_canonical_name": subject_mention.get("canonical_name"),
+                            "subject_entity_type": subject_type,
+                            "subject_token_start": subject_mention.get("token_start"),
+                            "subject_token_end": subject_mention.get("token_end"),
+                            "subject_token_span": [
+                                subject_mention.get("token_start"),
+                                subject_mention.get("token_end"),
+                            ],
+                            "subject_resolution": subject_mention.get("mention_resolution"),
+                            "object_mention_id": object_mention.get("mention_id"),
+                            "object_text": object_mention.get("mention_text"),
+                            "object_entity_id": object_entity_id,
+                            "object_canonical_name": object_mention.get("canonical_name"),
+                            "object_entity_type": object_type,
+                            "object_token_start": object_mention.get("token_start"),
+                            "object_token_end": object_mention.get("token_end"),
+                            "object_token_span": [
+                                object_mention.get("token_start"),
+                                object_mention.get("token_end"),
+                            ],
+                            "object_resolution": object_mention.get("mention_resolution"),
+                            "pair_source": pair_source,
+                            "token_distance": token_distance,
+                            "exact_claim_match": False,
+                            "matched_claim_ids": [],
+                            "matched_claim_count": 0,
+                            "bridge_source_claim_ids": sorted(bridge_claim_ids),
+                            "excluded_bridge_claim_ids": sorted(excluded_bridge_claim_ids),
+                            "bridge_predicates": [],
+                            "bridge_details": {
+                                "subject": {
+                                    "bridge_claim_id": subject_mention.get("bridge_claim_id"),
+                                    "bridge_anchor_entity_id": subject_mention.get("bridge_anchor_entity_id"),
+                                    "bridge_predicate": subject_mention.get("bridge_predicate"),
+                                    "bridge_match_surface": subject_mention.get("bridge_match_surface"),
+                                    "bridge_match_score": subject_mention.get("bridge_match_score"),
+                                },
+                                "object": {
+                                    "bridge_claim_id": object_mention.get("bridge_claim_id"),
+                                    "bridge_anchor_entity_id": object_mention.get("bridge_anchor_entity_id"),
+                                    "bridge_predicate": object_mention.get("bridge_predicate"),
+                                    "bridge_match_surface": object_mention.get("bridge_match_surface"),
+                                    "bridge_match_score": object_mention.get("bridge_match_score"),
+                                },
+                            },
+                        }
+                        relation_candidates.append(candidate_record)
+                        candidate_counts_by_source[pair_source] += 1
+                        hard_negative_counts_by_source[pair_source] += 1
                     else:
-                        pair_source = "coref_augmented"
-                    candidate_record = {
-                        "candidate_id": f"relcand_{candidate_index:06d}",
-                        "sentence_id": sentence_id,
-                        "doc_id": sentence_record.get("doc_id"),
-                        "source_id": sentence_record.get("source_id"),
-                        "sentence_index_in_doc": sentence_record.get("sentence_index_in_doc"),
-                        "text": sentence_record.get("text"),
-                        "tokens": list(sentence_record.get("tokens", [])),
-                        "token_spans": list(sentence_record.get("token_spans", [])),
-                        "predicate": relation_name,
-                        "subject_mention_id": subject_mention.get("mention_id"),
-                        "subject_text": subject_mention.get("mention_text"),
-                        "subject_entity_id": subject_entity_id,
-                        "subject_canonical_name": subject_mention.get("canonical_name"),
-                        "subject_entity_type": subject_type,
-                        "subject_token_start": subject_mention.get("token_start"),
-                        "subject_token_end": subject_mention.get("token_end"),
-                        "subject_token_span": [
-                            subject_mention.get("token_start"),
-                            subject_mention.get("token_end"),
-                        ],
-                        "subject_resolution": subject_mention.get("mention_resolution"),
-                        "object_mention_id": object_mention.get("mention_id"),
-                        "object_text": object_mention.get("mention_text"),
-                        "object_entity_id": object_entity_id,
-                        "object_canonical_name": object_mention.get("canonical_name"),
-                        "object_entity_type": object_type,
-                        "object_token_start": object_mention.get("token_start"),
-                        "object_token_end": object_mention.get("token_end"),
-                        "object_token_span": [
-                            object_mention.get("token_start"),
-                            object_mention.get("token_end"),
-                        ],
-                        "object_resolution": object_mention.get("mention_resolution"),
-                        "pair_source": pair_source,
-                        "token_distance": token_distance,
-                        "exact_claim_match": bool(exact_claim_rows),
-                        "matched_claim_ids": [row.get("claim_id") for row in exact_claim_rows],
-                        "matched_claim_count": len(exact_claim_rows),
-                        "bridge_source_claim_ids": sorted(bridge_claim_ids),
-                        "excluded_bridge_claim_ids": sorted(excluded_bridge_claim_ids),
-                        "bridge_predicates": sorted(
-                            {
-                                predicate
-                                for predicate in (
-                                    str(subject_mention.get("bridge_predicate") or "").strip().upper(),
-                                    str(object_mention.get("bridge_predicate") or "").strip().upper(),
-                                )
-                                if predicate
-                            }
-                        ),
-                        "bridge_details": {
-                            "subject": {
-                                "bridge_claim_id": subject_mention.get("bridge_claim_id"),
-                                "bridge_anchor_entity_id": subject_mention.get("bridge_anchor_entity_id"),
-                                "bridge_predicate": subject_mention.get("bridge_predicate"),
-                                "bridge_match_surface": subject_mention.get("bridge_match_surface"),
-                                "bridge_match_score": subject_mention.get("bridge_match_score"),
-                            },
-                            "object": {
-                                "bridge_claim_id": object_mention.get("bridge_claim_id"),
-                                "bridge_anchor_entity_id": object_mention.get("bridge_anchor_entity_id"),
-                                "bridge_predicate": object_mention.get("bridge_predicate"),
-                                "bridge_match_surface": object_mention.get("bridge_match_surface"),
-                                "bridge_match_score": object_mention.get("bridge_match_score"),
-                            },
-                        },
+                        filtered_counts["no_trigger_or_non_bridge_claim"] += 1
+                    continue
+                candidate_key = (
+                    sentence_id,
+                    str(subject_mention.get("mention_id")),
+                    str(object_mention.get("mention_id")),
+                    subject_entity_id,
+                    object_entity_id,
+                )
+                if candidate_key in seen_candidate_keys:
+                    continue
+                seen_candidate_keys.add(candidate_key)
+                candidate_index += 1
+                pair_source = _pair_source(subject_mention, object_mention)
+                strength_by_predicate = {
+                    relation_name: _candidate_strength(
+                        relation_name=relation_name,
+                        sentence_trigger_hits=sentence_trigger_hits,
+                        local_trigger_hits=local_trigger_hits,
+                        exact_claim_matches=exact_claim_matches,
+                        bridge_predicates=bridge_predicates,
+                    )
+                    for relation_name in candidate_relations
+                }
+                matched_claim_ids = sorted(
+                    {
+                        claim_id
+                        for claim_ids in exact_claim_matches.values()
+                        for claim_id in claim_ids
                     }
-                    relation_candidates.append(candidate_record)
+                )
+                candidate_record = {
+                    "candidate_id": f"relcand_{candidate_index:06d}",
+                    "sentence_id": sentence_id,
+                    "doc_id": sentence_record.get("doc_id"),
+                    "source_id": sentence_record.get("source_id"),
+                    "sentence_index_in_doc": sentence_record.get("sentence_index_in_doc"),
+                    "text": sentence_record.get("text"),
+                    "tokens": list(sentence_record.get("tokens", [])),
+                    "token_spans": list(sentence_record.get("token_spans", [])),
+                    "predicate": candidate_relations[0],
+                    "allowed_predicates": list(type_compatible_relations),
+                    "candidate_predicates": candidate_relations,
+                    "sentence_trigger_hits": sentence_trigger_hits,
+                    "local_trigger_hits": local_trigger_hits,
+                    "local_trigger_hit_count": sum(len(hits) for hits in local_trigger_hits.values()),
+                    "evidence_token_window": evidence_token_window,
+                    "exact_claim_matches": exact_claim_matches,
+                    "candidate_strength_by_predicate": strength_by_predicate,
+                    "subject_mention_id": subject_mention.get("mention_id"),
+                    "subject_text": subject_mention.get("mention_text"),
+                    "subject_entity_id": subject_entity_id,
+                    "subject_canonical_name": subject_mention.get("canonical_name"),
+                    "subject_entity_type": subject_type,
+                    "subject_token_start": subject_mention.get("token_start"),
+                    "subject_token_end": subject_mention.get("token_end"),
+                    "subject_token_span": [
+                        subject_mention.get("token_start"),
+                        subject_mention.get("token_end"),
+                    ],
+                    "subject_resolution": subject_mention.get("mention_resolution"),
+                    "object_mention_id": object_mention.get("mention_id"),
+                    "object_text": object_mention.get("mention_text"),
+                    "object_entity_id": object_entity_id,
+                    "object_canonical_name": object_mention.get("canonical_name"),
+                    "object_entity_type": object_type,
+                    "object_token_start": object_mention.get("token_start"),
+                    "object_token_end": object_mention.get("token_end"),
+                    "object_token_span": [
+                        object_mention.get("token_start"),
+                        object_mention.get("token_end"),
+                    ],
+                    "object_resolution": object_mention.get("mention_resolution"),
+                    "pair_source": pair_source,
+                    "token_distance": token_distance,
+                    "exact_claim_match": bool(matched_claim_ids),
+                    "matched_claim_ids": matched_claim_ids,
+                    "matched_claim_count": len(matched_claim_ids),
+                    "bridge_source_claim_ids": sorted(bridge_claim_ids),
+                    "excluded_bridge_claim_ids": sorted(excluded_bridge_claim_ids),
+                    "bridge_predicates": bridge_predicates,
+                    "bridge_details": {
+                        "subject": {
+                            "bridge_claim_id": subject_mention.get("bridge_claim_id"),
+                            "bridge_anchor_entity_id": subject_mention.get("bridge_anchor_entity_id"),
+                            "bridge_predicate": subject_mention.get("bridge_predicate"),
+                            "bridge_match_surface": subject_mention.get("bridge_match_surface"),
+                            "bridge_match_score": subject_mention.get("bridge_match_score"),
+                        },
+                        "object": {
+                            "bridge_claim_id": object_mention.get("bridge_claim_id"),
+                            "bridge_anchor_entity_id": object_mention.get("bridge_anchor_entity_id"),
+                            "bridge_predicate": object_mention.get("bridge_predicate"),
+                            "bridge_match_surface": object_mention.get("bridge_match_surface"),
+                            "bridge_match_score": object_mention.get("bridge_match_score"),
+                        },
+                    },
+                }
+                relation_candidates.append(candidate_record)
+                candidate_counts_by_source[pair_source] += 1
+                for relation_name in candidate_relations:
                     candidate_counts_by_relation[relation_name] += 1
-                    candidate_counts_by_source[pair_source] += 1
-                    if exact_claim_rows:
+                    if exact_claim_matches.get(relation_name):
                         exact_claim_counts[relation_name] += 1
 
     summary = {
@@ -589,6 +808,7 @@ def _build_relation_candidates(
         "candidate_counts_by_relation": _counter_to_sorted_dict(candidate_counts_by_relation),
         "candidate_counts_by_source": _counter_to_sorted_dict(candidate_counts_by_source),
         "exact_claim_counts_by_relation": _counter_to_sorted_dict(exact_claim_counts),
+        "hard_negative_counts_by_source": _counter_to_sorted_dict(hard_negative_counts_by_source),
         "filtered_counts": _counter_to_sorted_dict(filtered_counts),
     }
     return relation_candidates, summary
@@ -604,12 +824,23 @@ def prepare_relation_candidates_from_paths(
     claims_csv_path: str,
     ontology_path: str,
     relation_names: Sequence[str] | None = None,
+    config_path: str | None = None,
     max_token_distance: int = 24,
 ) -> PreparedRelationBundle:
     """读取全量上游资源，生成关系抽取的同句候选与 bridge 扩充结果。"""
 
+    configured_relation_names = relation_names
+    if configured_relation_names is None and config_path:
+        config_payload = read_json(config_path)
+        configured_relation_names = config_payload.get("target_relations")
     normalized_relation_names = tuple(
-        name.strip().upper() for name in (relation_names or DEFAULT_RELATION_NAMES) if name and name.strip()
+        name.strip().upper()
+        for name in resolve_target_relations(
+            ontology_path=Path(ontology_path),
+            configured_target_relations=configured_relation_names,
+            trigger_relation_names=SUPPORTED_RELATION_NAMES,
+        )
+        if name and name.strip()
     )
     sentences = read_jsonl(sentences_path)
     tokenized_sentences = read_jsonl(tokenized_sentences_path)
@@ -688,6 +919,7 @@ def prepare_relation_pairs(
     entities_csv_path: Path | None = None,
     aliases_csv_path: Path | None = None,
     claims_csv_path: Path | None = None,
+    config_path: Path | None = None,
 ) -> dict[str, Any]:
     """CLI 入口：基于 linked mentions 生成关系候选并落盘。
 
@@ -710,6 +942,7 @@ def prepare_relation_pairs(
         aliases_csv_path=str(resolved_aliases_csv),
         claims_csv_path=str(resolved_claims_csv),
         ontology_path=str(ontology_path),
+        config_path=str(config_path) if config_path else None,
         max_token_distance=max_token_distance,
     )
     write_jsonl(output_path, prepared_bundle.relation_candidates)

@@ -40,6 +40,17 @@ class RelationSentenceEvidence:
     weak_label: str = ""
     weak_label_reason: str = ""
     supervision_tier: str = ""
+    allowed_predicates: list[str] | None = None
+    candidate_predicates: list[str] | None = None
+    positive_predicates: list[str] | None = None
+    hard_negative_predicates: list[str] | None = None
+    unknown_predicates: list[str] | None = None
+    review_predicates: list[str] | None = None
+    weak_labels_by_predicate: dict[str, str] | None = None
+    sentence_trigger_hits: dict[str, list[str]] | None = None
+    local_trigger_hits: dict[str, list[str]] | None = None
+    exact_claim_matches: dict[str, list[str]] | None = None
+    candidate_strength_by_predicate: dict[str, str] | None = None
 
 
 @dataclass(frozen=True)
@@ -52,6 +63,7 @@ class RelationBag:
     object_id: str
     subject_type: str
     object_type: str
+    allowed_predicates: list[str]
     sentence_evidences: list[RelationSentenceEvidence]
     label_names: list[str]
 
@@ -202,9 +214,9 @@ def load_entity_type_map(entities_path: Path) -> dict[str, str]:
 
 def infer_target_relations(config: RelationExtractionConfig) -> list[str]:
     relation_constraints = build_relation_constraints(config.data.ontology_path)
-    _, discovered_relations = load_claim_relation_map(config.data.claims_path)
     if config.target_relations:
         return [relation for relation in config.target_relations if relation in relation_constraints]
+    _, discovered_relations = load_claim_relation_map(config.data.claims_path)
     return sorted(discovered_relations & set(relation_constraints))
 
 
@@ -297,6 +309,82 @@ def _candidate_to_sentence_evidence(candidate: dict[str, Any]) -> RelationSenten
         weak_label=str(candidate.get("weak_label", "")),
         weak_label_reason=str(candidate.get("weak_label_reason", "")),
         supervision_tier=str(candidate.get("supervision_tier", "")),
+        allowed_predicates=[str(item) for item in candidate.get("allowed_predicates", [])],
+        candidate_predicates=[str(item) for item in candidate.get("candidate_predicates", [])],
+        positive_predicates=[str(item) for item in candidate.get("positive_predicates", [])],
+        hard_negative_predicates=[str(item) for item in candidate.get("hard_negative_predicates", [])],
+        unknown_predicates=[str(item) for item in candidate.get("unknown_predicates", [])],
+        review_predicates=[str(item) for item in candidate.get("review_predicates", [])],
+        weak_labels_by_predicate=dict(candidate.get("weak_labels_by_predicate", {})),
+        sentence_trigger_hits={str(key): list(value) for key, value in dict(candidate.get("sentence_trigger_hits", {})).items()},
+        local_trigger_hits={str(key): list(value) for key, value in dict(candidate.get("local_trigger_hits", {})).items()},
+        exact_claim_matches={str(key): list(value) for key, value in dict(candidate.get("exact_claim_matches", {})).items()},
+        candidate_strength_by_predicate=dict(candidate.get("candidate_strength_by_predicate", {})),
+    )
+
+
+def _merge_unique(values: Iterable[str]) -> list[str]:
+    return sorted({str(value) for value in values if str(value)})
+
+
+def _merge_dict_list_values(first: dict[str, list[str]] | None, second: dict[str, list[str]] | None) -> dict[str, list[str]]:
+    merged: dict[str, set[str]] = defaultdict(set)
+    for payload in (first or {}, second or {}):
+        for key, values in payload.items():
+            normalized_key = str(key)
+            for value in values:
+                if str(value):
+                    merged[normalized_key].add(str(value))
+    return {key: sorted(values) for key, values in sorted(merged.items())}
+
+
+def _merge_sentence_evidence(
+    existing: RelationSentenceEvidence,
+    incoming: RelationSentenceEvidence,
+) -> RelationSentenceEvidence:
+    return RelationSentenceEvidence(
+        sentence_id=existing.sentence_id,
+        doc_id=existing.doc_id,
+        text=existing.text,
+        tokens=existing.tokens,
+        token_spans=existing.token_spans,
+        subject_span=existing.subject_span,
+        object_span=existing.object_span,
+        subject_mention_id=existing.subject_mention_id,
+        object_mention_id=existing.object_mention_id,
+        source_id=existing.source_id,
+        sentence_index_in_doc=existing.sentence_index_in_doc,
+        candidate_id=existing.candidate_id,
+        predicate=existing.predicate,
+        subject_text=existing.subject_text,
+        object_text=existing.object_text,
+        pair_source=existing.pair_source,
+        exact_claim_match=existing.exact_claim_match or incoming.exact_claim_match,
+        matched_claim_ids=_merge_unique(list(existing.matched_claim_ids or []) + list(incoming.matched_claim_ids or [])),
+        bridge_predicates=_merge_unique(list(existing.bridge_predicates or []) + list(incoming.bridge_predicates or [])),
+        bridge_details=existing.bridge_details or incoming.bridge_details,
+        weak_label=existing.weak_label or incoming.weak_label,
+        weak_label_reason=existing.weak_label_reason or incoming.weak_label_reason,
+        supervision_tier=existing.supervision_tier or incoming.supervision_tier,
+        allowed_predicates=_merge_unique(list(existing.allowed_predicates or []) + list(incoming.allowed_predicates or [])),
+        candidate_predicates=_merge_unique(list(existing.candidate_predicates or []) + list(incoming.candidate_predicates or [])),
+        positive_predicates=_merge_unique(list(existing.positive_predicates or []) + list(incoming.positive_predicates or [])),
+        hard_negative_predicates=_merge_unique(
+            list(existing.hard_negative_predicates or []) + list(incoming.hard_negative_predicates or [])
+        ),
+        unknown_predicates=_merge_unique(list(existing.unknown_predicates or []) + list(incoming.unknown_predicates or [])),
+        review_predicates=_merge_unique(list(existing.review_predicates or []) + list(incoming.review_predicates or [])),
+        weak_labels_by_predicate={
+            **dict(existing.weak_labels_by_predicate or {}),
+            **dict(incoming.weak_labels_by_predicate or {}),
+        },
+        sentence_trigger_hits=_merge_dict_list_values(existing.sentence_trigger_hits, incoming.sentence_trigger_hits),
+        local_trigger_hits=_merge_dict_list_values(existing.local_trigger_hits, incoming.local_trigger_hits),
+        exact_claim_matches=_merge_dict_list_values(existing.exact_claim_matches, incoming.exact_claim_matches),
+        candidate_strength_by_predicate={
+            **dict(existing.candidate_strength_by_predicate or {}),
+            **dict(incoming.candidate_strength_by_predicate or {}),
+        },
     )
 
 
@@ -310,11 +398,24 @@ def _build_relation_bags_from_candidate_records(
     target_relation_set = set(target_relations)
     bag_payloads: dict[str, dict[str, Any]] = {}
     for candidate in candidate_records:
-        predicate = str(candidate.get("predicate", "")).strip().upper()
-        weak_label = str(candidate.get("weak_label", "NA")).strip()
-        if predicate not in target_relation_set:
+        hard_negative_predicates = [
+            str(item).strip().upper()
+            for item in candidate.get("hard_negative_predicates", [])
+            if str(item).strip().upper() in (target_relation_set | {NA_RELATION_LABEL})
+        ]
+        candidate_predicates = [
+            str(item).strip().upper()
+            for item in candidate.get("candidate_predicates", [candidate.get("predicate", "")])
+            if str(item).strip().upper() in target_relation_set
+        ]
+        if not candidate_predicates and not hard_negative_predicates:
             continue
-        if include_gold_labels and weak_label not in {"ds_strict", "NA"}:
+        positive_predicates = [
+            str(item).strip().upper()
+            for item in candidate.get("positive_predicates", [])
+            if str(item).strip().upper() in target_relation_set
+        ]
+        if include_gold_labels and not positive_predicates and not hard_negative_predicates:
             continue
         subject_id = str(candidate.get("subject_entity_id", "")).strip()
         object_id = str(candidate.get("object_entity_id", "")).strip()
@@ -332,15 +433,34 @@ def _build_relation_bags_from_candidate_records(
                 "object_id": object_id,
                 "subject_type": str(candidate.get("subject_entity_type", "Entity")),
                 "object_type": str(candidate.get("object_entity_type", "Entity")),
-                "sentence_evidences": [],
+                "allowed_predicates": set(),
+                "sentence_evidences": {},
                 "label_names": set(),
+                "hard_negative_predicates": set(),
             },
         )
-        bag_payload["sentence_evidences"].append(evidence)
-        if include_gold_labels and weak_label == "ds_strict":
-            bag_payload["label_names"].add(predicate)
+        bag_payload["allowed_predicates"].update(
+            str(item).strip().upper()
+            for item in candidate.get("allowed_predicates", candidate_predicates)
+            if str(item).strip().upper() in target_relation_set
+        )
+        evidence_key = (
+            evidence.sentence_id,
+            evidence.subject_mention_id,
+            evidence.object_mention_id,
+        )
+        existing_evidence = bag_payload["sentence_evidences"].get(evidence_key)
+        if existing_evidence is None:
+            bag_payload["sentence_evidences"][evidence_key] = evidence
+        else:
+            bag_payload["sentence_evidences"][evidence_key] = _merge_sentence_evidence(existing_evidence, evidence)
+        if include_gold_labels:
+            bag_payload["label_names"].update(positive_predicates)
+            bag_payload["hard_negative_predicates"].update(hard_negative_predicates)
     bags: list[RelationBag] = []
     for bag_id, payload in sorted(bag_payloads.items()):
+        if include_gold_labels and not payload["label_names"] and not payload["hard_negative_predicates"]:
+            continue
         label_names = sorted(payload["label_names"]) if include_gold_labels and payload["label_names"] else [NA_RELATION_LABEL]
         bags.append(
             RelationBag(
@@ -350,8 +470,9 @@ def _build_relation_bags_from_candidate_records(
                 object_id=str(payload["object_id"]),
                 subject_type=str(payload["subject_type"]),
                 object_type=str(payload["object_type"]),
+                allowed_predicates=sorted(payload["allowed_predicates"]),
                 sentence_evidences=sorted(
-                    payload["sentence_evidences"],
+                    payload["sentence_evidences"].values(),
                     key=lambda item: (item.doc_id, item.sentence_id, item.subject_span[0], item.object_span[0]),
                 )[: config.model.max_sentences_per_bag],
                 label_names=label_names,
@@ -624,6 +745,17 @@ def vectorize_sentence_evidence(
         "weak_label": evidence.weak_label,
         "weak_label_reason": evidence.weak_label_reason,
         "supervision_tier": evidence.supervision_tier,
+        "allowed_predicates": list(evidence.allowed_predicates or []),
+        "candidate_predicates": list(evidence.candidate_predicates or []),
+        "positive_predicates": list(evidence.positive_predicates or []),
+        "hard_negative_predicates": list(evidence.hard_negative_predicates or []),
+        "unknown_predicates": list(evidence.unknown_predicates or []),
+        "review_predicates": list(evidence.review_predicates or []),
+        "weak_labels_by_predicate": dict(evidence.weak_labels_by_predicate or {}),
+        "sentence_trigger_hits": dict(evidence.sentence_trigger_hits or {}),
+        "local_trigger_hits": dict(evidence.local_trigger_hits or {}),
+        "exact_claim_matches": dict(evidence.exact_claim_matches or {}),
+        "candidate_strength_by_predicate": dict(evidence.candidate_strength_by_predicate or {}),
         "text": evidence.text,
         "token_spans": token_spans,
     }
@@ -644,6 +776,7 @@ def vectorize_bag(
         "object_id": bag.object_id,
         "subject_type": bag.subject_type,
         "object_type": bag.object_type,
+        "allowed_predicates": list(bag.allowed_predicates),
         "sentence_features": [
             vectorize_sentence_evidence(
                 evidence,
@@ -708,6 +841,17 @@ def collate_relation_batch(batch: list[dict[str, Any]]) -> dict[str, Any]:
                     "weak_label": feature.get("weak_label", ""),
                     "weak_label_reason": feature.get("weak_label_reason", ""),
                     "supervision_tier": feature.get("supervision_tier", ""),
+                    "allowed_predicates": feature.get("allowed_predicates", []),
+                    "candidate_predicates": feature.get("candidate_predicates", []),
+                    "positive_predicates": feature.get("positive_predicates", []),
+                    "hard_negative_predicates": feature.get("hard_negative_predicates", []),
+                    "unknown_predicates": feature.get("unknown_predicates", []),
+                    "review_predicates": feature.get("review_predicates", []),
+                    "weak_labels_by_predicate": feature.get("weak_labels_by_predicate", {}),
+                    "sentence_trigger_hits": feature.get("sentence_trigger_hits", {}),
+                    "local_trigger_hits": feature.get("local_trigger_hits", {}),
+                    "exact_claim_matches": feature.get("exact_claim_matches", {}),
+                    "candidate_strength_by_predicate": feature.get("candidate_strength_by_predicate", {}),
                 }
             )
             cursor += 1
@@ -721,6 +865,7 @@ def collate_relation_batch(batch: list[dict[str, Any]]) -> dict[str, Any]:
                 "object_id": bag["object_id"],
                 "subject_type": bag["subject_type"],
                 "object_type": bag["object_type"],
+                "allowed_predicates": bag.get("allowed_predicates", []),
                 "label_names": bag["label_names"],
             }
         )
@@ -751,24 +896,58 @@ def build_dataset_report(
     def summarize(split_bags: list[RelationBag]) -> dict[str, Any]:
         relation_counter: Counter[str] = Counter()
         sentence_counter = 0
+        hard_negative_bag_count = 0
         for bag in split_bags:
             sentence_counter += len(bag.sentence_evidences)
             relation_counter.update(bag.label_names)
+            if bag.is_na and any(
+                NA_RELATION_LABEL in set(evidence.hard_negative_predicates or [])
+                for evidence in bag.sentence_evidences
+            ):
+                hard_negative_bag_count += 1
         return {
             "bag_count": len(split_bags),
             "sentence_count": sentence_counter,
             "relation_counts": dict(sorted(relation_counter.items())),
             "na_bag_count": sum(1 for bag in split_bags if bag.is_na),
+            "hard_negative_bag_count": hard_negative_bag_count,
             "positive_bag_count": sum(1 for bag in split_bags if not bag.is_na),
         }
+
+    def positive_counts(split_bags: list[RelationBag]) -> Counter[str]:
+        counter: Counter[str] = Counter()
+        for bag in split_bags:
+            counter.update(label for label in bag.label_names if label != NA_RELATION_LABEL)
+        return counter
+
+    train_counts = positive_counts(train_bags)
+    dev_counts = positive_counts(dev_bags)
+    test_counts = positive_counts(test_bags)
+    all_counts = train_counts + dev_counts + test_counts
+    target_relations = [label for label in label_to_index if label != NA_RELATION_LABEL]
+    warnings: list[str] = []
+    for relation_name in target_relations:
+        if train_counts.get(relation_name, 0) == 0:
+            warnings.append(f"train split 缺少 {relation_name} 正例，训练该关系会不稳定。")
+        if dev_counts.get(relation_name, 0) == 0:
+            warnings.append(f"dev split 缺少 {relation_name} 正例，dev macro F1 对该关系不可用。")
+        if test_counts.get(relation_name, 0) == 0:
+            warnings.append(f"test split 缺少 {relation_name} 正例，test macro F1 对该关系不可用。")
+        if all_counts.get(relation_name, 0) == 1:
+            warnings.append(f"{relation_name} 全量只有 1 个正例，指标方差会很高。")
+
+    sampled_summary = summarize(sampled_train_bags)
+    if sampled_summary["hard_negative_bag_count"] == 0:
+        warnings.append("当前训练集没有显式 hard negative / NA bag，模型只学习正例和 implicit negative。")
 
     return {
         "label_space": list(label_to_index),
         "train_before_downsampling": summarize(train_bags),
-        "train_after_downsampling": summarize(sampled_train_bags),
+        "train_after_downsampling": sampled_summary,
         "dev": summarize(dev_bags),
         "test": summarize(test_bags),
         "na_downsampling": downsampling_report,
+        "coverage_warnings": warnings,
     }
 
 

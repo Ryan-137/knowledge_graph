@@ -15,10 +15,12 @@ V1_RELATIONS = {
     "DIED_IN",
     "STUDIED_AT",
     "WORKED_AT",
+    "WORKED_WITH",
     "AUTHORED",
     "PROPOSED",
     "DESIGNED",
     "AWARDED",
+    "INFLUENCED",
     "LOCATED_IN",
 }
 

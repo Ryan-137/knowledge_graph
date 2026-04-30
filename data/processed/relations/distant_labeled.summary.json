@@ -1,0 +1,133 @@
+{
+  "relation_names": [
+    "AUTHORED",
+    "AWARDED",
+    "BORN_IN",
+    "DESIGNED",
+    "DIED_IN",
+    "LOCATED_IN",
+    "PROPOSED",
+    "STUDIED_AT",
+    "WORKED_AT"
+  ],
+  "candidate_count": 600,
+  "weak_label_counts": {
+    "ds_strict": 263,
+    "hard_negative": 248,
+    "manual_review": 51,
+    "unknown": 38
+  },
+  "weak_label_reason_counts": {
+    "has_review_predicate": 416,
+    "conservative_no_relation_evidence": 94,
+    "has_strict_positive_predicate": 86,
+    "only_unknown_predicates": 4
+  },
+  "supervision_tier_counts": {
+    "hard_negative": 248,
+    "strict_text": 227,
+    "manual_review": 51,
+    "unknown": 38,
+    "bridge_supervised": 36
+  },
+  "predicate_counts": {
+    "NA": 271,
+    "STUDIED_AT": 109,
+    "WORKED_AT": 88,
+    "DESIGNED": 56,
+    "PROPOSED": 23,
+    "DIED_IN": 16,
+    "LOCATED_IN": 15,
+    "AWARDED": 14,
+    "BORN_IN": 4,
+    "AUTHORED": 4
+  },
+  "predicate_ds_strict_counts": {
+    "WORKED_AT": 32,
+    "DESIGNED": 25,
+    "STUDIED_AT": 16,
+    "BORN_IN": 4,
+    "DIED_IN": 4,
+    "PROPOSED": 3,
+    "AWARDED": 2
+  },
+  "predicate_ds_weak_counts": {
+    "STUDIED_AT": 120,
+    "WORKED_AT": 67,
+    "DESIGNED": 45,
+    "PROPOSED": 29,
+    "AWARDED": 14,
+    "LOCATED_IN": 11,
+    "DIED_IN": 8,
+    "AUTHORED": 2
+  },
+  "predicate_manual_review_counts": {
+    "WORKED_AT": 43,
+    "DESIGNED": 31,
+    "STUDIED_AT": 31,
+    "DIED_IN": 13,
+    "PROPOSED": 12,
+    "AWARDED": 5,
+    "AUTHORED": 3,
+    "BORN_IN": 2
+  },
+  "predicate_na_counts": {},
+  "hard_negative_count": 94,
+  "pair_source_counts": {
+    "bridge_augmented": 326,
+    "linked_linked": 172,
+    "coref_augmented": 102
+  },
+  "bridge_usage_counts": {
+    "STUDIED_AT": 160,
+    "WORKED_AT": 104,
+    "PROPOSED": 35,
+    "DIED_IN": 25,
+    "DESIGNED": 20,
+    "LOCATED_IN": 11,
+    "AWARDED": 10,
+    "BORN_IN": 4
+  },
+  "exact_claim_counts": {
+    "STUDIED_AT": 156,
+    "WORKED_AT": 129,
+    "DESIGNED": 93,
+    "PROPOSED": 44,
+    "DIED_IN": 25,
+    "AWARDED": 21,
+    "LOCATED_IN": 11,
+    "BORN_IN": 6,
+    "AUTHORED": 5
+  },
+  "trigger_positive_counts": {
+    "WORKED_AT": 103,
+    "STUDIED_AT": 89,
+    "DESIGNED": 56,
+    "DIED_IN": 20,
+    "PROPOSED": 16,
+    "AWARDED": 7,
+    "BORN_IN": 6,
+    "AUTHORED": 3
+  },
+  "local_trigger_positive_counts": {
+    "WORKED_AT": 75,
+    "DESIGNED": 56,
+    "STUDIED_AT": 47,
+    "DIED_IN": 17,
+    "PROPOSED": 15,
+    "AWARDED": 7,
+    "BORN_IN": 6,
+    "AUTHORED": 3
+  },
+  "manual_review_count": 51,
+  "prepare_summary": {
+    "candidate_count": 600,
+    "candidate_source_path": "C:\\Users\\misak\\Desktop\\知识工程\\knowledge_graph\\data\\processed\\relations\\pair_candidates.jsonl"
+  },
+  "manual_reviewed_correction_counts": {
+    "positive": 185,
+    "hard_negative": 183,
+    "unknown": 38
+  },
+  "review_queue_count": 51
+}

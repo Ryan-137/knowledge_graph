@@ -7,6 +7,7 @@ from .config import (
     RelationModelConfig,
     RelationTrainingConfig,
     load_relation_extraction_config,
+    resolve_target_relations,
 )
 from .evaluate import evaluate_relation_predictions
 from .predict import load_relation_model, predict_relations
@@ -26,6 +27,7 @@ __all__ = [
     "load_relation_model",
     "predict_relations",
     "prepare_relation_pairs",
+    "resolve_target_relations",
     "train_relation_model",
     "weak_label_relations",
 ]

@@ -178,6 +178,7 @@ def build_parser() -> argparse.ArgumentParser:
     relations_subparsers = relations_parser.add_subparsers(dest="command", required=True)
 
     relations_prepare_parser = relations_subparsers.add_parser("prepare", help="基于 resolved mention 生成实体对候选")
+    relations_prepare_parser.add_argument("--config", default=str(DEFAULT_RELATION_TRAINING_CONFIG))
     relations_prepare_parser.add_argument("--resolved-mentions", default=str(PATHS.resolved_mentions_jsonl))
     relations_prepare_parser.add_argument("--sentences", default=str(PATHS.sentences_jsonl))
     relations_prepare_parser.add_argument("--tokenized-sentences", default=str(PATHS.mentions_dir / "tokenized_sentences.jsonl"))
@@ -189,6 +190,7 @@ def build_parser() -> argparse.ArgumentParser:
     relations_prepare_parser.add_argument("--max-token-distance", type=int, default=24)
 
     relations_weak_label_parser = relations_subparsers.add_parser("weak-label", help="基于结构化 claims 生成远程监督关系样本")
+    relations_weak_label_parser.add_argument("--config", default=str(DEFAULT_RELATION_TRAINING_CONFIG))
     relations_weak_label_parser.add_argument("--pair-candidates", default=str(PATHS.pair_candidates_jsonl))
     relations_weak_label_parser.add_argument("--resolved-mentions", default=str(PATHS.resolved_mentions_jsonl))
     relations_weak_label_parser.add_argument("--sentences", default=str(PATHS.sentences_jsonl))
@@ -198,6 +200,7 @@ def build_parser() -> argparse.ArgumentParser:
     relations_weak_label_parser.add_argument("--claims-csv", default=str(PATHS.structured_csv_dir / "claims.csv"))
     relations_weak_label_parser.add_argument("--ontology", default=str(DEFAULT_ONTOLOGY_PATH))
     relations_weak_label_parser.add_argument("--output", default=str(PATHS.distant_labeled_jsonl))
+    relations_weak_label_parser.add_argument("--review-output", default=str(PATHS.distant_label_review_queue_jsonl))
 
     relations_train_parser = relations_subparsers.add_parser("train", help="训练关系分类模型")
     relations_train_parser.add_argument("--config", default=str(DEFAULT_RELATION_TRAINING_CONFIG))
@@ -243,6 +246,8 @@ def build_parser() -> argparse.ArgumentParser:
     relations_evaluate_parser.add_argument("--model-dir", default=str(PATHS.relation_model_dir))
     relations_evaluate_parser.add_argument("--split", default="test", choices=["train", "dev", "test", "all"])
     relations_evaluate_parser.add_argument("--report", default=str(PATHS.relations_dir / "evaluation.json"))
+    relations_evaluate_parser.add_argument("--gold", default=str(PATHS.relation_gold_jsonl))
+    relations_evaluate_parser.add_argument("--allow-distant-gold", action="store_true")
 
     facts_parser = subparsers.add_parser("facts", help="V1 事实抽取链路")
     facts_subparsers = facts_parser.add_subparsers(dest="command", required=True)
@@ -259,6 +264,7 @@ def build_parser() -> argparse.ArgumentParser:
         "fact_verified": str(PATHS.fact_verified_jsonl),
         "facts_final": str(PATHS.facts_final_jsonl),
         "fact_conflicts": str(PATHS.fact_conflicts_jsonl),
+        "extra_fact_candidates": None,
     }
 
     def add_fact_common_args(parser_obj: argparse.ArgumentParser) -> None:
@@ -279,6 +285,7 @@ def build_parser() -> argparse.ArgumentParser:
         parser_obj.add_argument("--fact-verified", default=facts_common_defaults["fact_verified"])
         parser_obj.add_argument("--facts-final", default=facts_common_defaults["facts_final"])
         parser_obj.add_argument("--fact-conflicts", default=facts_common_defaults["fact_conflicts"])
+        parser_obj.add_argument("--extra-fact-candidates", default=facts_common_defaults["extra_fact_candidates"])
 
     facts_generate_parser = facts_subparsers.add_parser("generate-candidates", help="从 pair candidates 生成事实候选")
     add_fact_common_args(facts_generate_parser)
@@ -302,6 +309,28 @@ def build_parser() -> argparse.ArgumentParser:
     facts_run_parser.add_argument("--base-url", default=None)
     facts_run_parser.add_argument("--model-name", default=None)
     facts_run_parser.add_argument("--timeout-seconds", type=int, default=60)
+
+    events_parser = subparsers.add_parser("events", help="文本事件抽取与事件回流事实")
+    events_subparsers = events_parser.add_subparsers(dest="command", required=True)
+    events_extract_parser = events_subparsers.add_parser("extract", help="抽取并校验文本事件候选；第一版仅覆盖 CollaborationEvent / InfluenceEvent")
+    events_extract_parser.add_argument("--sentences", default=str(PATHS.sentences_jsonl))
+    events_extract_parser.add_argument("--resolved-mentions", default=str(PATHS.resolved_mentions_jsonl))
+    events_extract_parser.add_argument("--relation-candidates", default=str(PATHS.pair_candidates_jsonl))
+    events_extract_parser.add_argument("--ontology", default=str(DEFAULT_ONTOLOGY_PATH))
+    events_extract_parser.add_argument(
+        "--patterns",
+        default=str(DEFAULT_RELATION_PATTERNS),
+        help="事实关系触发词配置；第一版事件模板暂不消费该文件",
+    )
+    events_extract_parser.add_argument("--event-candidates", default=str(PATHS.event_candidates_text_jsonl))
+    events_extract_parser.add_argument("--verified-events", default=str(PATHS.verified_events_text_jsonl))
+    events_extract_parser.add_argument("--event-arguments", default=str(PATHS.event_arguments_text_jsonl))
+    events_extract_parser.add_argument("--summary", default=str(PATHS.events_text_summary_json))
+
+    events_to_facts_parser = events_subparsers.add_parser("to-facts", help="将高置信文本事件转换为事实候选")
+    events_to_facts_parser.add_argument("--verified-events", default=str(PATHS.verified_events_text_jsonl))
+    events_to_facts_parser.add_argument("--ontology", default=str(DEFAULT_ONTOLOGY_PATH))
+    events_to_facts_parser.add_argument("--output", default=str(PATHS.event_to_fact_candidates_jsonl))
 
     visualization_parser = subparsers.add_parser("visualization", help="最终图谱可视化导出层")
     visualization_subparsers = visualization_parser.add_subparsers(dest="command", required=True)
@@ -650,6 +679,7 @@ def handle_relations(args: argparse.Namespace) -> int:
             ontology_path=Path(args.ontology),
             output_path=Path(args.output),
             max_token_distance=args.max_token_distance,
+            config_path=Path(args.config),
         )
         emit_cli_result(
             result,
@@ -671,8 +701,18 @@ def handle_relations(args: argparse.Namespace) -> int:
             claims_csv_path=Path(args.claims_csv),
             ontology_path=Path(args.ontology),
             output_path=Path(args.output),
+            review_output_path=Path(args.review_output),
+            config_path=Path(args.config),
         )
-        emit_cli_result(result, {"command": "weak-label", "pair_candidates": args.pair_candidates, "output": args.output})
+        emit_cli_result(
+            result,
+            {
+                "command": "weak-label",
+                "pair_candidates": args.pair_candidates,
+                "output": args.output,
+                "review_output": args.review_output,
+            },
+        )
         return 0
 
     if args.command == "train":
@@ -733,6 +773,8 @@ def handle_relations(args: argparse.Namespace) -> int:
         pair_candidates_path=Path(args.pair_candidates),
         distant_labeled_path=Path(args.distant_labeled),
         split_name=args.split,
+        gold_path=Path(args.gold),
+        allow_distant_gold=args.allow_distant_gold,
     )
     emit_cli_result(result, {"command": "evaluate", "report": args.report})
     return 0
@@ -816,6 +858,7 @@ def handle_facts(args: argparse.Namespace) -> int:
         final_facts_output_path=Path(args.facts_final),
         conflicts_output_path=Path(args.fact_conflicts),
         extracted_claims_path=Path(args.extracted_claims),
+        extra_fact_candidates_path=Path(args.extra_fact_candidates) if args.extra_fact_candidates else None,
         candidate_source=candidate_source,
         api_key=args.api_key,
         base_url=args.base_url,
@@ -823,6 +866,35 @@ def handle_facts(args: argparse.Namespace) -> int:
         timeout_seconds=args.timeout_seconds,
     )
     emit_cli_result(result, {"command": "run", "output": args.facts_final})
+    return 0
+
+
+def handle_events(args: argparse.Namespace) -> int:
+    if args.command == "extract":
+        from event_extraction import run_text_event_extraction
+
+        result = run_text_event_extraction(
+            sentences_path=Path(args.sentences),
+            resolved_mentions_path=Path(args.resolved_mentions),
+            relation_candidates_path=Path(args.relation_candidates),
+            ontology_path=Path(args.ontology),
+            relation_patterns_path=Path(args.patterns),
+            event_candidates_output_path=Path(args.event_candidates),
+            verified_events_output_path=Path(args.verified_events),
+            event_arguments_output_path=Path(args.event_arguments),
+            summary_output_path=Path(args.summary),
+        )
+        emit_cli_result(result, {"command": "extract", "output": args.verified_events})
+        return 0
+
+    from event_extraction import event_candidates_to_fact_candidates_from_paths
+
+    result = event_candidates_to_fact_candidates_from_paths(
+        verified_events_path=Path(args.verified_events),
+        ontology_path=Path(args.ontology),
+        output_path=Path(args.output),
+    )
+    emit_cli_result(result, {"command": "to-facts", "output": args.output})
     return 0
 
 
@@ -858,6 +930,8 @@ def main() -> int:
         return handle_relations(args)
     if args.module == "facts":
         return handle_facts(args)
+    if args.module == "events":
+        return handle_events(args)
     return handle_visualization(args)
 
 

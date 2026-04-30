@@ -1,0 +1,26 @@
+{
+  "label_to_index": {
+    "NA": 0,
+    "AUTHORED": 1,
+    "AWARDED": 2,
+    "BORN_IN": 3,
+    "DESIGNED": 4,
+    "DIED_IN": 5,
+    "LOCATED_IN": 6,
+    "PROPOSED": 7,
+    "STUDIED_AT": 8,
+    "WORKED_AT": 9
+  },
+  "index_to_label": [
+    "NA",
+    "AUTHORED",
+    "AWARDED",
+    "BORN_IN",
+    "DESIGNED",
+    "DIED_IN",
+    "LOCATED_IN",
+    "PROPOSED",
+    "STUDIED_AT",
+    "WORKED_AT"
+  ]
+}

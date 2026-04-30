@@ -1,0 +1,430 @@
+{
+  "config": {
+    "data": {
+      "sentences_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/unstructured/sentences.jsonl",
+      "tokenized_sentences_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/mentions/tokenized_sentences.jsonl",
+      "resolved_mentions_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/coreference/resolved_mentions.jsonl",
+      "claims_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/claims.csv",
+      "entities_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/entities.csv",
+      "aliases_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/structured/csv/aliases.csv",
+      "ontology_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/knowledge/ontology.json",
+      "pair_candidates_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/pair_candidates.jsonl",
+      "distant_labeled_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/distant_labeled.jsonl",
+      "relation_gold_path": "knowledge_graph/data/processed/relations/relation_gold.jsonl",
+      "output_dir": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/model"
+    },
+    "embeddings": {
+      "pretrained_txt_path": "knowledge_graph/data/resources/glove.6B.100d.txt",
+      "embedding_dim": 100,
+      "position_embedding_dim": 16,
+      "min_token_frequency": 1,
+      "lowercase_tokens": true,
+      "initializer_range": 0.05
+    },
+    "model": {
+      "max_sentence_length": 128,
+      "max_sentences_per_bag": 16,
+      "convolution_channels": 128,
+      "convolution_kernel_sizes": [
+        3,
+        5
+      ],
+      "dropout": 0.3,
+      "relation_threshold": 0.5,
+      "threshold_by_relation": {},
+      "top_k_support_sentences": 3,
+      "prediction_mask_mode": "candidate"
+    },
+    "training": {
+      "random_seed": 42,
+      "batch_size": 16,
+      "num_epochs": 25,
+      "learning_rate": 0.001,
+      "weight_decay": 1e-05,
+      "gradient_clip_norm": 5.0,
+      "train_ratio": 0.65,
+      "dev_ratio": 0.2,
+      "na_downsample_ratio": 3.0,
+      "log_every_steps": 10,
+      "device": "auto",
+      "early_stop_patience": 5,
+      "use_class_weights": true
+    },
+    "target_relations": [
+      "AUTHORED",
+      "AWARDED",
+      "BORN_IN",
+      "DESIGNED",
+      "DIED_IN",
+      "LOCATED_IN",
+      "PROPOSED",
+      "STUDIED_AT",
+      "WORKED_AT"
+    ]
+  },
+  "dataset": {
+    "label_space": [
+      "NA",
+      "AUTHORED",
+      "AWARDED",
+      "BORN_IN",
+      "DESIGNED",
+      "DIED_IN",
+      "LOCATED_IN",
+      "PROPOSED",
+      "STUDIED_AT",
+      "WORKED_AT"
+    ],
+    "train_before_downsampling": {
+      "bag_count": 69,
+      "sentence_count": 335,
+      "relation_counts": {
+        "AUTHORED": 2,
+        "AWARDED": 4,
+        "BORN_IN": 1,
+        "DESIGNED": 8,
+        "DIED_IN": 2,
+        "LOCATED_IN": 4,
+        "NA": 22,
+        "PROPOSED": 3,
+        "STUDIED_AT": 13,
+        "WORKED_AT": 11
+      },
+      "na_bag_count": 22,
+      "hard_negative_bag_count": 10,
+      "positive_bag_count": 47
+    },
+    "train_after_downsampling": {
+      "bag_count": 69,
+      "sentence_count": 335,
+      "relation_counts": {
+        "AUTHORED": 2,
+        "AWARDED": 4,
+        "BORN_IN": 1,
+        "DESIGNED": 8,
+        "DIED_IN": 2,
+        "LOCATED_IN": 4,
+        "NA": 22,
+        "PROPOSED": 3,
+        "STUDIED_AT": 13,
+        "WORKED_AT": 11
+      },
+      "na_bag_count": 22,
+      "hard_negative_bag_count": 10,
+      "positive_bag_count": 47
+    },
+    "dev": {
+      "bag_count": 14,
+      "sentence_count": 50,
+      "relation_counts": {
+        "BORN_IN": 1,
+        "LOCATED_IN": 1,
+        "NA": 4,
+        "PROPOSED": 2,
+        "STUDIED_AT": 3,
+        "WORKED_AT": 3
+      },
+      "na_bag_count": 4,
+      "hard_negative_bag_count": 2,
+      "positive_bag_count": 10
+    },
+    "test": {
+      "bag_count": 28,
+      "sentence_count": 104,
+      "relation_counts": {
+        "DESIGNED": 3,
+        "DIED_IN": 1,
+        "LOCATED_IN": 3,
+        "NA": 8,
+        "PROPOSED": 2,
+        "STUDIED_AT": 5,
+        "WORKED_AT": 6
+      },
+      "na_bag_count": 8,
+      "hard_negative_bag_count": 5,
+      "positive_bag_count": 20
+    },
+    "na_downsampling": {
+      "positive_before": 47,
+      "na_before": 22,
+      "positive_after": 47,
+      "na_after": 22
+    },
+    "coverage_warnings": [
+      "dev split 缺少 AUTHORED 正例，dev macro F1 对该关系不可用。",
+      "test split 缺少 AUTHORED 正例，test macro F1 对该关系不可用。",
+      "dev split 缺少 AWARDED 正例，dev macro F1 对该关系不可用。",
+      "test split 缺少 AWARDED 正例，test macro F1 对该关系不可用。",
+      "test split 缺少 BORN_IN 正例，test macro F1 对该关系不可用。",
+      "dev split 缺少 DESIGNED 正例，dev macro F1 对该关系不可用。",
+      "dev split 缺少 DIED_IN 正例，dev macro F1 对该关系不可用。"
+    ]
+  },
+  "class_weights": {
+    "NA": 2.136364,
+    "AUTHORED": 33.5,
+    "AWARDED": 16.25,
+    "BORN_IN": 68.0,
+    "DESIGNED": 7.625,
+    "DIED_IN": 33.5,
+    "LOCATED_IN": 16.25,
+    "PROPOSED": 22.0,
+    "STUDIED_AT": 4.307692,
+    "WORKED_AT": 5.272727
+  },
+  "embedding": {
+    "vocabulary_size": 984,
+    "embedding_dim": 100,
+    "pretrained_txt_path": "knowledge_graph/data/resources/glove.6B.100d.txt",
+    "pretrained_coverage": 0.980691,
+    "covered_token_count": 965
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.468398,
+      "dev_micro_f1": 0.571429,
+      "dev_macro_f1": 0.218519
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.987052,
+      "dev_micro_f1": 0.571429,
+      "dev_macro_f1": 0.2
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.81155,
+      "dev_micro_f1": 0.571429,
+      "dev_macro_f1": 0.255556
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.635771,
+      "dev_micro_f1": 0.571429,
+      "dev_macro_f1": 0.255556
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.501802,
+      "dev_micro_f1": 0.461538,
+      "dev_macro_f1": 0.222222
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.478319,
+      "dev_micro_f1": 0.461538,
+      "dev_macro_f1": 0.222222
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.394812,
+      "dev_micro_f1": 0.461538,
+      "dev_macro_f1": 0.222222
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.394961,
+      "dev_micro_f1": 0.461538,
+      "dev_macro_f1": 0.222222
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.327683,
+      "dev_micro_f1": 0.461538,
+      "dev_macro_f1": 0.2
+    }
+  ],
+  "best_epoch": 4,
+  "best_dev_metrics": {
+    "bag_count": 14,
+    "micro": {
+      "precision": 1.0,
+      "recall": 0.4,
+      "f1": 0.571429,
+      "tp": 4,
+      "fp": 0,
+      "fn": 6
+    },
+    "macro": {
+      "precision": 0.333333,
+      "recall": 0.222222,
+      "f1": 0.255556
+    },
+    "per_relation": {
+      "AUTHORED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "AWARDED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "BORN_IN": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "DESIGNED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "DIED_IN": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "LOCATED_IN": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "PROPOSED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "STUDIED_AT": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.666667,
+        "f1": 0.8
+      },
+      "WORKED_AT": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.333333,
+        "f1": 0.5
+      }
+    }
+  },
+  "checkpoint_path": "C:/Users/misak/Desktop/知识工程/knowledge_graph/data/processed/relations/model/relation_model.pt",
+  "test_metrics": {
+    "bag_count": 28,
+    "micro": {
+      "precision": 1.0,
+      "recall": 0.35,
+      "f1": 0.518519,
+      "tp": 7,
+      "fp": 0,
+      "fn": 13
+    },
+    "macro": {
+      "precision": 0.333333,
+      "recall": 0.177778,
+      "f1": 0.227778
+    },
+    "per_relation": {
+      "AUTHORED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "AWARDED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "BORN_IN": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "DESIGNED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "DIED_IN": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "LOCATED_IN": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.666667,
+        "f1": 0.8
+      },
+      "PROPOSED": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "STUDIED_AT": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1": 0.75
+      },
+      "WORKED_AT": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.333333,
+        "f1": 0.5
+      }
+    }
+  },
+  "test_prediction_summary": {
+    "bag_count": 28,
+    "predicted_relation_count": 7,
+    "relation_counts": {
+      "LOCATED_IN": 2,
+      "STUDIED_AT": 3,
+      "WORKED_AT": 2
+    },
+    "avg_supporting_sentence_count": 2.142857
+  }
+}

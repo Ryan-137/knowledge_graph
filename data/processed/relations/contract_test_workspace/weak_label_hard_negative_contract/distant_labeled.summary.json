@@ -1,0 +1,33 @@
+{
+  "relation_names": [
+    "STUDIED_AT"
+  ],
+  "candidate_count": 1,
+  "weak_label_counts": {
+    "hard_negative": 1
+  },
+  "weak_label_reason_counts": {
+    "conservative_no_relation_evidence": 1
+  },
+  "supervision_tier_counts": {
+    "hard_negative": 1
+  },
+  "predicate_counts": {},
+  "predicate_ds_strict_counts": {},
+  "predicate_ds_weak_counts": {},
+  "predicate_manual_review_counts": {},
+  "predicate_na_counts": {},
+  "hard_negative_count": 1,
+  "pair_source_counts": {
+    "bridge_augmented": 1
+  },
+  "bridge_usage_counts": {},
+  "exact_claim_counts": {},
+  "trigger_positive_counts": {},
+  "local_trigger_positive_counts": {},
+  "manual_review_count": 0,
+  "prepare_summary": {
+    "candidate_count": 1,
+    "candidate_source_path": "C:\\Users\\misak\\Desktop\\知识工程\\knowledge_graph\\data\\processed\\relations\\contract_test_workspace\\weak_label_hard_negative_contract\\pair_candidates.jsonl"
+  }
+}

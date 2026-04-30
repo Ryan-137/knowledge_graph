@@ -85,7 +85,7 @@ def _write_training_side_artifacts(
         },
     )
     write_json(output_dir / "eval_dev.json", dev_metrics)
-    write_json(output_dir / "eval_test_gold.json", test_metrics)
+    write_json(output_dir / "eval_test_distant.json", test_metrics)
 
 
 def _evaluate_split(

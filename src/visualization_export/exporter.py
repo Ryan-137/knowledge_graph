@@ -437,29 +437,34 @@ def _write_neo4j_browser_queries(output_dir: Path) -> Path:
     queries_path = neo4j_dir / "browser_queries.cypher"
     queries = """// Neo4j Browser 可视化查询：每次复制一个查询到 Browser 执行，切换到 Graph 视图。
 
-// 1. Alan Turing 两跳核心网络
+// 1. 全量图：显示所有节点和所有关系
+MATCH (n:KgNode)
+OPTIONAL MATCH p = (n)-[r]->(m:KgNode)
+RETURN n, p;
+
+// 2. Alan Turing 两跳核心网络
 MATCH p = (turing:KgNode {id: 'Q7251'})-[*1..2]-(neighbor:KgNode)
 RETURN p
 LIMIT 180;
 
-// 2. facts 层：Wikidata 结构化事实骨架
+// 3. facts 层：Wikidata 结构化事实骨架
 MATCH p = (source:KgNode)-[r]->(target:KgNode)
 WHERE r.source_layer = 'facts'
 RETURN p
 LIMIT 120;
 
-// 3. evidence 层：文本抽取证据关系
+// 4. evidence 层：文本抽取证据关系
 MATCH p = (source:KgNode)-[r]->(target:KgNode)
 WHERE r.source_layer = 'evidence'
 RETURN p
 LIMIT 120;
 
-// 4. 事件节点网络：事件作为独立节点连接人物、作品、地点和时间
+// 5. 事件节点网络：事件作为独立节点连接人物、作品、地点和时间
 MATCH p = (event:Event)-[r]->(target:KgNode)
 RETURN p
 LIMIT 160;
 
-// 5. 高连接节点总览
+// 6. 高连接节点总览
 MATCH (n:KgNode)
 WITH n, size((n)--()) AS degree
 ORDER BY degree DESC

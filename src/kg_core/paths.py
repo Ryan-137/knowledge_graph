@@ -72,6 +72,10 @@ class ProjectPaths:
         return self.processed_root / "facts"
 
     @property
+    def events_dir(self) -> Path:
+        return self.processed_root / "events"
+
+    @property
     def visualization_dir(self) -> Path:
         return self.processed_root / "visualization"
 
@@ -120,6 +124,10 @@ class ProjectPaths:
         return self.relations_dir / "distant_labeled.jsonl"
 
     @property
+    def distant_label_review_queue_jsonl(self) -> Path:
+        return self.relations_dir / "distant_label_review_queue.jsonl"
+
+    @property
     def relation_gold_jsonl(self) -> Path:
         return self.relations_dir / "relation_gold.jsonl"
 
@@ -142,6 +150,26 @@ class ProjectPaths:
     @property
     def fact_conflicts_jsonl(self) -> Path:
         return self.facts_dir / "fact_conflicts.jsonl"
+
+    @property
+    def event_candidates_text_jsonl(self) -> Path:
+        return self.events_dir / "event_candidates_text.jsonl"
+
+    @property
+    def verified_events_text_jsonl(self) -> Path:
+        return self.events_dir / "verified_events_text.jsonl"
+
+    @property
+    def event_arguments_text_jsonl(self) -> Path:
+        return self.events_dir / "event_arguments_text.jsonl"
+
+    @property
+    def event_to_fact_candidates_jsonl(self) -> Path:
+        return self.events_dir / "event_to_fact_candidates.jsonl"
+
+    @property
+    def events_text_summary_json(self) -> Path:
+        return self.events_dir / "events_text.summary.json"
 
     def resolve_project_path(self, raw_path: str | Path) -> Path:
         path = Path(raw_path)

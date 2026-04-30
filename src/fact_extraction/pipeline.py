@@ -25,6 +25,7 @@ def run_fact_extraction(
     final_facts_output_path: str | Path,
     conflicts_output_path: str | Path,
     extracted_claims_path: str | Path | None = None,
+    extra_fact_candidates_path: str | Path | None = None,
     candidate_source: str = "pair_candidates",
     api_key: str | None = None,
     base_url: str | None = None,
@@ -55,6 +56,15 @@ def run_fact_extraction(
         )
     else:
         raise ValueError(f"未知 facts candidate_source：{candidate_source}")
+    extra_candidate_count = 0
+    extra_fact_candidates_exists = False
+    if extra_fact_candidates_path is not None:
+        extra_path = Path(extra_fact_candidates_path)
+        extra_fact_candidates_exists = extra_path.exists()
+        if extra_fact_candidates_exists:
+            extra_candidates = read_jsonl(extra_path)
+            extra_candidate_count = len(extra_candidates)
+            candidates.extend(extra_candidates)
     write_fact_jsonl(fact_candidates_output_path, candidates)
 
     scored_candidates, score_summary = add_distant_supervision_signals(
@@ -76,6 +86,9 @@ def run_fact_extraction(
     summary = {
         "candidate_source": normalized_candidate_source,
         "generate_candidates": candidate_summary,
+        "extra_fact_candidate_count": extra_candidate_count,
+        "extra_fact_candidates_path": Path(extra_fact_candidates_path).as_posix() if extra_fact_candidates_path else None,
+        "extra_fact_candidates_exists": extra_fact_candidates_exists,
         "score": score_summary,
         "verify_llm": verify_summary,
         "aggregate": aggregate_summary,

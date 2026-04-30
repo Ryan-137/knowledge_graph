@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import NA_RELATION_LABEL, load_relation_extraction_config
-from .dataset import RelationBag, build_relation_bags, read_json, write_json
+from .dataset import RelationBag, build_relation_bags, infer_target_relations, read_json, read_jsonl, write_json
 from .predict import predict_relations
 from .reporting import build_evaluation_report, build_prediction_report
 
@@ -126,14 +126,130 @@ def evaluate_prediction_records(
     }
 
 
+def evaluate_prediction_records_against_gold_records(
+    prediction_records: list[dict[str, Any]],
+    gold_records: list[dict[str, Any]],
+    *,
+    labels: list[str],
+) -> dict[str, Any]:
+    evaluated_labels = [label for label in labels if label != NA_RELATION_LABEL]
+    predicted_label_sets = build_prediction_label_sets(prediction_records)
+    predicted_pairs = {
+        (bag_id, relation_name)
+        for bag_id, relation_names in predicted_label_sets.items()
+        for relation_name in relation_names
+    }
+    gold_positive_pairs: set[tuple[str, str]] = set()
+    gold_negative_pairs: set[tuple[str, str]] = set()
+    gold_unknown_pairs: set[tuple[str, str]] = set()
+    gold_unknown_record_count = 0
+    for record in gold_records:
+        relation_name = str(record.get("predicate", "")).strip().upper()
+        if relation_name not in evaluated_labels:
+            continue
+        bag_id = _gold_record_bag_id(record)
+        if not bag_id:
+            continue
+        gold_label = str(record.get("gold_label", "")).strip().lower()
+        pair_key = (bag_id, relation_name)
+        if gold_label == "positive":
+            gold_positive_pairs.add(pair_key)
+        elif gold_label == "negative":
+            gold_negative_pairs.add(pair_key)
+        elif gold_label == "unknown":
+            gold_unknown_pairs.add(pair_key)
+            gold_unknown_record_count += 1
+    covered_gold_pairs = gold_positive_pairs | gold_negative_pairs
+    unlabeled_predicted_pairs = predicted_pairs - covered_gold_pairs - gold_unknown_pairs
+    per_relation_counts: dict[str, dict[str, int]] = {
+        relation_name: {"tp": 0, "fp": 0, "fn": 0}
+        for relation_name in evaluated_labels
+    }
+    for bag_id, relation_name in gold_positive_pairs:
+        if (bag_id, relation_name) in predicted_pairs:
+            per_relation_counts[relation_name]["tp"] += 1
+        else:
+            per_relation_counts[relation_name]["fn"] += 1
+    for bag_id, relation_name in gold_negative_pairs:
+        if (bag_id, relation_name) in predicted_pairs:
+            per_relation_counts[relation_name]["fp"] += 1
+
+    per_relation_metrics = {
+        relation_name: _build_metric_triplet(counts["tp"], counts["fp"], counts["fn"])
+        for relation_name, counts in per_relation_counts.items()
+    }
+    micro_tp = sum(counts["tp"] for counts in per_relation_counts.values())
+    micro_fp = sum(counts["fp"] for counts in per_relation_counts.values())
+    micro_fn = sum(counts["fn"] for counts in per_relation_counts.values())
+    micro_metrics = _build_metric_triplet(micro_tp, micro_fp, micro_fn)
+    if per_relation_metrics:
+        macro_precision = sum(float(item["precision"]) for item in per_relation_metrics.values()) / len(per_relation_metrics)
+        macro_recall = sum(float(item["recall"]) for item in per_relation_metrics.values()) / len(per_relation_metrics)
+        macro_f1 = sum(float(item["f1"]) for item in per_relation_metrics.values()) / len(per_relation_metrics)
+    else:
+        macro_precision = 0.0
+        macro_recall = 0.0
+        macro_f1 = 0.0
+    return {
+        "evaluation_scope": "closed_gold",
+        "bag_count": len({bag_id for bag_id, _ in covered_gold_pairs}),
+        "gold_record_count": len(gold_records),
+        "gold_positive_pair_count": len(gold_positive_pairs),
+        "gold_negative_pair_count": len(gold_negative_pairs),
+        "gold_unknown_record_count": gold_unknown_record_count,
+        "unlabeled_predicted_pair_count": len(unlabeled_predicted_pairs),
+        "micro": {
+            "precision": micro_metrics["precision"],
+            "closed_gold_precision": micro_metrics["precision"],
+            "recall": micro_metrics["recall"],
+            "f1": micro_metrics["f1"],
+            "tp": micro_metrics["tp"],
+            "fp": micro_metrics["fp"],
+            "fn": micro_metrics["fn"],
+        },
+        "macro": {
+            "precision": round(macro_precision, 6),
+            "closed_gold_precision": round(macro_precision, 6),
+            "recall": round(macro_recall, 6),
+            "f1": round(macro_f1, 6),
+        },
+        "per_relation": per_relation_metrics,
+    }
+
+
+def _gold_record_bag_id(record: dict[str, Any]) -> str:
+    bag_id = str(record.get("bag_id", "")).strip()
+    if bag_id:
+        return bag_id
+    doc_id = str(record.get("doc_id", "")).strip()
+    subject_id = str(record.get("subject_entity_id", "")).strip()
+    object_id = str(record.get("object_entity_id", "")).strip()
+    if not doc_id or not subject_id or not object_id:
+        return ""
+    return f"{doc_id}__{subject_id}__{object_id}"
+
+
 def evaluate_relation_extractor(
     checkpoint_path: Path,
     *,
     config: Any,
     split_name: str = "test",
     output_path: Path | None = None,
+    gold_path: Path | None = None,
+    allow_distant_gold: bool = False,
 ) -> dict[str, Any]:
-    gold_bags, target_relations = build_relation_bags(config, include_gold_labels=True)
+    gold_records: list[dict[str, Any]] = []
+    if gold_path is not None and gold_path.exists():
+        gold_records = read_jsonl(gold_path)
+    if gold_path is not None and not gold_records and not allow_distant_gold:
+        raise ValueError(
+            "relation_gold.jsonl 为空或不存在，不能执行真实 gold evaluation。"
+            "请补充人工 gold，或显式传入 allow_distant_gold=True 回退到 distant label。"
+        )
+    target_relations = infer_target_relations(config)
+    gold_bags: list[RelationBag] = []
+    if not gold_records:
+        gold_bags, target_relations = build_relation_bags(config, include_gold_labels=True)
     if split_name != "all":
         prediction_records = predict_relations(
             checkpoint_path,
@@ -142,19 +258,36 @@ def evaluate_relation_extractor(
         )
         prediction_bag_ids = {str(record["bag_id"]) for record in prediction_records}
         gold_bags = [bag for bag in gold_bags if bag.bag_id in prediction_bag_ids]
+        if gold_records:
+            gold_records = [
+                record
+                for record in gold_records
+                if _gold_record_bag_id(record) in prediction_bag_ids
+            ]
     else:
         prediction_records = predict_relations(checkpoint_path, config=config)
-    metrics = evaluate_prediction_records(
-        prediction_records,
-        gold_bags,
-        labels=[NA_RELATION_LABEL] + sorted(target_relations),
-    )
+    if gold_records:
+        metrics = evaluate_prediction_records_against_gold_records(
+            prediction_records,
+            gold_records,
+            labels=[NA_RELATION_LABEL] + sorted(target_relations),
+        )
+        evaluation_source = "manual_gold"
+    else:
+        metrics = evaluate_prediction_records(
+            prediction_records,
+            gold_bags,
+            labels=[NA_RELATION_LABEL] + sorted(target_relations),
+        )
+        evaluation_source = "distant_label"
     evaluation_report = build_evaluation_report(
         checkpoint_path=checkpoint_path.as_posix(),
         split_name=split_name,
         prediction_report=build_prediction_report(prediction_records),
         metrics=metrics,
     )
+    evaluation_report["evaluation_source"] = evaluation_source
+    evaluation_report["gold_path"] = gold_path.as_posix() if gold_path else None
     if output_path is not None:
         write_json(output_path, evaluation_report)
     return evaluation_report
@@ -176,6 +309,8 @@ def evaluate_relation_predictions(
     distant_labeled_path: Path,
     target_relations: list[str] | None = None,
     split_name: str = "test",
+    gold_path: Path | None = None,
+    allow_distant_gold: bool = False,
 ) -> dict[str, Any]:
     config = load_relation_extraction_config(
         config_path=config_path,
@@ -197,4 +332,6 @@ def evaluate_relation_predictions(
         config=config,
         split_name=split_name,
         output_path=output_path,
+        gold_path=gold_path,
+        allow_distant_gold=allow_distant_gold,
     )

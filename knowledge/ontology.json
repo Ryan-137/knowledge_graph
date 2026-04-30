@@ -90,6 +90,16 @@
       "name": "HonorEvent",
       "parent": "Event",
       "attributes": []
+    },
+    {
+      "name": "CollaborationEvent",
+      "parent": "Event",
+      "attributes": []
+    },
+    {
+      "name": "InfluenceEvent",
+      "parent": "Event",
+      "attributes": []
     }
   ],
   "relations": [
@@ -139,7 +149,7 @@
       "name": "WORKED_WITH",
       "domain": "Person",
       "range": "Person",
-      "event_type": null
+      "event_type": "CollaborationEvent"
     },
     {
       "name": "ENGAGED_TO",
@@ -169,7 +179,7 @@
       "name": "INFLUENCED",
       "domain": "Person",
       "range": "Person",
-      "event_type": null
+      "event_type": "InfluenceEvent"
     },
     {
       "name": "ABOUT",
@@ -284,6 +294,22 @@
         {"role": "award", "class": "Award"}
       ],
       "derived_relation": "AWARDED"
+    },
+    {
+      "name": "CollaborationEvent",
+      "participants": [
+        {"role": "person_a", "class": "Person"},
+        {"role": "person_b", "class": "Person"}
+      ],
+      "derived_relation": "WORKED_WITH"
+    },
+    {
+      "name": "InfluenceEvent",
+      "participants": [
+        {"role": "source_person", "class": "Person"},
+        {"role": "target_person", "class": "Person"}
+      ],
+      "derived_relation": "INFLUENCED"
     }
   ],
   "constraints": [
@@ -403,6 +429,16 @@
       "type": "event_role_required",
       "event_type": "HonorEvent",
       "roles": ["recipient", "award"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "CollaborationEvent",
+      "roles": ["person_a", "person_b"]
+    },
+    {
+      "type": "event_role_required",
+      "event_type": "InfluenceEvent",
+      "roles": ["source_person", "target_person"]
     },
     {
       "type": "time_order_check",

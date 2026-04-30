@@ -1,0 +1,90 @@
+{
+  "bag_count": 28,
+  "micro": {
+    "precision": 1.0,
+    "recall": 0.35,
+    "f1": 0.518519,
+    "tp": 7,
+    "fp": 0,
+    "fn": 13
+  },
+  "macro": {
+    "precision": 0.333333,
+    "recall": 0.177778,
+    "f1": 0.227778
+  },
+  "per_relation": {
+    "AUTHORED": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "AWARDED": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "BORN_IN": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "DESIGNED": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "DIED_IN": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "LOCATED_IN": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.666667,
+      "f1": 0.8
+    },
+    "PROPOSED": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "STUDIED_AT": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75
+    },
+    "WORKED_AT": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 4,
+      "precision": 1.0,
+      "recall": 0.333333,
+      "f1": 0.5
+    }
+  }
+}

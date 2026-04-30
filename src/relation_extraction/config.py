@@ -12,11 +12,14 @@ PAD_TOKEN = "[PAD]"
 UNK_TOKEN = "[UNK]"
 DEFAULT_EXTRACTOR_NAME = "pcnn_mil_attention"
 DEFAULT_TARGET_RELATIONS = (
+    "BORN_IN",
+    "DIED_IN",
     "STUDIED_AT",
     "WORKED_AT",
-    "BORN_IN",
     "AUTHORED",
     "PROPOSED",
+    "DESIGNED",
+    "AWARDED",
     "LOCATED_IN",
 )
 
@@ -72,6 +75,7 @@ class RelationModelConfig:
     relation_threshold: float = 0.5
     threshold_by_relation: dict[str, float] = field(default_factory=dict)
     top_k_support_sentences: int = 3
+    prediction_mask_mode: str = "candidate"
 
 
 @dataclass(frozen=True)
@@ -131,6 +135,50 @@ def _read_config_payload(config_path: Path | None) -> dict[str, Any]:
     return payload
 
 
+def _ontology_relation_names(ontology: dict[str, Any]) -> set[str]:
+    return {
+        str(relation.get("name", "")).strip().upper()
+        for relation in ontology.get("relations", [])
+        if str(relation.get("name", "")).strip()
+    }
+
+
+def _read_ontology_relation_names(ontology_path: Path) -> set[str]:
+    if not ontology_path.exists():
+        raise FileNotFoundError(f"关系抽取 ontology 文件不存在：{ontology_path.as_posix()}")
+    ontology = json.loads(ontology_path.read_text(encoding="utf-8-sig"))
+    if not isinstance(ontology, dict):
+        raise ValueError(f"关系抽取 ontology 文件不是 JSON 对象：{ontology_path.as_posix()}")
+    return _ontology_relation_names(ontology)
+
+
+def resolve_target_relations(
+    *,
+    ontology_path: Path,
+    configured_target_relations: Sequence[str] | None,
+    trigger_relation_names: Sequence[str],
+) -> list[str]:
+    """统一解析关系抽取链路的目标关系集合。"""
+
+    requested_relations = [
+        str(relation_name).strip().upper()
+        for relation_name in (configured_target_relations or DEFAULT_TARGET_RELATIONS)
+        if str(relation_name).strip()
+    ]
+    if not requested_relations:
+        raise ValueError("关系抽取 target_relations 为空，无法确定训练/预测关系集合。")
+
+    ontology_relations = _read_ontology_relation_names(ontology_path)
+    trigger_relations = {str(relation_name).strip().upper() for relation_name in trigger_relation_names}
+    missing_in_ontology = sorted(set(requested_relations) - ontology_relations)
+    if missing_in_ontology:
+        raise ValueError(f"关系抽取配置包含 ontology 未定义关系：{missing_in_ontology}")
+    missing_triggers = sorted(set(requested_relations) - trigger_relations)
+    if missing_triggers:
+        raise ValueError(f"关系抽取配置包含缺少 trigger 规则的关系：{missing_triggers}")
+    return sorted(set(requested_relations) & ontology_relations)
+
+
 def _resolve_path(raw_value: str | Path | None) -> Path | None:
     if raw_value in (None, ""):
         return None
@@ -156,18 +204,31 @@ def load_relation_extraction_config(
     dev_ratio: float | None = None,
 ) -> RelationExtractionConfig:
     payload = _read_config_payload(config_path)
+    prediction_mask_mode = str(payload.get("prediction_mask_mode", "candidate")).strip() or "candidate"
+    if prediction_mask_mode not in {"ontology", "candidate", "ontology-and-candidate"}:
+        raise ValueError(f"未知 prediction_mask_mode：{prediction_mask_mode}")
     configured_embedding_path = _resolve_path(payload.get("embedding_path"))
     embeddings = EmbeddingConfig(
         pretrained_txt_path=configured_embedding_path,
         embedding_dim=int(payload.get("embedding_dim", 100)),
         position_embedding_dim=int(payload.get("position_embedding_dim", 16)),
+        min_token_frequency=int(payload.get("min_token_frequency", 1)),
+        initializer_range=float(payload.get("initializer_range", 0.05)),
     )
     model = RelationModelConfig(
         max_sentence_length=int(payload.get("max_seq_len", 128)),
+        max_sentences_per_bag=int(payload.get("max_sentences_per_bag", 16)),
         convolution_channels=int(payload.get("cnn_hidden_size", 128)),
         convolution_kernel_sizes=[int(item) for item in payload.get("cnn_kernel_sizes", [3, 5])],
         dropout=float(payload.get("dropout", 0.3)),
         relation_threshold=float(relation_threshold if relation_threshold is not None else payload.get("relation_threshold", 0.5)),
+        threshold_by_relation={
+            str(relation_name).strip().upper(): float(threshold)
+            for relation_name, threshold in dict(payload.get("threshold_by_relation", {})).items()
+            if str(relation_name).strip()
+        },
+        top_k_support_sentences=int(payload.get("top_k_support_sentences", 3)),
+        prediction_mask_mode=prediction_mask_mode,
     )
     effective_dev_ratio = float(dev_ratio if dev_ratio is not None else payload.get("dev_ratio", 0.15))
     train_ratio = float(payload.get("train_ratio", max(0.1, 1.0 - effective_dev_ratio - 0.15)))
@@ -177,18 +238,22 @@ def load_relation_extraction_config(
         num_epochs=int(payload.get("max_epochs", 25)),
         learning_rate=float(payload.get("learning_rate", 1e-3)),
         weight_decay=float(payload.get("weight_decay", 1e-5)),
+        gradient_clip_norm=float(payload.get("gradient_clip_norm", 5.0)),
         train_ratio=train_ratio,
         dev_ratio=effective_dev_ratio,
         na_downsample_ratio=float(payload.get("na_downsample_ratio", 3.0)),
+        log_every_steps=int(payload.get("log_every_steps", 10)),
         early_stop_patience=int(payload.get("early_stop_patience", 5)),
         use_class_weights=bool(payload.get("use_class_weights", True)),
         device=str(payload.get("device", "auto")),
     )
-    normalized_target_relations = [
-        relation_name.strip().upper()
-        for relation_name in (target_relations or payload.get("target_relations") or DEFAULT_TARGET_RELATIONS)
-        if str(relation_name).strip()
-    ]
+    from relation_extraction.rules import SUPPORTED_RELATION_NAMES
+
+    normalized_target_relations = resolve_target_relations(
+        ontology_path=ontology_path,
+        configured_target_relations=target_relations or payload.get("target_relations"),
+        trigger_relation_names=SUPPORTED_RELATION_NAMES,
+    )
     return RelationExtractionConfig(
         data=RelationDataPaths(
             sentences_path=sentences_path,

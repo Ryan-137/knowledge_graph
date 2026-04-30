@@ -12,10 +12,12 @@ DEFAULT_RELATION_PATTERNS: dict[str, list[str]] = {
     "DIED_IN": ["died in", "death in", "passed away in"],
     "STUDIED_AT": ["studied at", "educated at", "attended", "graduated from", "went to", "study"],
     "WORKED_AT": ["worked at", "worked for", "joined", "employed by", "served at", "appointment"],
+    "WORKED_WITH": ["worked with", "collaborated with", "cooperated with", "collaboration with"],
     "AUTHORED": ["wrote", "authored", "published", "paper by"],
     "PROPOSED": ["proposed", "introduced", "outlined", "formulated", "devised"],
     "DESIGNED": ["designed", "built", "developed", "invented"],
     "AWARDED": ["awarded", "received", "won", "elected fellow"],
+    "INFLUENCED": ["influenced", "inspired", "shaped", "had an influence on", "influence on", "was influenced by"],
     "LOCATED_IN": ["located in", "based in", "situated in"],
 }
 
@@ -28,6 +30,9 @@ PREDICATE_ALIASES = {
     "STUDIED_AT": "STUDIED_AT",
     "WORKED_AT": "WORKED_AT",
     "EMPLOYED_BY": "WORKED_AT",
+    "WORKED_WITH": "WORKED_WITH",
+    "COLLABORATED_WITH": "WORKED_WITH",
+    "COOPERATED_WITH": "WORKED_WITH",
     "AUTHORED": "AUTHORED",
     "CREATED": "DESIGNED",
     "KNOWN_FOR": "PROPOSED",
@@ -35,6 +40,9 @@ PREDICATE_ALIASES = {
     "DESIGNED": "DESIGNED",
     "AWARD_RECEIVED": "AWARDED",
     "AWARDED": "AWARDED",
+    "INFLUENCED": "INFLUENCED",
+    "INFLUENCED_BY": "INFLUENCED",
+    "INSPIRED": "INFLUENCED",
     "LOCATED_IN": "LOCATED_IN",
 }
 
