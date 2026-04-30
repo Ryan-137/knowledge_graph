@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import re
-from collections import defaultdict
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any, Sequence
+from itertools import product
+from typing import Any, Collection, Sequence
 
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
@@ -13,17 +13,16 @@ from kg_core.taxonomy import normalize_entity_type
 
 DEFAULT_RELATION_NAMES: tuple[str, ...] = (
     "BORN_IN",
+    "DIED_IN",
     "STUDIED_AT",
     "WORKED_AT",
     "AUTHORED",
     "PROPOSED",
-    "LOCATED_IN",
-)
-SUPPORTED_RELATION_NAMES: tuple[str, ...] = DEFAULT_RELATION_NAMES + (
-    "DIED_IN",
     "DESIGNED",
     "AWARDED",
+    "LOCATED_IN",
 )
+SUPPORTED_RELATION_NAMES: tuple[str, ...] = DEFAULT_RELATION_NAMES
 
 _TRIM_PATTERN = re.compile(r"(^[^\w]+|[^\w]+$)")
 _WORDNET_LEMMATIZER = WordNetLemmatizer()
@@ -39,13 +38,14 @@ class RelationRule:
     ontology_range: str
     allowed_subject_types: tuple[str, ...]
     allowed_object_types: tuple[str, ...]
+    allowed_type_pairs: tuple[tuple[str, str], ...]
     trigger_lemmas: tuple[str, ...]
     trigger_phrases: tuple[str, ...]
 
     def matches_types(self, subject_type: str, object_type: str) -> bool:
         normalized_subject = normalize_entity_type(subject_type)
         normalized_object = normalize_entity_type(object_type)
-        return normalized_subject in self.allowed_subject_types and normalized_object in self.allowed_object_types
+        return (normalized_subject, normalized_object) in self.allowed_type_pairs
 
 
 TRIGGER_CONFIGS: dict[str, dict[str, tuple[str, ...]]] = {
@@ -126,47 +126,26 @@ def normalize_trigger_tokens(tokens: Sequence[str]) -> list[str]:
     return [token for token in (_normalize_trigger_token(token) for token in tokens) if token]
 
 
-def _coerce_primary_entity_type(raw_type: Any) -> str:
+def _coerce_entity_types(raw_type: Any) -> tuple[str, ...]:
     if isinstance(raw_type, (list, tuple)):
-        for item in raw_type:
-            normalized_item = normalize_entity_type(item)
-            if normalized_item:
-                return normalized_item
-        return "CONCEPT"
-    return normalize_entity_type(raw_type)
+        normalized_items = tuple(
+            sorted({normalize_entity_type(item) for item in raw_type if normalize_entity_type(item)})
+        )
+        return normalized_items or ("CONCEPT",)
+    return (normalize_entity_type(raw_type),)
 
 
-def _load_ontology_relation_specs(ontology: dict[str, Any]) -> dict[str, dict[str, str]]:
-    relation_specs: dict[str, dict[str, str]] = {}
+def _load_ontology_relation_specs(ontology: dict[str, Any]) -> dict[str, dict[str, tuple[str, ...]]]:
+    relation_specs: dict[str, dict[str, tuple[str, ...]]] = {}
     for relation in ontology.get("relations", []):
         relation_name = str(relation.get("name", "")).strip().upper()
         if not relation_name:
             continue
         relation_specs[relation_name] = {
-            "domain": _coerce_primary_entity_type(relation.get("domain")),
-            "range": _coerce_primary_entity_type(relation.get("range")),
+            "domains": _coerce_entity_types(relation.get("domain")),
+            "ranges": _coerce_entity_types(relation.get("range")),
         }
     return relation_specs
-
-
-def _collect_claim_type_overrides(
-    claims: Sequence[dict[str, Any]],
-    entity_index: dict[str, dict[str, Any]],
-) -> dict[str, dict[str, set[str]]]:
-    overrides: dict[str, dict[str, set[str]]] = defaultdict(lambda: {"subjects": set(), "objects": set()})
-    for claim in claims:
-        predicate = str(claim.get("predicate", "")).strip().upper()
-        if not predicate:
-            continue
-        subject_id = str(claim.get("subject_id", "")).strip()
-        object_id = str(claim.get("object_id", "")).strip()
-        subject_row = entity_index.get(subject_id, {})
-        object_row = entity_index.get(object_id, {})
-        subject_type = normalize_entity_type(subject_row.get("entity_type"))
-        object_type = normalize_entity_type(object_row.get("entity_type"))
-        overrides[predicate]["subjects"].add(subject_type)
-        overrides[predicate]["objects"].add(object_type)
-    return overrides
 
 
 def build_relation_rules(
@@ -178,38 +157,34 @@ def build_relation_rules(
 ) -> dict[str, RelationRule]:
     """构建关系规则。
 
-    这里同时吸收 ontology 的权威约束，以及 claims 中真实出现过的类型组合。
-    这样可以兜住当前结构化库里 `PROPOSED -> MACHINE` 这类比 ontology 更细的实际情况。
+    关系类型约束只服从 ontology，claims 只能提供证据，不能反向扩张本体契约。
     """
 
     normalized_relation_names = tuple(
         name.strip().upper() for name in (relation_names or DEFAULT_RELATION_NAMES) if name and name.strip()
     )
     ontology_specs = _load_ontology_relation_specs(ontology)
-    claim_type_overrides = _collect_claim_type_overrides(claims, entity_index)
+    _ = claims
+    _ = entity_index
     relation_rules: dict[str, RelationRule] = {}
     for relation_name in normalized_relation_names:
-        if relation_name not in ontology_specs and relation_name not in claim_type_overrides:
-            raise ValueError(f"关系 {relation_name} 既不在 ontology 中，也没有 claims 支撑，无法构建规则。")
-        ontology_domain = ontology_specs.get(relation_name, {}).get("domain", "CONCEPT")
-        ontology_range = ontology_specs.get(relation_name, {}).get("range", "CONCEPT")
+        if relation_name not in ontology_specs:
+            raise ValueError(f"关系 {relation_name} 不在 ontology 中，无法构建规则。")
+        ontology_domains = ontology_specs.get(relation_name, {}).get("domains", ("CONCEPT",))
+        ontology_ranges = ontology_specs.get(relation_name, {}).get("ranges", ("CONCEPT",))
+        ontology_domain = ontology_domains[0]
+        ontology_range = ontology_ranges[0]
+        allowed_type_pairs = tuple(sorted(product(ontology_domains, ontology_ranges)))
         trigger_config = TRIGGER_CONFIGS.get(relation_name, {"lemmas": (), "phrases": ()})
-        allowed_subject_types = tuple(
-            sorted(
-                {ontology_domain, *claim_type_overrides.get(relation_name, {}).get("subjects", set())}
-            )
-        )
-        allowed_object_types = tuple(
-            sorted(
-                {ontology_range, *claim_type_overrides.get(relation_name, {}).get("objects", set())}
-            )
-        )
+        allowed_subject_types = tuple(sorted({subject_type for subject_type, _ in allowed_type_pairs}))
+        allowed_object_types = tuple(sorted({object_type for _, object_type in allowed_type_pairs}))
         relation_rules[relation_name] = RelationRule(
             name=relation_name,
             ontology_domain=ontology_domain,
             ontology_range=ontology_range,
             allowed_subject_types=allowed_subject_types,
             allowed_object_types=allowed_object_types,
+            allowed_type_pairs=allowed_type_pairs,
             trigger_lemmas=tuple(trigger_config.get("lemmas", ())),
             trigger_phrases=tuple(trigger_config.get("phrases", ())),
         )
@@ -221,12 +196,21 @@ def infer_candidate_relations(
     subject_type: str,
     object_type: str,
     relation_rules: dict[str, RelationRule],
+    triggered_relation_names: Collection[str] | None = None,
 ) -> list[str]:
     matched_relations = [
         relation_name
         for relation_name, relation_rule in relation_rules.items()
         if relation_rule.matches_types(subject_type, object_type)
     ]
+    if triggered_relation_names:
+        triggered_matches = [
+            relation_name
+            for relation_name in matched_relations
+            if relation_name in triggered_relation_names
+        ]
+        if triggered_matches:
+            return sorted(triggered_matches)
     return sorted(matched_relations)
 
 

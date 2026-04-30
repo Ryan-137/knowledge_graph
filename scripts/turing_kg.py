@@ -186,6 +186,7 @@ def build_parser() -> argparse.ArgumentParser:
     relations_prepare_parser.add_argument("--claims-csv", default=str(PATHS.structured_csv_dir / "claims.csv"))
     relations_prepare_parser.add_argument("--ontology", default=str(DEFAULT_ONTOLOGY_PATH))
     relations_prepare_parser.add_argument("--output", default=str(PATHS.pair_candidates_jsonl))
+    relations_prepare_parser.add_argument("--max-token-distance", type=int, default=24)
 
     relations_weak_label_parser = relations_subparsers.add_parser("weak-label", help="基于结构化 claims 生成远程监督关系样本")
     relations_weak_label_parser.add_argument("--pair-candidates", default=str(PATHS.pair_candidates_jsonl))
@@ -249,6 +250,7 @@ def build_parser() -> argparse.ArgumentParser:
     facts_common_defaults = {
         "resolved_mentions": str(PATHS.resolved_mentions_jsonl),
         "pair_candidates": str(PATHS.pair_candidates_jsonl),
+        "extracted_claims": str(PATHS.relations_dir / "extracted_claims.jsonl"),
         "sentences": str(PATHS.sentences_jsonl),
         "claims_csv": str(PATHS.structured_csv_dir / "claims.csv"),
         "ontology": str(DEFAULT_ONTOLOGY_PATH),
@@ -262,6 +264,13 @@ def build_parser() -> argparse.ArgumentParser:
     def add_fact_common_args(parser_obj: argparse.ArgumentParser) -> None:
         parser_obj.add_argument("--resolved-mentions", default=facts_common_defaults["resolved_mentions"])
         parser_obj.add_argument("--pair-candidates", default=facts_common_defaults["pair_candidates"])
+        parser_obj.add_argument("--extracted-claims", default=facts_common_defaults["extracted_claims"])
+        parser_obj.add_argument(
+            "--candidate-source",
+            default="auto",
+            choices=["auto", "pair-candidates", "extracted-claims"],
+            help="facts 候选来源；auto 会优先消费 relations predict 生成的 extracted_claims.jsonl",
+        )
         parser_obj.add_argument("--sentences", default=facts_common_defaults["sentences"])
         parser_obj.add_argument("--claims-csv", default=facts_common_defaults["claims_csv"])
         parser_obj.add_argument("--ontology", default=facts_common_defaults["ontology"])
@@ -619,6 +628,14 @@ def emit_cli_result(result: object, fallback_payload: dict[str, object]) -> None
     print(result)
 
 
+def resolve_fact_candidate_source(args: argparse.Namespace) -> str:
+    """CLI auto 模式下，把 relations predict 输出接到 facts 链路。"""
+
+    if args.candidate_source == "auto":
+        return "extracted_claims" if Path(args.extracted_claims).exists() else "pair_candidates"
+    return str(args.candidate_source).replace("-", "_")
+
+
 def handle_relations(args: argparse.Namespace) -> int:
     if args.command == "prepare":
         from relation_extraction.prepare import prepare_relation_pairs
@@ -632,6 +649,7 @@ def handle_relations(args: argparse.Namespace) -> int:
             claims_csv_path=Path(args.claims_csv),
             ontology_path=Path(args.ontology),
             output_path=Path(args.output),
+            max_token_distance=args.max_token_distance,
         )
         emit_cli_result(
             result,
@@ -723,15 +741,27 @@ def handle_relations(args: argparse.Namespace) -> int:
 def handle_facts(args: argparse.Namespace) -> int:
     _ = args.resolved_mentions
     if args.command == "generate-candidates":
-        from fact_extraction import generate_fact_candidates_from_paths
+        candidate_source = resolve_fact_candidate_source(args)
+        if candidate_source == "extracted_claims":
+            from fact_extraction import generate_fact_candidates_from_extracted_claims_paths
 
-        result = generate_fact_candidates_from_paths(
-            pair_candidates_path=Path(args.pair_candidates),
-            sentences_path=Path(args.sentences),
-            ontology_path=Path(args.ontology),
-            relation_patterns_path=Path(args.patterns),
-            output_path=Path(args.fact_candidates),
-        )
+            result = generate_fact_candidates_from_extracted_claims_paths(
+                extracted_claims_path=Path(args.extracted_claims),
+                sentences_path=Path(args.sentences),
+                ontology_path=Path(args.ontology),
+                relation_patterns_path=Path(args.patterns),
+                output_path=Path(args.fact_candidates),
+            )
+        else:
+            from fact_extraction import generate_fact_candidates_from_paths
+
+            result = generate_fact_candidates_from_paths(
+                pair_candidates_path=Path(args.pair_candidates),
+                sentences_path=Path(args.sentences),
+                ontology_path=Path(args.ontology),
+                relation_patterns_path=Path(args.patterns),
+                output_path=Path(args.fact_candidates),
+            )
         emit_cli_result(result, {"command": "generate-candidates", "output": args.fact_candidates})
         return 0
 
@@ -774,6 +804,7 @@ def handle_facts(args: argparse.Namespace) -> int:
 
     from fact_extraction import run_fact_extraction
 
+    candidate_source = resolve_fact_candidate_source(args)
     result = run_fact_extraction(
         pair_candidates_path=Path(args.pair_candidates),
         sentences_path=Path(args.sentences),
@@ -784,6 +815,8 @@ def handle_facts(args: argparse.Namespace) -> int:
         verified_facts_output_path=Path(args.fact_verified),
         final_facts_output_path=Path(args.facts_final),
         conflicts_output_path=Path(args.fact_conflicts),
+        extracted_claims_path=Path(args.extracted_claims),
+        candidate_source=candidate_source,
         api_key=args.api_key,
         base_url=args.base_url,
         model_name=args.model_name,

@@ -6,7 +6,7 @@ from typing import Any
 from kg_core.io import read_csv_records, read_json, read_jsonl, write_json
 
 from .aggregator import aggregate_fact_candidates
-from .candidate_generator import generate_fact_candidates
+from .candidate_generator import generate_fact_candidates, generate_fact_candidates_from_extracted_claims
 from .distant_supervision import add_distant_supervision_signals
 from .llm_verifier import verify_fact_candidates
 from .pattern_rules import load_relation_patterns
@@ -24,6 +24,8 @@ def run_fact_extraction(
     verified_facts_output_path: str | Path,
     final_facts_output_path: str | Path,
     conflicts_output_path: str | Path,
+    extracted_claims_path: str | Path | None = None,
+    candidate_source: str = "pair_candidates",
     api_key: str | None = None,
     base_url: str | None = None,
     model_name: str | None = None,
@@ -31,12 +33,28 @@ def run_fact_extraction(
 ) -> dict[str, Any]:
     """顺序执行 V1 事实抽取链路。"""
 
-    candidates, candidate_summary = generate_fact_candidates(
-        read_jsonl(pair_candidates_path),
-        read_jsonl(sentences_path),
-        read_json(ontology_path),
-        relation_patterns=load_relation_patterns(relation_patterns_path),
-    )
+    sentences = read_jsonl(sentences_path)
+    ontology = read_json(ontology_path)
+    relation_patterns = load_relation_patterns(relation_patterns_path)
+    normalized_candidate_source = candidate_source.replace("-", "_")
+    if normalized_candidate_source == "extracted_claims":
+        if extracted_claims_path is None:
+            raise ValueError("candidate_source=extracted_claims 时必须提供 extracted_claims_path。")
+        candidates, candidate_summary = generate_fact_candidates_from_extracted_claims(
+            read_jsonl(extracted_claims_path),
+            sentences,
+            ontology,
+            relation_patterns=relation_patterns,
+        )
+    elif normalized_candidate_source == "pair_candidates":
+        candidates, candidate_summary = generate_fact_candidates(
+            read_jsonl(pair_candidates_path),
+            sentences,
+            ontology,
+            relation_patterns=relation_patterns,
+        )
+    else:
+        raise ValueError(f"未知 facts candidate_source：{candidate_source}")
     write_fact_jsonl(fact_candidates_output_path, candidates)
 
     scored_candidates, score_summary = add_distant_supervision_signals(
@@ -56,6 +74,7 @@ def run_fact_extraction(
     write_fact_jsonl(conflicts_output_path, conflicts)
 
     summary = {
+        "candidate_source": normalized_candidate_source,
         "generate_candidates": candidate_summary,
         "score": score_summary,
         "verify_llm": verify_summary,

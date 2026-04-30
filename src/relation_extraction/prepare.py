@@ -11,7 +11,12 @@ from kg_core import ProjectPaths
 from kg_core.entity_catalog import load_entity_catalog, normalize_alias_text
 from kg_core.io import read_json, read_jsonl, write_json, write_jsonl
 from kg_core.taxonomy import MENTION_TYPE_TO_ENTITY_TYPE, normalize_entity_type, normalize_mention_type
-from relation_extraction.rules import DEFAULT_RELATION_NAMES, build_relation_rules, infer_candidate_relations
+from relation_extraction.rules import (
+    DEFAULT_RELATION_NAMES,
+    build_relation_rules,
+    build_sentence_trigger_map,
+    infer_candidate_relations,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -252,6 +257,33 @@ def _surface_match_score(mention_surface: str, candidate_surface: str) -> float:
     return SequenceMatcher(None, mention_surface, candidate_surface).ratio()
 
 
+def _mention_token_distance(first_mention: dict[str, Any], second_mention: dict[str, Any]) -> int | None:
+    first_start = first_mention.get("token_start")
+    first_end = first_mention.get("token_end")
+    second_start = second_mention.get("token_start")
+    second_end = second_mention.get("token_end")
+    if any(value is None for value in (first_start, first_end, second_start, second_end)):
+        return None
+    first_start_int, first_end_int = int(first_start), int(first_end)
+    second_start_int, second_end_int = int(second_start), int(second_end)
+    if first_end_int <= second_start_int:
+        return second_start_int - first_end_int
+    if second_end_int <= first_start_int:
+        return first_start_int - second_end_int
+    return 0
+
+
+def _bridge_claim_ids(*mentions: dict[str, Any]) -> set[str]:
+    claim_ids: set[str] = set()
+    for mention in mentions:
+        if mention.get("mention_resolution") != "claim_guided_alias_bridge":
+            continue
+        claim_id = str(mention.get("bridge_claim_id") or "").strip()
+        if claim_id:
+            claim_ids.add(claim_id)
+    return claim_ids
+
+
 def _build_claim_guided_alias_bridges(
     *,
     repaired_mentions: Sequence[dict[str, Any]],
@@ -369,6 +401,7 @@ def _build_relation_candidates(
     bridged_mentions: Sequence[dict[str, Any]],
     relation_rules: dict[str, Any],
     claim_tuple_index: dict[tuple[str, str, str], list[dict[str, Any]]],
+    max_token_distance: int = 24,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     mentions_by_sentence: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for mention in repaired_mentions:
@@ -380,12 +413,19 @@ def _build_relation_candidates(
     candidate_counts_by_relation: Counter[str] = Counter()
     candidate_counts_by_source: Counter[str] = Counter()
     exact_claim_counts: Counter[str] = Counter()
+    filtered_counts: Counter[str] = Counter()
     relation_candidates: list[dict[str, Any]] = []
     seen_candidate_keys: set[tuple[str, str, str, str, str, str]] = set()
+    seen_token_distance_filter_keys: set[tuple[str, str, tuple[str, ...]]] = set()
     candidate_index = 0
 
     for sentence_id, sentence_mentions in mentions_by_sentence.items():
         sentence_record = sentence_index[sentence_id]
+        trigger_map = build_sentence_trigger_map(
+            tokens=list(sentence_record.get("tokens", [])),
+            relation_rules=relation_rules,
+        )
+        triggered_relation_names = set(trigger_map)
         for subject_mention in sentence_mentions:
             for object_mention in sentence_mentions:
                 if subject_mention.get("mention_id") == object_mention.get("mention_id"):
@@ -396,12 +436,58 @@ def _build_relation_candidates(
                     continue
                 subject_type = normalize_entity_type(subject_mention.get("linked_entity_type"))
                 object_type = normalize_entity_type(object_mention.get("linked_entity_type"))
-                candidate_relations = infer_candidate_relations(
+                type_compatible_relations = infer_candidate_relations(
                     subject_type=subject_type,
                     object_type=object_type,
                     relation_rules=relation_rules,
                 )
+                if not type_compatible_relations:
+                    continue
+                token_distance = _mention_token_distance(subject_mention, object_mention)
+                if token_distance is not None and token_distance > max_token_distance:
+                    filter_key = (
+                        sentence_id,
+                        "||".join(
+                            sorted(
+                                [
+                                    str(subject_mention.get("mention_id")),
+                                    str(object_mention.get("mention_id")),
+                                ]
+                            )
+                        ),
+                        tuple(type_compatible_relations),
+                    )
+                    if filter_key not in seen_token_distance_filter_keys:
+                        filtered_counts["token_distance"] += 1
+                        seen_token_distance_filter_keys.add(filter_key)
+                    continue
+
+                bridge_claim_ids = _bridge_claim_ids(subject_mention, object_mention)
+                exact_claim_rows_by_relation: dict[str, list[dict[str, Any]]] = {}
+                excluded_bridge_claim_ids: set[str] = set()
+                for relation_name in type_compatible_relations:
+                    exact_claim_key = (subject_entity_id, relation_name, object_entity_id)
+                    raw_exact_claim_rows = claim_tuple_index.get(exact_claim_key, [])
+                    filtered_exact_claim_rows = []
+                    for row in raw_exact_claim_rows:
+                        claim_id = str(row.get("claim_id") or "").strip()
+                        if claim_id and claim_id in bridge_claim_ids:
+                            excluded_bridge_claim_ids.add(claim_id)
+                            continue
+                        filtered_exact_claim_rows.append(row)
+                    if filtered_exact_claim_rows:
+                        exact_claim_rows_by_relation[relation_name] = filtered_exact_claim_rows
+
+                # 关系候选必须来自句内触发词或非 bridge 来源的精确 claim，避免纯类型枚举污染候选空间。
+                candidate_relations = sorted(
+                    {
+                        relation_name
+                        for relation_name in type_compatible_relations
+                        if relation_name in triggered_relation_names or relation_name in exact_claim_rows_by_relation
+                    }
+                )
                 if not candidate_relations:
+                    filtered_counts["no_trigger_or_non_bridge_claim"] += 1
                     continue
                 for relation_name in candidate_relations:
                     candidate_key = (
@@ -416,8 +502,7 @@ def _build_relation_candidates(
                         continue
                     seen_candidate_keys.add(candidate_key)
                     candidate_index += 1
-                    exact_claim_key = (subject_entity_id, relation_name, object_entity_id)
-                    exact_claim_rows = claim_tuple_index.get(exact_claim_key, [])
+                    exact_claim_rows = exact_claim_rows_by_relation.get(relation_name, [])
                     resolutions = {str(subject_mention.get("mention_resolution")), str(object_mention.get("mention_resolution"))}
                     if resolutions == {"linked"}:
                         pair_source = "linked_linked"
@@ -460,9 +545,12 @@ def _build_relation_candidates(
                         ],
                         "object_resolution": object_mention.get("mention_resolution"),
                         "pair_source": pair_source,
+                        "token_distance": token_distance,
                         "exact_claim_match": bool(exact_claim_rows),
                         "matched_claim_ids": [row.get("claim_id") for row in exact_claim_rows],
                         "matched_claim_count": len(exact_claim_rows),
+                        "bridge_source_claim_ids": sorted(bridge_claim_ids),
+                        "excluded_bridge_claim_ids": sorted(excluded_bridge_claim_ids),
                         "bridge_predicates": sorted(
                             {
                                 predicate
@@ -501,6 +589,7 @@ def _build_relation_candidates(
         "candidate_counts_by_relation": _counter_to_sorted_dict(candidate_counts_by_relation),
         "candidate_counts_by_source": _counter_to_sorted_dict(candidate_counts_by_source),
         "exact_claim_counts_by_relation": _counter_to_sorted_dict(exact_claim_counts),
+        "filtered_counts": _counter_to_sorted_dict(filtered_counts),
     }
     return relation_candidates, summary
 
@@ -515,6 +604,7 @@ def prepare_relation_candidates_from_paths(
     claims_csv_path: str,
     ontology_path: str,
     relation_names: Sequence[str] | None = None,
+    max_token_distance: int = 24,
 ) -> PreparedRelationBundle:
     """读取全量上游资源，生成关系抽取的同句候选与 bridge 扩充结果。"""
 
@@ -561,6 +651,7 @@ def prepare_relation_candidates_from_paths(
         bridged_mentions=bridged_mentions,
         relation_rules=relation_rules,
         claim_tuple_index=claim_tuple_index,
+        max_token_distance=max_token_distance,
     )
 
     summary = {
@@ -600,11 +691,10 @@ def prepare_relation_pairs(
 ) -> dict[str, Any]:
     """CLI 入口：基于 linked mentions 生成关系候选并落盘。
 
-    当前关系候选生成逻辑已经内置 span/句子级过滤，因此这里保留
-    `max_token_distance` / `include_nil` 参数以匹配 CLI 契约，但不再额外二次过滤。
+    当前关系候选生成逻辑已经内置 span/句子级过滤；`max_token_distance`
+    在候选生成阶段生效，`include_nil` 仍由上游 mention resolution 契约控制。
     """
 
-    _ = max_token_distance
     _ = include_nil
     project_paths = ProjectPaths.discover(start=output_path)
     resolved_tokenized_path = tokenized_sentences_path or (project_paths.mentions_dir / "tokenized_sentences.jsonl")
@@ -620,6 +710,7 @@ def prepare_relation_pairs(
         aliases_csv_path=str(resolved_aliases_csv),
         claims_csv_path=str(resolved_claims_csv),
         ontology_path=str(ontology_path),
+        max_token_distance=max_token_distance,
     )
     write_jsonl(output_path, prepared_bundle.relation_candidates)
     summary_path = output_path.with_suffix(".summary.json")

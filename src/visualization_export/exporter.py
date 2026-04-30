@@ -196,11 +196,26 @@ def _event_label(row: dict[str, str], entity_rows: dict[str, dict[str, str]]) ->
     return f"{event_type}: {subject_name}"
 
 
+def _event_roles(row: dict[str, str]) -> list[dict[str, str]]:
+    roles_text = row.get("roles_json") or ""
+    if roles_text:
+        roles = json.loads(roles_text)
+        if isinstance(roles, list):
+            return [role for role in roles if isinstance(role, dict) and role.get("entity_id") and role.get("role")]
+    roles = [
+        {"role": "subject", "entity_id": row.get("subject_id", "")},
+        {"role": "object", "entity_id": row.get("object_id", "")},
+    ]
+    if row.get("location_id"):
+        roles.append({"role": "location", "entity_id": row["location_id"]})
+    return [role for role in roles if role.get("entity_id")]
+
+
 def _load_event_graph(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[str, dict[str, Any]], entity_rows: dict[str, dict[str, str]]) -> None:
     if not path.exists():
         return
     for row in read_csv_records(path):
-        event_id = row["event_candidate_id"]
+        event_id = row.get("event_id") or row["event_candidate_id"]
         event_type = row.get("event_type") or "Event"
         _add_node(
             nodes,
@@ -212,30 +227,28 @@ def _load_event_graph(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[
                 "description": row.get("predicate", ""),
                 "source_layer": "event",
                 "source_name": row.get("source_name", ""),
-                "confidence": "",
+                "confidence": row.get("confidence", ""),
                 "event_type": event_type,
                 "start_time": row.get("start_time_norm", ""),
                 "end_time": row.get("end_time_norm", ""),
             },
         )
-        for role, target_id in (
-            ("EVENT_SUBJECT", row.get("subject_id", "")),
-            ("EVENT_OBJECT", row.get("object_id", "")),
-            ("EVENT_LOCATION", row.get("location_id", "")),
-        ):
+        for role in _event_roles(row):
+            role_name = str(role.get("role", "")).strip()
+            target_id = str(role.get("entity_id", "")).strip()
             if target_id:
                 _ensure_entity_node(nodes, target_id, "event")
                 _add_edge(
                     edges,
                     {
-                        "id": _stable_id(event_id, role, target_id),
+                        "id": _stable_id(event_id, role_name, target_id),
                         "source": event_id,
                         "target": target_id,
-                        "label": role,
+                        "label": role_name,
                         "type": "Directed",
                         "source_layer": "event",
                         "source_name": row.get("source_name", ""),
-                        "confidence": "",
+                        "confidence": row.get("confidence", ""),
                         "evidence_text": row.get("time_text", ""),
                     },
                 )
@@ -489,10 +502,23 @@ relationship {
   font-size: 9px;
 }
 
-relationship.EVENT_SUBJECT,
-relationship.EVENT_OBJECT,
+relationship.PERSON,
+relationship.BIRTH_PLACE,
+relationship.DEATH_PLACE,
+relationship.STUDENT,
+relationship.INSTITUTION,
+relationship.EMPLOYEE,
+relationship.EMPLOYER,
+relationship.AUTHOR,
+relationship.WORK,
+relationship.PROPOSER,
+relationship.CONCEPT,
+relationship.DESIGNER,
+relationship.MACHINE,
+relationship.RECIPIENT,
+relationship.AWARD,
 relationship.EVENT_TIME,
-relationship.EVENT_LOCATION {
+relationship.LOCATION {
   color: #2a9d8f;
 }
 """

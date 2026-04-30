@@ -237,9 +237,10 @@ class StructuredFetchPipeline:
 
     def build_event_candidates(self) -> None:
         claims = self.repository.list_claims()
+        entity_index = {row["entity_id"]: row for row in self.repository.list_entities()}
         event_candidates: list[dict[str, Any]] = []
         for claim_row in claims:
-            event_candidate = build_event_candidate_from_claim(claim_row)
+            event_candidate = build_event_candidate_from_claim(claim_row, entity_index=entity_index)
             if event_candidate is not None:
                 event_candidates.append(event_candidate)
         self.repository.replace_event_candidates(event_candidates)

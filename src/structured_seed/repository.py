@@ -7,6 +7,26 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+EVENT_CANDIDATE_COLUMNS = [
+    "event_id",
+    "event_candidate_id",
+    "event_type",
+    "subject_id",
+    "object_id",
+    "start_time_raw",
+    "end_time_raw",
+    "start_time_norm",
+    "end_time_norm",
+    "location_id",
+    "time_text",
+    "source_name",
+    "statement_id",
+    "predicate",
+    "roles_json",
+    "confidence",
+    "raw_payload_json",
+]
+
 
 @dataclass(slots=True)
 class ValidationIssue:
@@ -79,6 +99,7 @@ class StructuredRepository:
 
             CREATE TABLE IF NOT EXISTS event_candidates (
                 event_candidate_id TEXT PRIMARY KEY,
+                event_id TEXT,
                 event_type TEXT NOT NULL,
                 subject_id TEXT NOT NULL,
                 object_id TEXT,
@@ -91,6 +112,8 @@ class StructuredRepository:
                 source_name TEXT NOT NULL,
                 statement_id TEXT NOT NULL,
                 predicate TEXT NOT NULL,
+                roles_json TEXT,
+                confidence REAL,
                 raw_payload_json TEXT NOT NULL
             );
 
@@ -110,6 +133,7 @@ class StructuredRepository:
             );
             """
         )
+        self._ensure_event_candidate_columns(cursor)
         self.connection.commit()
 
     def upsert_entity(self, entity: dict[str, Any], aliases: list[dict[str, Any]]) -> None:
@@ -251,14 +275,15 @@ class StructuredRepository:
         cursor.executemany(
             """
             INSERT INTO event_candidates (
-                event_candidate_id, event_type, subject_id, object_id, start_time_raw, end_time_raw,
+                event_candidate_id, event_id, event_type, subject_id, object_id, start_time_raw, end_time_raw,
                 start_time_norm, end_time_norm, location_id, time_text, source_name, statement_id,
-                predicate, raw_payload_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                predicate, roles_json, confidence, raw_payload_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             [
                 (
                     item["event_candidate_id"],
+                    item["event_id"],
                     item["event_type"],
                     item["subject_id"],
                     item.get("object_id"),
@@ -271,6 +296,8 @@ class StructuredRepository:
                     item["source_name"],
                     item["statement_id"],
                     item["predicate"],
+                    json.dumps(item["roles_json"], ensure_ascii=False, sort_keys=True),
+                    item["confidence"],
                     json.dumps(item["raw_payload_json"], ensure_ascii=False, sort_keys=True),
                 )
                 for item in event_candidates
@@ -368,6 +395,7 @@ class StructuredRepository:
         issues.extend(self._check_orphan_claims())
         issues.extend(self._check_duplicate_aliases())
         issues.extend(self._check_time_formats())
+        issues.extend(self._check_event_roles())
         return issues
 
     def export_csv(self, output_dir: Path) -> list[Path]:
@@ -377,6 +405,8 @@ class StructuredRepository:
             path = output_dir / f"{table_name}.csv"
             rows = self.connection.execute(f"SELECT * FROM {table_name}").fetchall()
             columns = [row["name"] for row in self.connection.execute(f"PRAGMA table_info({table_name})").fetchall()]
+            if table_name == "event_candidates":
+                columns = [column for column in EVENT_CANDIDATE_COLUMNS if column in columns]
             with path.open("w", encoding="utf-8", newline="") as handle:
                 writer = csv.writer(handle)
                 if columns:
@@ -464,6 +494,54 @@ class StructuredRepository:
                         )
                     )
         return issues
+
+    def _check_event_roles(self) -> list[ValidationIssue]:
+        required_roles = {
+            "BirthEvent": {"person", "birth_place"},
+            "EducationEvent": {"student", "institution"},
+            "EmploymentEvent": {"employee", "employer"},
+            "PublicationEvent": {"author", "work"},
+            "DeathEvent": {"person", "death_place"},
+            "ProposalEvent": {"proposer", "concept"},
+            "DesignEvent": {"designer", "machine"},
+            "HonorEvent": {"recipient", "award"},
+        }
+        issues: list[ValidationIssue] = []
+        rows = self.connection.execute(
+            """
+            SELECT event_id, event_candidate_id, event_type, roles_json
+            FROM event_candidates
+            """
+        ).fetchall()
+        for row in rows:
+            event_id = row["event_id"] or row["event_candidate_id"]
+            roles = json.loads(row["roles_json"] or "[]")
+            actual_roles = {str(role.get("role", "")).strip() for role in roles}
+            expected_roles = required_roles.get(row["event_type"], set())
+            missing_roles = sorted(expected_roles - actual_roles)
+            if missing_roles:
+                issues.append(
+                    ValidationIssue(
+                        check_name="event_role_required",
+                        level="error",
+                        message="事件缺少本体要求的角色",
+                        detail=f"{event_id}:{row['event_type']}:{','.join(missing_roles)}",
+                    )
+                )
+        return issues
+
+    def _ensure_event_candidate_columns(self, cursor: sqlite3.Cursor) -> None:
+        existing_columns = {
+            row["name"] for row in cursor.execute("PRAGMA table_info(event_candidates)").fetchall()
+        }
+        required_columns = {
+            "event_id": "TEXT",
+            "roles_json": "TEXT",
+            "confidence": "REAL",
+        }
+        for column_name, column_type in required_columns.items():
+            if column_name not in existing_columns:
+                cursor.execute(f"ALTER TABLE event_candidates ADD COLUMN {column_name} {column_type}")
 
 
 def chunked(values: Iterable[str], size: int) -> list[list[str]]:

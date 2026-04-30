@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from kg_core.event_mapping import event_type_for_predicate
+
 from .config import (
     DEFAULT_EXTRACTOR_NAME,
     NA_RELATION_LABEL,
@@ -247,7 +249,7 @@ def _build_extracted_claim_records(prediction_records: list[dict[str, Any]]) -> 
                     "bridge_details": primary_evidence.get("bridge_details", {}),
                     "supervision_tier": primary_evidence.get("supervision_tier", ""),
                     "extractor": DEFAULT_EXTRACTOR_NAME,
-                    "event_type_hint": predicted_relation.get("predicate"),
+                    "event_type_hint": event_type_for_predicate(predicted_relation.get("predicate")) or "",
                 }
             )
     return extracted_claims
