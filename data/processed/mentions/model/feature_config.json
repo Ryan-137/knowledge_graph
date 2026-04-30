@@ -1,0 +1,6 @@
+{
+  "use_pos": true,
+  "use_dict": true,
+  "use_time_hint": true,
+  "window_size": 2
+}

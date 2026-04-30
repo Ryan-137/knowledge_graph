@@ -1,0 +1,43 @@
+{
+  "record_count": 84,
+  "entity_span_count": 108,
+  "label_distribution": {
+    "O": 1906,
+    "B-PER": 40,
+    "I-PER": 13,
+    "B-ORG": 24,
+    "I-ORG": 37,
+    "B-LOC": 26,
+    "I-LOC": 9,
+    "B-WORK": 4,
+    "I-WORK": 10,
+    "B-CONCEPT": 5,
+    "I-CONCEPT": 4,
+    "B-MACHINE": 9,
+    "I-MACHINE": 6,
+    "B-AWARD": 0,
+    "I-AWARD": 0
+  },
+  "doc_coverage_count": 11,
+  "doc_ids": [
+    "doc_0001",
+    "doc_0002",
+    "doc_0003",
+    "doc_0004",
+    "doc_0005",
+    "doc_0006",
+    "doc_0007",
+    "doc_0008",
+    "doc_0009",
+    "doc_0010",
+    "doc_0011"
+  ],
+  "review_status_distribution": {
+    "auto_checked": 67,
+    "auto_checked_manual_reviewed": 17
+  },
+  "weak_label_confidence_distribution": {
+    "0.92": 67,
+    "0.95": 17
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "train": {
+    "record_count": 339,
+    "entity_span_count": 497,
+    "label_distribution": {
+      "O": 6986,
+      "B-PER": 205,
+      "I-PER": 113,
+      "B-ORG": 83,
+      "I-ORG": 123,
+      "B-LOC": 59,
+      "I-LOC": 22,
+      "B-WORK": 28,
+      "I-WORK": 92,
+      "B-CONCEPT": 54,
+      "I-CONCEPT": 49,
+      "B-MACHINE": 56,
+      "I-MACHINE": 48,
+      "B-AWARD": 12,
+      "I-AWARD": 31
+    },
+    "doc_coverage_count": 11,
+    "doc_ids": [
+      "doc_0001",
+      "doc_0002",
+      "doc_0003",
+      "doc_0004",
+      "doc_0005",
+      "doc_0006",
+      "doc_0007",
+      "doc_0008",
+      "doc_0009",
+      "doc_0010",
+      "doc_0011"
+    ],
+    "review_status_distribution": {
+      "auto_checked": 271,
+      "auto_checked_manual_reviewed": 68
+    },
+    "weak_label_confidence_distribution": {
+      "0.92": 271,
+      "0.95": 68
+    }
+  },
+  "dev": {
+    "record_count": 84,
+    "entity_span_count": 108,
+    "label_distribution": {
+      "O": 1906,
+      "B-PER": 40,
+      "I-PER": 13,
+      "B-ORG": 24,
+      "I-ORG": 37,
+      "B-LOC": 26,
+      "I-LOC": 9,
+      "B-WORK": 4,
+      "I-WORK": 10,
+      "B-CONCEPT": 5,
+      "I-CONCEPT": 4,
+      "B-MACHINE": 9,
+      "I-MACHINE": 6,
+      "B-AWARD": 0,
+      "I-AWARD": 0
+    },
+    "doc_coverage_count": 11,
+    "doc_ids": [
+      "doc_0001",
+      "doc_0002",
+      "doc_0003",
+      "doc_0004",
+      "doc_0005",
+      "doc_0006",
+      "doc_0007",
+      "doc_0008",
+      "doc_0009",
+      "doc_0010",
+      "doc_0011"
+    ],
+    "review_status_distribution": {
+      "auto_checked": 67,
+      "auto_checked_manual_reviewed": 17
+    },
+    "weak_label_confidence_distribution": {
+      "0.92": 67,
+      "0.95": 17
+    }
+  },
+  "test_gold_exists": true,
+  "weak_record_count": 423,
+  "accepted_count": 423,
+  "train_count": 339,
+  "dev_count": 84,
+  "dev_ratio": 0.2,
+  "weak_doc_count": 11,
+  "accepted_doc_count": 11,
+  "accepted_doc_coverage": 1.0,
+  "train_doc_coverage": 1.0,
+  "dev_doc_coverage": 1.0,
+  "accepted_review_status_distribution": {
+    "auto_checked": 338,
+    "auto_checked_manual_reviewed": 85
+  },
+  "accepted_weak_label_confidence_distribution": {
+    "0.92": 338,
+    "0.95": 85
+  }
+}

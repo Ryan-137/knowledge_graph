@@ -1,0 +1,207 @@
+{
+  "summary": {
+    "total_candidate_count": 424,
+    "accepted_count": 423,
+    "rejected_count": 1,
+    "acceptance_rate": 0.9976415094339622,
+    "reason_counts": {
+      "<urlopen error [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。>": 9,
+      "与高置信词典类型冲突": 6,
+      "The read operation timed out": 3,
+      "token 数量与 label 数量不一致: 38 != 37": 2,
+      "token 数量与 label 数量不一致: 50 != 49": 2,
+      "token 数量与 label 数量不一致: 35 != 34": 1,
+      "token 数量与 label 数量不一致: 35 != 36": 1,
+      "token 数量与 label 数量不一致: 39 != 38": 1,
+      "token 数量与 label 数量不一致: 41 != 40": 1,
+      "token 数量与 label 数量不一致: 41 != 42": 1,
+      "token 数量与 label 数量不一致: 44 != 45": 1,
+      "token 数量与 label 数量不一致: 45 != 46": 1,
+      "token 数量与 label 数量不一致: 49 != 48": 1,
+      "token 数量与 label 数量不一致: 52 != 51": 1,
+      "token 数量与 label 数量不一致: 55 != 56": 1,
+      "token 数量与 label 数量不一致: 56 != 55": 1,
+      "token 数量与 label 数量不一致: 59 != 60": 1,
+      "token 数量与 label 数量不一致: 60 != 59": 1,
+      "token 数量与 label 数量不一致: 63 != 62": 1,
+      "token 数量与 label 数量不一致: 64 != 63": 1,
+      "token 数量与 label 数量不一致: 65 != 66": 1,
+      "token 数量与 label 数量不一致: 67 != 66": 1,
+      "token 数量与 label 数量不一致: 70 != 66": 1,
+      "token 数量与 label 数量不一致: 70 != 69": 1,
+      "token 数量与 label 数量不一致: 70 != 71": 1,
+      "token 数量与 label 数量不一致: 80 != 75": 1,
+      "实体 span 跨越了明显无关标点": 1,
+      "词典核心实体漏标": 1
+    },
+    "reject_reason_counts": {
+      "<urlopen error [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。>": 9,
+      "与高置信词典类型冲突": 6,
+      "The read operation timed out": 3,
+      "token 数量与 label 数量不一致: 38 != 37": 2,
+      "token 数量与 label 数量不一致: 50 != 49": 2,
+      "token 数量与 label 数量不一致: 35 != 34": 1,
+      "token 数量与 label 数量不一致: 35 != 36": 1,
+      "token 数量与 label 数量不一致: 39 != 38": 1,
+      "token 数量与 label 数量不一致: 41 != 40": 1,
+      "token 数量与 label 数量不一致: 41 != 42": 1,
+      "token 数量与 label 数量不一致: 44 != 45": 1,
+      "token 数量与 label 数量不一致: 45 != 46": 1,
+      "token 数量与 label 数量不一致: 49 != 48": 1,
+      "token 数量与 label 数量不一致: 52 != 51": 1,
+      "token 数量与 label 数量不一致: 55 != 56": 1,
+      "token 数量与 label 数量不一致: 56 != 55": 1,
+      "token 数量与 label 数量不一致: 59 != 60": 1,
+      "token 数量与 label 数量不一致: 60 != 59": 1,
+      "token 数量与 label 数量不一致: 63 != 62": 1,
+      "token 数量与 label 数量不一致: 64 != 63": 1,
+      "token 数量与 label 数量不一致: 65 != 66": 1,
+      "token 数量与 label 数量不一致: 67 != 66": 1,
+      "token 数量与 label 数量不一致: 70 != 66": 1,
+      "token 数量与 label 数量不一致: 70 != 69": 1,
+      "token 数量与 label 数量不一致: 70 != 71": 1,
+      "token 数量与 label 数量不一致: 80 != 75": 1,
+      "实体 span 跨越了明显无关标点": 1,
+      "词典核心实体漏标": 1
+    },
+    "stage_counts": {
+      "auto_checked": 376,
+      "response_parse": 25,
+      "request_error": 9,
+      "auto_validation": 8,
+      "request_timeout": 3,
+      "auto_checked_with_context_exemption": 2,
+      "auto_checked_with_bio_fix": 1
+    },
+    "accepted_review_status_counts": {
+      "auto_checked": 376,
+      "auto_checked_with_context_exemption": 2,
+      "auto_checked_with_bio_fix": 1
+    },
+    "accepted_doc_counts": {
+      "doc_0008": 84,
+      "doc_0010": 48,
+      "doc_0009": 47,
+      "doc_0005": 36,
+      "doc_0002": 35,
+      "doc_0011": 29,
+      "doc_0003": 28,
+      "doc_0001": 26,
+      "doc_0004": 20,
+      "doc_0007": 14,
+      "doc_0006": 12
+    },
+    "rejected_doc_counts": {
+      "doc_0009": 17,
+      "doc_0010": 9,
+      "doc_0002": 4,
+      "doc_0004": 4,
+      "doc_0001": 2,
+      "doc_0003": 2,
+      "doc_0008": 2,
+      "doc_0011": 2,
+      "doc_0005": 1,
+      "doc_0006": 1,
+      "doc_0007": 1
+    },
+    "targeted_hit_counts": {
+      "Turing machine": {
+        "candidate_count": 8,
+        "accepted_count": 8,
+        "rejected_count": 0
+      },
+      "Turing Award": {
+        "candidate_count": 3,
+        "accepted_count": 3,
+        "rejected_count": 0
+      },
+      "Bombe": {
+        "candidate_count": 10,
+        "accepted_count": 9,
+        "rejected_count": 1
+      },
+      "ACE": {
+        "candidate_count": 16,
+        "accepted_count": 12,
+        "rejected_count": 4
+      },
+      "Ferranti Mark 1": {
+        "candidate_count": 6,
+        "accepted_count": 2,
+        "rejected_count": 4
+      },
+      "Computing Machinery and Intelligence": {
+        "candidate_count": 6,
+        "accepted_count": 5,
+        "rejected_count": 1
+      }
+    },
+    "targeted_keyword_reason_counts": {
+      "ACE": {
+        "token 数量与 label 数量不一致: 35 != 34": 1,
+        "token 数量与 label 数量不一致: 35 != 36": 1,
+        "token 数量与 label 数量不一致: 41 != 42": 1,
+        "与高置信词典类型冲突": 1
+      },
+      "Bombe": {
+        "词典核心实体漏标": 1
+      },
+      "Computing Machinery and Intelligence": {
+        "token 数量与 label 数量不一致: 59 != 60": 1
+      },
+      "Ferranti Mark 1": {
+        "与高置信词典类型冲突": 2,
+        "token 数量与 label 数量不一致: 50 != 49": 1,
+        "token 数量与 label 数量不一致: 52 != 51": 1
+      },
+      "Turing Award": {},
+      "Turing machine": {}
+    },
+    "targeted_reject_reason_counts": {
+      "ACE": {
+        "token 数量与 label 数量不一致: 35 != 34": 1,
+        "token 数量与 label 数量不一致: 35 != 36": 1,
+        "token 数量与 label 数量不一致: 41 != 42": 1,
+        "与高置信词典类型冲突": 1
+      },
+      "Bombe": {
+        "词典核心实体漏标": 1
+      },
+      "Computing Machinery and Intelligence": {
+        "token 数量与 label 数量不一致: 59 != 60": 1
+      },
+      "Ferranti Mark 1": {
+        "与高置信词典类型冲突": 2,
+        "token 数量与 label 数量不一致: 50 != 49": 1,
+        "token 数量与 label 数量不一致: 52 != 51": 1
+      },
+      "Turing Award": {},
+      "Turing machine": {}
+    },
+    "timeout_count": 3,
+    "parse_error_count": 25,
+    "validation_error_count": 8,
+    "unexpected_error_count": 0,
+    "manual_rescued_count": 44,
+    "manual_remaining_rejected_count": 1
+  },
+  "rejected_records": [
+    {
+      "sentence_id": "sent_000891",
+      "doc_id": "doc_0007",
+      "source_id": "src_first_007",
+      "text": "This content is only available via PDF. Open the PDF for in another window Scanned images copyright © 2017, Royal Society 2017 Royal Society Metrics Total Views 57,251 165 Pageviews 57,086 PDF Downloads Since 2/1/2009 Month: Total Views: February 2009 7 March 2009 28 April 2009 10 May 2009 8 June 2009 8 July 2009 5 August 2009 11 September 2009 13 October 2009 14 November 2009 41 December 2009 75 January 2010 128 February 2010 101 March 2010 12 April 2010 26 May 2010 18 June 2010 44 July 2010 151 August 2010 16 September 2010 13 October 2010 103 November 2010 121 December 2010 34 January 2011 130 February 2011 46 March 2011 52 April 2011 70 May 2011 22 June 2011 63 July 2011 15 August 2011 43 September 2011 39 October 2011 57 November 2011 43 December 2011 58 January 2012 247 February 2012 105 March 2012 145 April 2012 94 May 2012 91 June 2012 408 July 2012 287 August 2012 185 September 2012 195 October 2012 165 November 2012 179 December 2012 188 January 2013 786 February 2013 31 March 2013 49 April 2013 35 May 2013 1,310 June 2013 240 July 2013 22 August 2013 28 September 2013 42 October 2013 82 November 2013 253 December 2013 34 January 2014 109 February 2014 19 March 2014 63 April 2014 83 May 2014 33 June 2014 29 July 2014 45 August 2014 112 September 2014 73 October 2014 128 November 2014 69 December 2014 70 January 2015 373 February 2015 135 March 2015 1,017 April 2015 930 May 2015 1,378 June 2015 604 July 2015 1,496 August 2015 514 September 2015 545 October 2015 510 November 2015 559 December 2015 653 January 2016 561 February 2016 426 March 2016 1,540 April 2016 655 May 2016 626 June 2016 458 July 2016 499 August 2016 628 September 2016 573 October 2016 866 November 2016 913 December 2016 792 January 2017 396 February 2017 47 March 2017 55 April 2017 63 May 2017 38 June 2017 166 July 2017 38 August 2017 143 September 2017 218 October 2017 152 November 2017 139 December 2017 196 January 2018 334 February 2018 77 March 2018 144 April 2018 98 May 2018 351 June 2018 117 July 2018 96 August 2018 93 September 2018 123 October 2018 177 December 2018 124 January 2019 172 February 2019 146 March 2019 122 April 2019 102 May 2019 40 June 2019 32 July 2019 48 August 2019 37 September 2019 36 October 2019 130 November 2019 88 December 2019 92 January 2020 163 February 2020 153 March 2020 160 April 2020 366 May 2020 420 June 2020 356 July 2020 268 August 2020 196 September 2020 31 October 2020 94 November 2020 31 December 2020 127 January 2021 210 February 2021 137 March 2021 44 April 2021 167 May 2021 109 June 2021 43 July 2021 54 August 2021 53 September 2021 55 October 2021 95 November 2021 66 December 2021 52 January 2022 203 February 2022 248 March 2022 60 April 2022 91 May 2022 67 June 2022 75 July 2022 73 August 2022 332 September 2022 247 October 2022 378 November 2022 574 December 2022 395 January 2023 448 February 2023 570 March 2023 717 April 2023 494 May 2023 573 June 2023 481 July 2023 438 August 2023 340 September 2023 418 October 2023 485 November 2023 640 December 2023 502 January 2024 478 February 2024 431 March 2024 496 April 2024 524 May 2024 678 June 2024 494 July 2024 431 August 2024 428 September 2024 462 October 2024 647 November 2024 544 December 2024 423 January 2025 448 February 2025 472 March 2025 658 April 2025 611 May 2025 679 June 2025 571 July 2025 522 August 2025 484 September 2025 2,069 October 2025 514 December 2025 508 January 2026 494 February 2026 456 March 2026 538 April 2026 552 57,251 Total Views 9,493 Web of Science View Metrics 10,942 15 1,441 2 Smart Citations 10,942 15 1,441 2 Citing Publications Supporting Mentioning Contrasting View Citations See how this article has been cited at scite.ai scite shows how a scientific paper has been cited by providing the context of the citation, a classification describing whether it supports, mentions, or contrasts the cited claim, and a label indicating in which section the citation was made.",
+      "reason": "The read operation timed out",
+      "stage": "request_timeout"
+    }
+  ],
+  "manual_review": {
+    "rescued_sentence_count": 44,
+    "remaining_rejected_sentence_ids": [
+      "sent_000891"
+    ],
+    "skipped_sentence_ids": [
+      "sent_000891"
+    ]
+  }
+}
