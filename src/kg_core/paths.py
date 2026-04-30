@@ -80,6 +80,10 @@ class ProjectPaths:
         return self.processed_root / "visualization"
 
     @property
+    def fusion_dir(self) -> Path:
+        return self.processed_root / "fusion"
+
+    @property
     def structured_db(self) -> Path:
         return self.structured_dir / "structured_kg.db"
 
@@ -170,6 +174,11 @@ class ProjectPaths:
     @property
     def events_text_summary_json(self) -> Path:
         return self.events_dir / "events_text.summary.json"
+
+
+    @property
+    def fusion_corrections_jsonl(self) -> Path:
+        return self.fusion_dir / "corrections.jsonl"
 
     def resolve_project_path(self, raw_path: str | Path) -> Path:
         path = Path(raw_path)

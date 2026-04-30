@@ -4,7 +4,7 @@ from __future__ import annotations
 def build_entity_base_query(qids: list[str], limit: int, offset: int) -> str:
     entity_values = " ".join(f"wd:{qid}" for qid in qids)
     return f"""
-    SELECT ?entity ?entityLabelEn ?entityLabelZh ?descriptionEn ?descriptionZh ?instanceOf ?instanceOfLabel ?birthDate ?deathDate ?wikipediaTitleEn WHERE {{
+    SELECT ?entity ?entityLabelEn ?entityLabelZh ?subjectNamedAs ?descriptionEn ?descriptionZh ?instanceOf ?instanceOfLabel ?birthDate ?deathDate ?wikipediaTitleEn WHERE {{
       VALUES ?entity {{ {entity_values} }}
       OPTIONAL {{
         ?entity rdfs:label ?entityLabelEn .
@@ -22,6 +22,7 @@ def build_entity_base_query(qids: list[str], limit: int, offset: int) -> str:
         ?entity schema:description ?descriptionZh .
         FILTER(LANG(?descriptionZh) = "zh")
       }}
+      OPTIONAL {{ ?entity wdt:P1810 ?subjectNamedAs . }}
       OPTIONAL {{
         ?entity wdt:P31 ?instanceOf .
         OPTIONAL {{

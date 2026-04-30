@@ -8,12 +8,42 @@ from pathlib import Path
 from typing import Any
 
 from kg_core.io import read_csv_records, read_jsonl, write_csv_records, write_json
+from .fusion import fuse_graph_view, load_corrections
 
 
 GEPHI_NODE_FIELDS = ["Id", "Label", "type", "labels", "description", "source_layer", "source_name", "confidence", "degree"]
-GEPHI_EDGE_FIELDS = ["Id", "Source", "Target", "Type", "Label", "source_layer", "source_name", "confidence", "evidence_text"]
+GEPHI_EDGE_FIELDS = [
+    "Id",
+    "Source",
+    "Target",
+    "Type",
+    "Label",
+    "display_label",
+    "source_layer",
+    "source_name",
+    "confidence",
+    "evidence_text",
+    "semantic_key",
+    "fusion_status",
+    "fusion_reason",
+    "role",
+]
 NEO4J_NODE_FIELDS = [":ID", ":LABEL", "name", "entity_type", "description", "source_layer", "source_name", "confidence:float"]
-NEO4J_REL_FIELDS = [":START_ID", ":END_ID", ":TYPE", "edge_id", "source_layer", "source_name", "confidence:float", "evidence_text"]
+NEO4J_REL_FIELDS = [
+    ":START_ID",
+    ":END_ID",
+    ":TYPE",
+    "edge_id",
+    "source_layer",
+    "source_name",
+    "confidence:float",
+    "evidence_text",
+    "semantic_key",
+    "fusion_status",
+    "fusion_reason",
+    "role",
+    "display_label",
+]
 
 
 def _stable_id(*parts: object) -> str:
@@ -149,6 +179,7 @@ def _load_fact_edges(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[s
                 "confidence": row.get("confidence", ""),
                 "evidence_text": row.get("object_text", ""),
                 "statement_id": row.get("statement_id", ""),
+                "qualifiers": row.get("qualifiers_json", ""),
             },
         )
 
@@ -160,10 +191,18 @@ def _evidence_text_from_fact(row: dict[str, Any]) -> str:
     return ""
 
 
+def _primary_evidence_from_fact(row: dict[str, Any]) -> dict[str, Any]:
+    evidence = row.get("evidence") or []
+    if evidence and isinstance(evidence[0], dict):
+        return dict(evidence[0])
+    return {}
+
+
 def _load_text_fact_edges(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[str, dict[str, Any]]) -> None:
     if not path.exists():
         return
     for row in read_jsonl(path):
+        evidence = _primary_evidence_from_fact(row)
         subject_id = str(row.get("subject_id") or "")
         object_id = str(row.get("object_id") or "")
         if not object_id and row.get("object_text"):
@@ -183,6 +222,10 @@ def _load_text_fact_edges(path: Path, nodes: dict[str, dict[str, Any]], edges: d
                 "confidence": row.get("confidence", ""),
                 "evidence_text": row.get("evidence_text") or _evidence_text_from_fact(row),
                 "status": row.get("status", ""),
+                "qualifiers": row.get("qualifiers", {}),
+                "sentence_id": evidence.get("sentence_id", ""),
+                "source_id": evidence.get("source_id", ""),
+                "doc_id": evidence.get("doc_id", ""),
             },
         )
 
@@ -229,6 +272,8 @@ def _load_event_graph(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[
                 "source_name": row.get("source_name", ""),
                 "confidence": row.get("confidence", ""),
                 "event_type": event_type,
+                "node_type": "event",
+                "event_status": row.get("status", "VERIFIED"),
                 "start_time": row.get("start_time_norm", ""),
                 "end_time": row.get("end_time_norm", ""),
             },
@@ -244,12 +289,14 @@ def _load_event_graph(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[
                         "id": _stable_id(event_id, role_name, target_id),
                         "source": event_id,
                         "target": target_id,
-                        "label": role_name,
+                        "label": "EXT_EVENT_ARG",
+                        "role": role_name,
                         "type": "Directed",
                         "source_layer": "event",
                         "source_name": row.get("source_name", ""),
                         "confidence": row.get("confidence", ""),
                         "evidence_text": row.get("time_text", ""),
+                        "event_id": event_id,
                     },
                 )
         time_value = row.get("start_time_norm") or row.get("time_text")
@@ -261,12 +308,14 @@ def _load_event_graph(path: Path, nodes: dict[str, dict[str, Any]], edges: dict[
                     "id": _stable_id(event_id, "EVENT_TIME", time_node_id),
                     "source": event_id,
                     "target": time_node_id,
-                    "label": "EVENT_TIME",
+                    "label": "EXT_EVENT_ARG",
+                    "role": "time",
                     "type": "Directed",
                     "source_layer": "event",
                     "source_name": row.get("source_name", ""),
                     "confidence": "",
                     "evidence_text": row.get("time_text", ""),
+                    "event_id": event_id,
                 },
             )
 
@@ -319,11 +368,16 @@ def _write_gephi_csv(output_dir: Path, nodes: list[dict[str, Any]], edges: list[
                 "Source": edge["source"],
                 "Target": edge["target"],
                 "Type": edge.get("type", "Directed"),
-                "Label": edge.get("label", ""),
+                "Label": edge.get("display_label") or edge.get("label", ""),
+                "display_label": edge.get("display_label", ""),
                 "source_layer": edge.get("source_layer", ""),
                 "source_name": edge.get("source_name", ""),
                 "confidence": edge.get("confidence", ""),
                 "evidence_text": edge.get("evidence_text", ""),
+                "semantic_key": edge.get("semantic_key", ""),
+                "fusion_status": edge.get("fusion_status", ""),
+                "fusion_reason": edge.get("fusion_reason", ""),
+                "role": edge.get("role", ""),
             }
             for edge in edges
         ),
@@ -365,6 +419,11 @@ def _write_neo4j_csv(output_dir: Path, nodes: list[dict[str, Any]], edges: list[
                 "source_name": edge.get("source_name", ""),
                 "confidence:float": edge.get("confidence", ""),
                 "evidence_text": edge.get("evidence_text", ""),
+                "semantic_key": edge.get("semantic_key", ""),
+                "fusion_status": edge.get("fusion_status", ""),
+                "fusion_reason": edge.get("fusion_reason", ""),
+                "role": edge.get("role", ""),
+                "display_label": edge.get("display_label", ""),
             }
             for edge in edges
         ),
@@ -418,7 +477,12 @@ def _write_neo4j_load_script(output_dir: Path, nodes: list[dict[str, Any]], edge
                 "SET r.source_layer = row.source_layer,",
                 "    r.source_name = row.source_name,",
                 "    r.confidence = CASE WHEN row.`confidence:float` = '' THEN null ELSE toFloat(row.`confidence:float`) END,",
-                "    r.evidence_text = row.evidence_text;",
+                "    r.evidence_text = row.evidence_text,",
+                "    r.semantic_key = row.semantic_key,",
+                "    r.fusion_status = row.fusion_status,",
+                "    r.fusion_reason = row.fusion_reason,",
+                "    r.role = row.role,",
+                "    r.display_label = row.display_label;",
                 "",
             ]
         )
@@ -459,12 +523,18 @@ WHERE r.source_layer = 'evidence'
 RETURN p
 LIMIT 120;
 
-// 5. 事件节点网络：事件作为独立节点连接人物、作品、地点和时间
+// 5. wikipedia_direct 层：从 Wikipedia infobox 直连抽取的结构化事实
+MATCH p = (source:KgNode)-[r]->(target:KgNode)
+WHERE r.source_layer = 'wikipedia_direct'
+RETURN p
+LIMIT 80;
+
+// 6. 事件节点网络：事件作为独立节点连接人物、作品、地点和时间
 MATCH p = (event:Event)-[r]->(target:KgNode)
 RETURN p
 LIMIT 160;
 
-// 6. 高连接节点总览
+// 7. 高连接节点总览
 MATCH (n:KgNode)
 WITH n, size((n)--()) AS degree
 ORDER BY degree DESC
@@ -498,6 +568,7 @@ node.Machine { color: #4d908e; }
 node.Work { color: #7b2cbf; }
 node.Award { color: #f77f00; }
 node.Event { color: #2a9d8f; }
+node.WikipediaPage { color: #3a86ff; diameter: 30px; }
 node.Literal { color: #6c757d; diameter: 26px; }
 
 relationship {
@@ -523,6 +594,7 @@ relationship.MACHINE,
 relationship.RECIPIENT,
 relationship.AWARD,
 relationship.EVENT_TIME,
+relationship.EXT_EVENT_ARG,
 relationship.LOCATION {
   color: #2a9d8f;
 }
@@ -575,7 +647,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const box = document.getElementById("graph");
 const details = document.getElementById("details");
-const colors = {{Person:"#d1495b", Organization:"#00798c", Place:"#edae49", Concept:"#30638e", Machine:"#4d908e", Work:"#7b2cbf", Award:"#f77f00", Literal:"#6c757d", Event:"#2a9d8f", PublicationEvent:"#2a9d8f", EducationEvent:"#43aa8b", EmploymentEvent:"#577590", HonorEvent:"#f8961e"}};
+const colors = {{Person:"#d1495b", Organization:"#00798c", Place:"#edae49", Concept:"#30638e", Machine:"#4d908e", Work:"#7b2cbf", Award:"#f77f00", WikipediaPage:"#3a86ff", Literal:"#6c757d", Event:"#2a9d8f", PublicationEvent:"#2a9d8f", EducationEvent:"#43aa8b", EmploymentEvent:"#577590", HonorEvent:"#f8961e"}};
 const nodes = graph.nodes.map((node, index) => ({{...node, x: 80 + (index % 24) * 32, y: 80 + Math.floor(index / 24) * 32, vx: 0, vy: 0}}));
 const nodeById = new Map(nodes.map(node => [node.id, node]));
 const edges = graph.edges.map(edge => ({{...edge, sourceNode: nodeById.get(edge.source), targetNode: nodeById.get(edge.target)}})).filter(edge => edge.sourceNode && edge.targetNode);
@@ -623,7 +695,7 @@ function draw() {{
   ctx.lineWidth = 1;
   ctx.font = "12px Arial";
   for (const edge of edges) {{
-    ctx.strokeStyle = edge.source_layer === "facts" ? "rgba(20,20,20,.25)" : edge.source_layer === "evidence" ? "rgba(209,73,91,.28)" : "rgba(42,157,143,.25)";
+    ctx.strokeStyle = edge.source_layer === "facts" ? "rgba(20,20,20,.25)" : edge.source_layer === "evidence" ? "rgba(209,73,91,.28)" : edge.source_layer === "wikipedia_direct" ? "rgba(58,134,255,.35)" : "rgba(42,157,143,.25)";
     ctx.beginPath(); ctx.moveTo(edge.sourceNode.x, edge.sourceNode.y); ctx.lineTo(edge.targetNode.x, edge.targetNode.y); ctx.stroke();
   }}
   for (const node of nodes) {{
@@ -672,6 +744,7 @@ def export_visualization_graph(
     event_candidates_csv_path: Path,
     text_facts_path: Path,
     output_dir: Path,
+    corrections_path: Path | None = None,
     html_max_nodes: int = 260,
 ) -> dict[str, Any]:
     """汇总结构化事实、事件节点和文本证据，产出最终可视化图谱文件。"""
@@ -681,6 +754,7 @@ def export_visualization_graph(
     _load_fact_edges(claims_csv_path, nodes, edges)
     _load_event_graph(event_candidates_csv_path, nodes, edges, entity_rows)
     _load_text_fact_edges(text_facts_path, nodes, edges)
+    nodes, edges, fusion_report = fuse_graph_view(nodes, edges, load_corrections(corrections_path))
     _attach_degrees(nodes, edges)
 
     node_rows = sorted(nodes.values(), key=lambda item: str(item["id"]))
@@ -690,8 +764,10 @@ def export_visualization_graph(
     output_dir.mkdir(parents=True, exist_ok=True)
     graph_json_path = output_dir / "graph.json"
     stats_path = output_dir / "stats.json"
+    fusion_report_path = output_dir / "fusion_report.json"
     write_json(graph_json_path, graph_payload)
     write_json(stats_path, graph_payload["stats"])
+    write_json(fusion_report_path, fusion_report)
     gephi_nodes_path, gephi_edges_path = _write_gephi_csv(output_dir, node_rows, edge_rows)
     neo4j_nodes_path, neo4j_rels_path = _write_neo4j_csv(output_dir, node_rows, edge_rows)
     neo4j_load_path, neo4j_queries_path, neo4j_style_path = _write_neo4j_visualization_assets(output_dir, node_rows, edge_rows)
@@ -701,6 +777,7 @@ def export_visualization_graph(
         "edge_count": graph_payload["stats"]["edge_count"],
         "graph_json": graph_json_path.as_posix(),
         "stats_json": stats_path.as_posix(),
+        "fusion_report_json": fusion_report_path.as_posix(),
         "gephi_nodes_csv": gephi_nodes_path.as_posix(),
         "gephi_edges_csv": gephi_edges_path.as_posix(),
         "neo4j_nodes_csv": neo4j_nodes_path.as_posix(),

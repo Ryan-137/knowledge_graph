@@ -339,6 +339,7 @@ def build_parser() -> argparse.ArgumentParser:
     visualization_export_parser.add_argument("--claims-csv", default=str(PATHS.structured_csv_dir / "claims.csv"))
     visualization_export_parser.add_argument("--events-csv", default=str(PATHS.structured_csv_dir / "event_candidates.csv"))
     visualization_export_parser.add_argument("--text-facts", default=str(PATHS.facts_final_jsonl))
+    visualization_export_parser.add_argument("--corrections", default=str(PATHS.fusion_corrections_jsonl))
     visualization_export_parser.add_argument("--output-dir", default=str(PATHS.visualization_dir))
     visualization_export_parser.add_argument("--html-max-nodes", type=int, default=260)
     return parser
@@ -907,6 +908,7 @@ def handle_visualization(args: argparse.Namespace) -> int:
         event_candidates_csv_path=Path(args.events_csv),
         text_facts_path=Path(args.text_facts),
         output_dir=Path(args.output_dir),
+        corrections_path=Path(args.corrections),
         html_max_nodes=args.html_max_nodes,
     )
     emit_cli_result(result, {"command": "export", "output_dir": args.output_dir})

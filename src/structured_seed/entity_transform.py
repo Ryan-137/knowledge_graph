@@ -19,6 +19,7 @@ def aggregate_entity_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any
                 "entity_id": entity_id,
                 "label_en": None,
                 "label_zh": None,
+                "subject_named_as": None,
                 "description_en": None,
                 "description_zh": None,
                 "wikipedia_title_en": None,
@@ -31,6 +32,7 @@ def aggregate_entity_rows(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any
         )
         bucket["label_en"] = bucket["label_en"] or get_binding_value(row, "entityLabelEn")
         bucket["label_zh"] = bucket["label_zh"] or get_binding_value(row, "entityLabelZh")
+        bucket["subject_named_as"] = bucket["subject_named_as"] or get_binding_value(row, "subjectNamedAs")
         bucket["description_en"] = bucket["description_en"] or get_binding_value(row, "descriptionEn")
         bucket["description_zh"] = bucket["description_zh"] or get_binding_value(row, "descriptionZh")
         bucket["wikipedia_title_en"] = bucket["wikipedia_title_en"] or get_binding_value(row, "wikipediaTitleEn")
@@ -71,11 +73,13 @@ def build_entity_record(
     """把聚合后的 Wikidata 实体转换成 entities/aliases 两类落库记录。"""
     label_en = grouped["label_en"]
     label_zh = grouped["label_zh"]
-    canonical_name = choose_canonical_name(label_zh, label_en, grouped["entity_id"])
+    subject_named_as = grouped.get("subject_named_as")
+    canonical_name = choose_canonical_name(label_zh, label_en, subject_named_as, grouped["entity_id"])
     alias_records = build_alias_records(
         canonical_name=canonical_name,
         label_en=label_en,
         label_zh=label_zh,
+        subject_named_as=subject_named_as,
         aliases_en=aliases_by_lang.get("en", []),
         aliases_zh=aliases_by_lang.get("zh", []),
     )
@@ -103,6 +107,7 @@ def build_entity_record(
         "raw_payload_json": {
             "instance_of_ids": dedupe_preserve_order(grouped["instance_of_ids"]),
             "instance_of_labels": dedupe_preserve_order(grouped["instance_of_labels"]),
+            "subject_named_as": subject_named_as,
             "birth_date_raw": grouped["birth_date"],
             "death_date_raw": grouped["death_date"],
         },
@@ -110,14 +115,15 @@ def build_entity_record(
     return entity, alias_records
 
 
-def choose_canonical_name(label_zh: str | None, label_en: str | None, fallback: str) -> str:
-    return (label_zh or label_en or fallback).strip()
+def choose_canonical_name(label_zh: str | None, label_en: str | None, subject_named_as: str | None, fallback: str) -> str:
+    return (label_zh or label_en or subject_named_as or fallback).strip()
 
 
 def build_alias_records(
     canonical_name: str,
     label_en: str | None,
     label_zh: str | None,
+    subject_named_as: str | None,
     aliases_en: list[str],
     aliases_zh: list[str],
 ) -> list[dict[str, Any]]:
@@ -128,6 +134,7 @@ def build_alias_records(
         *((item, "zh") for item in aliases_zh),
         *((item, "en") for item in [label_en] if item),
         *((item, "zh") for item in [label_zh] if item),
+        *((item, "en") for item in [subject_named_as] if item),
     ):
         normalized = normalize_alias(alias)
         if not normalized or normalized == normalize_alias(canonical_name) or normalized in seen:
